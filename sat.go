@@ -7,7 +7,14 @@
 
 package smart
 
-const ATA_IDENTIFY_DEVICE = 0xec
+const (
+	// ATA feature register values for SMART
+	SMART_READ_DATA = 0xd0
+
+	// ATA commands
+	ATA_SMART           = 0xb0
+	ATA_IDENTIFY_DEVICE = 0xec
+)
 
 // ATA device identify struct
 type IdentifyDeviceData struct {
