@@ -6,10 +6,25 @@
 package smart
 
 import (
+	"bytes"
+	"encoding/binary"
 	"fmt"
 	"path/filepath"
 	"unsafe"
 )
+
+var nativeEndian binary.ByteOrder
+
+// Determine native endianness of system
+func init() {
+	i := uint32(1)
+	b := (*[4]byte)(unsafe.Pointer(&i))
+	if b[0] == 1 {
+		nativeEndian = binary.LittleEndian
+	} else {
+		nativeEndian = binary.BigEndian
+	}
+}
 
 // Swap bytes in a byte slice
 func swapBytes(s []byte) []byte {
@@ -71,6 +86,8 @@ func ReadSMART(device string) error {
 	fmt.Printf("Firmware Revision: %s\n", swapBytes(ident_buf.FirmwareRevision[:]))
 	fmt.Printf("Model Number: %s\n", swapBytes(ident_buf.ModelNumber[:]))
 
+	// FIXME: Check that device supports SMART before trying to read data page
+
 	/*
 	 * SMART READ DATA
 	 * command code B0h, feature register D0h
@@ -93,7 +110,19 @@ func ReadSMART(device string) error {
 		return fmt.Errorf("SgExecute SMART READ DATA: %v", err)
 	}
 
-	fmt.Printf("\nSMART READ DATA response: %#v\n\n", resp_buf)
+	smart := smartPage{}
+	binary.Read(bytes.NewBuffer(resp_buf[:362]), nativeEndian, &smart)
+
+	fmt.Printf("\nSMART structure version: %d\n", smart.Version)
+	fmt.Printf("ID# ATTRIBUTE_NAME           FLAG     VALUE WORST RESERVED RAW_VALUE     VENDOR_BYTES\n")
+
+	for _, attr := range smart.Attrs {
+		if attr.Id == 0 {
+			break
+		}
+
+		fmt.Printf("%#v\n", attr)
+	}
 
 	return nil
 }

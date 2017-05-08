@@ -37,3 +37,19 @@ type IdentifyDeviceData struct {
 	ObsoleteWords51      [2]uint16
 	_                    [512 - 110]byte // FIXME: Split out remaining bytes
 }
+
+// Individual SMART attribute (12 bytes)
+type smartAttr struct {
+	Id          uint8
+	Flags       uint16
+	Value       uint8
+	Worst       uint8
+	VendorBytes [6]byte
+	Reserved    uint8
+}
+
+// Page of 30 SMART attributes as per ATA spec
+type smartPage struct {
+	Version uint16
+	Attrs   [30]smartAttr
+}
