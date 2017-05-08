@@ -10,8 +10,31 @@ import (
 	"encoding/binary"
 	"fmt"
 	"path/filepath"
+	"regexp"
+	"strconv"
+	"strings"
 	"unsafe"
+
+	"github.com/BurntSushi/toml"
 )
+
+type attrConv struct {
+	Conv string
+	Name string
+}
+
+type driveModel struct {
+	Family         string
+	ModelRegex     string
+	FirmwareRegex  string
+	WarningMsg     string
+	Presets        map[string]attrConv
+	CompiledRegexp *regexp.Regexp
+}
+
+type driveDb struct {
+	Drives []driveModel
+}
 
 var nativeEndian binary.ByteOrder
 
@@ -24,6 +47,58 @@ func init() {
 	} else {
 		nativeEndian = binary.BigEndian
 	}
+}
+
+// lookupDrive returns the most appropriate driveModel for a given ATA IDENTIFY value
+func (db *driveDb) lookupDrive(ident []byte) driveModel {
+	var model, defaultModel driveModel
+
+	for _, d := range db.Drives {
+		// Skip placeholder entry
+		if strings.HasPrefix(d.Family, "$Id") {
+			continue
+		}
+
+		if d.Family == "DEFAULT" {
+			defaultModel = d
+			continue
+		}
+
+		if d.CompiledRegexp.Match(ident) {
+			model = d
+
+			// Inherit presets from defaultModel
+			for id, p := range defaultModel.Presets {
+				if _, exists := model.Presets[id]; exists {
+					// Some drives override the conv but don't specify a name, so copy it from default
+					if model.Presets[id].Name == "" {
+						model.Presets[id] = attrConv{Name: p.Name, Conv: model.Presets[id].Conv}
+					}
+				} else {
+					model.Presets[id] = p
+				}
+			}
+
+			break
+		}
+	}
+
+	return model
+}
+
+// openDriveDb opens a .toml formatted drive database, unmarshalls it, and returns a driveDb
+func openDriveDb(dbfile string) (driveDb, error) {
+	var db driveDb
+
+	if _, err := toml.DecodeFile(dbfile, &db); err != nil {
+		return db, fmt.Errorf("Cannot open / parse drive DB: %s", err)
+	}
+
+	for i, d := range db.Drives {
+		db.Drives[i].CompiledRegexp, _ = regexp.Compile(d.ModelRegex)
+	}
+
+	return db, nil
 }
 
 // Swap bytes in a byte slice
@@ -86,6 +161,14 @@ func ReadSMART(device string) error {
 	fmt.Printf("Firmware Revision: %s\n", swapBytes(ident_buf.FirmwareRevision[:]))
 	fmt.Printf("Model Number: %s\n", swapBytes(ident_buf.ModelNumber[:]))
 
+	db, err := openDriveDb("drivedb.toml")
+	if err != nil {
+		return err
+	}
+
+	thisDrive := db.lookupDrive(ident_buf.ModelNumber[:])
+	fmt.Printf("Drive DB contains %d entries. Using model: %s\n", len(db.Drives), thisDrive.Family)
+
 	// FIXME: Check that device supports SMART before trying to read data page
 
 	/*
@@ -117,11 +200,32 @@ func ReadSMART(device string) error {
 	fmt.Printf("ID# ATTRIBUTE_NAME           FLAG     VALUE WORST RESERVED RAW_VALUE     VENDOR_BYTES\n")
 
 	for _, attr := range smart.Attrs {
+		var rawValue uint64
+
 		if attr.Id == 0 {
 			break
 		}
 
-		fmt.Printf("%#v\n", attr)
+		attrconv := thisDrive.Presets[strconv.Itoa(int(attr.Id))]
+
+		switch attrconv.Conv {
+		case "raw24(raw8)":
+			// Big-endian 24-bit number, optionally with 8 bit values
+			for i := 2; i >= 0; i-- {
+				rawValue |= uint64(attr.VendorBytes[i]) << uint64(i*8)
+			}
+		case "raw48":
+			// Big-endian 48-bit number
+			for i := 5; i >= 0; i-- {
+				rawValue |= uint64(attr.VendorBytes[i]) << uint64(i*8)
+			}
+		case "tempminmax":
+			rawValue = uint64(attr.VendorBytes[0])
+		}
+
+		fmt.Printf("%3d %-24s %#04x   %03d   %03d   %03d      %-12d  %v (%s)\n",
+			attr.Id, attrconv.Name, attr.Flags, attr.Value, attr.Worst, attr.Reserved,
+			rawValue, attr.VendorBytes, attrconv.Conv)
 	}
 
 	return nil

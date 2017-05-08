@@ -55,7 +55,6 @@ func main() {
 	defer destFile.Close()
 
 	drivedb := DriveDb{}
-
 	t0 := time.Now()
 
 	for _, d := range C.builtin_knowndrives {
@@ -85,9 +84,7 @@ func main() {
 		drivedb.Drives = append(drivedb.Drives, dm)
 	}
 
-	t1 := time.Now()
-	fmt.Printf("Parsed drivedb.h in %v - %d entries\n", t1.Sub(t0), len(drivedb.Drives))
-
+	fmt.Printf("Parsed drivedb.h in %v - %d entries\n", time.Since(t0), len(drivedb.Drives))
 	enc := toml.NewEncoder(destFile)
 
 	if err := enc.Encode(drivedb); err != nil {
