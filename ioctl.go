@@ -12,9 +12,9 @@ import "syscall"
 
 // ioctl executes an ioctl command on the specified file descriptor
 func ioctl(fd, cmd, ptr uintptr) error {
-    _, _, errno := syscall.Syscall(syscall.SYS_IOCTL, fd, cmd, ptr)
-    if errno != 0 {
-        return errno
-    }
-    return nil
+	_, _, errno := syscall.Syscall(syscall.SYS_IOCTL, fd, cmd, ptr)
+	if errno != 0 {
+		return errno
+	}
+	return nil
 }

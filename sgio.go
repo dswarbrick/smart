@@ -23,7 +23,8 @@ const (
 	SG_IO = 0x2285
 
 	// SCSI commands used by this package
-	SCSI_INQUIRY = 0x12
+	SCSI_INQUIRY         = 0x12
+	SCSI_ATA_PASSTHRU_16 = 0x85
 
 	INQ_REPLY_LEN = 36 // Minimum length of standard INQUIRY response
 )
