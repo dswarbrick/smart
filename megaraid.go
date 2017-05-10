@@ -132,7 +132,7 @@ func MakeDev(major, minor uint) uint {
 // format and return it as a byte slice
 func (ioc *megasas_iocpacket) PackedBytes() []byte {
 	b := new(bytes.Buffer)
-	binary.Write(b, binary.LittleEndian, ioc)
+	binary.Write(b, nativeEndian, ioc)
 	return b.Bytes()
 }
 
@@ -264,7 +264,7 @@ func (m *MegasasIoctl) GetDeviceList(host uint16) ([]MegasasPDAddress, error) {
 }
 
 func OpenMegasasIoctl() error {
-	var cdb []byte
+	var cdb, respBuf []byte
 
 	m, _ := CreateMegasasIoctl()
 	fmt.Printf("%#v\n", m)
@@ -286,9 +286,10 @@ func OpenMegasasIoctl() error {
 	for _, pd := range devices {
 		if pd.SCSIDevType == 0 { // SCSI disk
 			cdb = []byte{SCSI_INQUIRY, 0, 0, 0, INQ_REPLY_LEN, 0}
-			resp := make([]byte, 512)
-			m.PassThru(0, uint8(pd.DeviceId), cdb, resp, SG_DXFER_FROM_DEV)
-			fmt.Printf("diskNum: %d  INQUIRY data: %.8s  %.16s  %.4s\n", pd.DeviceId, resp[8:], resp[16:], resp[32:])
+			respBuf = make([]byte, 512)
+			m.PassThru(0, uint8(pd.DeviceId), cdb, respBuf, SG_DXFER_FROM_DEV)
+			fmt.Printf("diskNum: %d  INQUIRY data: %.8s  %.16s  %.4s\n",
+				pd.DeviceId, respBuf[8:], respBuf[16:], respBuf[32:])
 		}
 	}
 
@@ -296,15 +297,42 @@ func OpenMegasasIoctl() error {
 
 	// Send ATA IDENTIFY command as a CDB16 passthru command
 	cdb = []byte{SCSI_ATA_PASSTHRU_16, 0x08, 0x0e, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xec, 0x00}
-	buf := make([]byte, 512)
-	m.PassThru(0, 26, cdb, buf, SG_DXFER_FROM_DEV)
+	respBuf = make([]byte, 512)
+	m.PassThru(0, 26, cdb, respBuf, SG_DXFER_FROM_DEV)
 
 	ident_buf := IdentifyDeviceData{}
-	binary.Read(bytes.NewBuffer(buf), binary.LittleEndian, &ident_buf)
+	binary.Read(bytes.NewBuffer(respBuf), nativeEndian, &ident_buf)
 
 	fmt.Printf("Serial Number: %s\n", swapBytes(ident_buf.SerialNumber[:]))
 	fmt.Printf("Firmware Revision: %s\n", swapBytes(ident_buf.FirmwareRevision[:]))
 	fmt.Printf("Model Number: %s\n", swapBytes(ident_buf.ModelNumber[:]))
+
+	fmt.Println()
+
+	// Send ATA SMART READ command as a CDB16 passthru command
+	cdb = []byte{SCSI_ATA_PASSTHRU_16, 0x08, 0x0e, 0x00, 0xd0, 0x00, 0x01, 0x00, 0x00, 0x00, 0x4f, 0x00, 0xc2, 0x00, 0xb0, 0x00}
+	respBuf = make([]byte, 512)
+	m.PassThru(0, 26, cdb, respBuf, SG_DXFER_FROM_DEV)
+
+	smart := smartPage{}
+	binary.Read(bytes.NewBuffer(respBuf[:362]), nativeEndian, &smart)
+
+	fmt.Printf("SMART structure version: %d\n", smart.Version)
+	fmt.Printf("ID# ATTRIBUTE_NAME           FLAG     VALUE WORST RESERVED RAW_VALUE     VENDOR_BYTES\n")
+
+	for _, attr := range smart.Attrs {
+		if attr.Id != 0 {
+			var rawValue uint64
+
+			for i := 5; i >= 0; i-- {
+				rawValue |= uint64(attr.VendorBytes[i]) << uint64(i*8)
+			}
+
+			fmt.Printf("%3d %-24s %#04x   %03d   %03d   %03d      %-12d  %v (%s)\n",
+				attr.Id, "(name)", attr.Flags, attr.Value, attr.Worst, attr.Reserved,
+				rawValue, attr.VendorBytes, "(conv)")
+		}
+	}
 
 	return nil
 }
