@@ -184,9 +184,7 @@ func (m *MegasasIoctl) Close() {
 
 // MFI sends a MegaRAID Firmware Interface (MFI) command to the specified host
 func (m *MegasasIoctl) MFI(host uint16, opcode uint32, b []byte) error {
-	var ioc megasas_iocpacket
-
-	ioc.host_no = host
+	ioc := megasas_iocpacket{host_no: host}
 
 	// Approximation of C union behaviour
 	dcmd := (*megasas_dcmd_frame)(unsafe.Pointer(&ioc.frame))
@@ -211,9 +209,7 @@ func (m *MegasasIoctl) MFI(host uint16, opcode uint32, b []byte) error {
 
 // PassThru sends a SCSI command to a MegaRAID controller
 func (m *MegasasIoctl) PassThru(host uint16, diskNum uint8, cdb []byte, buf []byte, dxfer_dir int) {
-	var ioc megasas_iocpacket
-
-	ioc.host_no = host
+	ioc := megasas_iocpacket{host_no: host}
 
 	// Approximation of C union behaviour
 	pthru := (*megasas_pthru_frame)(unsafe.Pointer(&ioc.frame))
@@ -222,7 +218,7 @@ func (m *MegasasIoctl) PassThru(host uint16, diskNum uint8, cdb []byte, buf []by
 	pthru.target_id = diskNum
 	pthru.cdb_len = uint8(len(cdb))
 
-	// Fixme: Don't use SG_* here
+	// FIXME: Don't use SG_* here
 	switch dxfer_dir {
 	case SG_DXFER_NONE:
 		pthru.flags = MFI_FRAME_DIR_NONE
@@ -268,6 +264,8 @@ func (m *MegasasIoctl) GetDeviceList(host uint16) ([]MegasasPDAddress, error) {
 }
 
 func OpenMegasasIoctl() error {
+	var cdb []byte
+
 	m, _ := CreateMegasasIoctl()
 	fmt.Printf("%#v\n", m)
 
@@ -287,12 +285,26 @@ func OpenMegasasIoctl() error {
 
 	for _, pd := range devices {
 		if pd.SCSIDevType == 0 { // SCSI disk
-			cdb := []byte{SCSI_INQUIRY, 0, 0, 0, INQ_REPLY_LEN, 0}
+			cdb = []byte{SCSI_INQUIRY, 0, 0, 0, INQ_REPLY_LEN, 0}
 			resp := make([]byte, 512)
 			m.PassThru(0, uint8(pd.DeviceId), cdb, resp, SG_DXFER_FROM_DEV)
 			fmt.Printf("diskNum: %d  INQUIRY data: %.8s  %.16s  %.4s\n", pd.DeviceId, resp[8:], resp[16:], resp[32:])
 		}
 	}
+
+	fmt.Println()
+
+	// Send ATA IDENTIFY command as a CDB16 passthru command
+	cdb = []byte{SCSI_ATA_PASSTHRU_16, 0x08, 0x0e, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xec, 0x00}
+	buf := make([]byte, 512)
+	m.PassThru(0, 26, cdb, buf, SG_DXFER_FROM_DEV)
+
+	ident_buf := IdentifyDeviceData{}
+	binary.Read(bytes.NewBuffer(buf), binary.LittleEndian, &ident_buf)
+
+	fmt.Printf("Serial Number: %s\n", swapBytes(ident_buf.SerialNumber[:]))
+	fmt.Printf("Firmware Revision: %s\n", swapBytes(ident_buf.FirmwareRevision[:]))
+	fmt.Printf("Model Number: %s\n", swapBytes(ident_buf.ModelNumber[:]))
 
 	return nil
 }
