@@ -110,6 +110,40 @@ func swapBytes(s []byte) []byte {
 	return s
 }
 
+func printSMART(smart smartPage, drive driveModel) {
+	fmt.Printf("\nSMART structure version: %d\n", smart.Version)
+	fmt.Printf("ID# ATTRIBUTE_NAME           FLAG     VALUE WORST RESERVED RAW_VALUE     VENDOR_BYTES\n")
+
+	for _, attr := range smart.Attrs {
+		var rawValue uint64
+
+		if attr.Id == 0 {
+			break
+		}
+
+		attrconv := drive.Presets[strconv.Itoa(int(attr.Id))]
+
+		switch attrconv.Conv {
+		case "raw24(raw8)":
+			// Big-endian 24-bit number, optionally with 8 bit values
+			for i := 2; i >= 0; i-- {
+				rawValue |= uint64(attr.VendorBytes[i]) << uint64(i*8)
+			}
+		case "raw48":
+			// Big-endian 48-bit number
+			for i := 5; i >= 0; i-- {
+				rawValue |= uint64(attr.VendorBytes[i]) << uint64(i*8)
+			}
+		case "tempminmax":
+			rawValue = uint64(attr.VendorBytes[0])
+		}
+
+		fmt.Printf("%3d %-24s %#04x   %03d   %03d   %03d      %-12d  %v (%s)\n",
+			attr.Id, attrconv.Name, attr.Flags, attr.Value, attr.Worst, attr.Reserved,
+			rawValue, attr.VendorBytes, attrconv.Conv)
+	}
+}
+
 func ReadSMART(device string) error {
 	dev, err := openDevice(device)
 	if err != nil {
@@ -195,38 +229,7 @@ func ReadSMART(device string) error {
 
 	smart := smartPage{}
 	binary.Read(bytes.NewBuffer(resp_buf[:362]), nativeEndian, &smart)
-
-	fmt.Printf("\nSMART structure version: %d\n", smart.Version)
-	fmt.Printf("ID# ATTRIBUTE_NAME           FLAG     VALUE WORST RESERVED RAW_VALUE     VENDOR_BYTES\n")
-
-	for _, attr := range smart.Attrs {
-		var rawValue uint64
-
-		if attr.Id == 0 {
-			break
-		}
-
-		attrconv := thisDrive.Presets[strconv.Itoa(int(attr.Id))]
-
-		switch attrconv.Conv {
-		case "raw24(raw8)":
-			// Big-endian 24-bit number, optionally with 8 bit values
-			for i := 2; i >= 0; i-- {
-				rawValue |= uint64(attr.VendorBytes[i]) << uint64(i*8)
-			}
-		case "raw48":
-			// Big-endian 48-bit number
-			for i := 5; i >= 0; i-- {
-				rawValue |= uint64(attr.VendorBytes[i]) << uint64(i*8)
-			}
-		case "tempminmax":
-			rawValue = uint64(attr.VendorBytes[0])
-		}
-
-		fmt.Printf("%3d %-24s %#04x   %03d   %03d   %03d      %-12d  %v (%s)\n",
-			attr.Id, attrconv.Name, attr.Flags, attr.Value, attr.Worst, attr.Reserved,
-			rawValue, attr.VendorBytes, attrconv.Conv)
-	}
+	printSMART(smart, thisDrive)
 
 	return nil
 }
