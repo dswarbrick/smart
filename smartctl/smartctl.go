@@ -20,6 +20,7 @@ func main() {
 
 	device := flag.String("device", "", "Device from which to read SMART attributes, e.g., /dev/sda")
 	scan := flag.Bool("scan", false, "Scan for drives that support SMART")
+	megaraid := flag.Bool("megaraid", false, "Scan for drives on MegaRAID controller")
 	flag.Parse()
 
 	if *device != "" {
@@ -27,6 +28,8 @@ func main() {
 			fmt.Println(err)
 			os.Exit(1)
 		}
+	} else if *megaraid {
+		smart.OpenMegasasIoctl()
 	} else if *scan {
 		smart.ScanDevices()
 	} else {
