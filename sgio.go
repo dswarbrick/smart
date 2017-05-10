@@ -18,7 +18,10 @@ import (
 )
 
 const (
-	SG_DXFER_FROM_DEV = -3
+	SG_DXFER_NONE        = -1
+	SG_DXFER_TO_DEV      = -2
+	SG_DXFER_FROM_DEV    = -3
+	SG_DXFER_TO_FROM_DEV = -4
 
 	SG_IO = 0x2285
 

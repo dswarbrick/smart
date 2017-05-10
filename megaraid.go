@@ -28,9 +28,15 @@ import (
 const (
 	MAX_IOCTL_SGE = 16
 
-	MFI_CMD_DCMD = 0x05
+	MFI_CMD_PD_SCSI_IO = 0x04
+	MFI_CMD_DCMD       = 0x05
 
 	MR_DCMD_PD_GET_LIST = 0x02010000 // Obsolete / deprecated command
+
+	MFI_FRAME_DIR_NONE  = 0x0000
+	MFI_FRAME_DIR_WRITE = 0x0008
+	MFI_FRAME_DIR_READ  = 0x0010
+	MFI_FRAME_DIR_BOTH  = 0x0018
 )
 
 type megasas_sge64 struct {
@@ -58,6 +64,26 @@ type megasas_dcmd_frame struct {
 	opcode        uint32
 	mbox          [12]byte      // FIXME: This is actually a union of [12]uint8 / [6]uint16 / [3]uint32
 	sgl           megasas_sge64 // FIXME: This is actually a union of megasas_sge64 / megasas_sge32
+}
+
+type megasas_pthru_frame struct {
+	cmd                    uint8
+	sense_len              uint8
+	cmd_status             uint8
+	scsi_status            uint8
+	target_id              uint8
+	lun                    uint8
+	cdb_len                uint8
+	sge_count              uint8
+	context                uint32
+	pad_0                  uint32
+	flags                  uint16
+	timeout                uint16
+	data_xfer_len          uint32
+	sense_buf_phys_addr_lo uint32
+	sense_buf_phys_addr_hi uint32
+	cdb                    [16]byte
+	sgl                    megasas_sge64
 }
 
 type megasas_iocpacket struct {
@@ -183,6 +209,46 @@ func (m *MegasasIoctl) MFI(host uint16, opcode uint32, b []byte) error {
 	return nil
 }
 
+// PassThru sends a SCSI command to a MegaRAID controller
+func (m *MegasasIoctl) PassThru(host uint16, diskNum uint8, cdb []byte, buf []byte, dxfer_dir int) {
+	var ioc megasas_iocpacket
+
+	ioc.host_no = host
+
+	// Approximation of C union behaviour
+	pthru := (*megasas_pthru_frame)(unsafe.Pointer(&ioc.frame))
+	pthru.cmd_status = 0xff
+	pthru.cmd = MFI_CMD_PD_SCSI_IO
+	pthru.target_id = diskNum
+	pthru.cdb_len = uint8(len(cdb))
+
+	// Fixme: Don't use SG_* here
+	switch dxfer_dir {
+	case SG_DXFER_NONE:
+		pthru.flags = MFI_FRAME_DIR_NONE
+	case SG_DXFER_FROM_DEV:
+		pthru.flags = MFI_FRAME_DIR_READ
+	case SG_DXFER_TO_DEV:
+		pthru.flags = MFI_FRAME_DIR_WRITE
+	}
+
+	copy(pthru.cdb[:], cdb)
+
+	pthru.data_xfer_len = uint32(len(buf))
+	pthru.sge_count = 1
+
+	ioc.sge_count = 1
+	ioc.sgl_off = uint32(unsafe.Offsetof(pthru.sgl))
+	ioc.sgl[0] = Iovec{uint64(uintptr(unsafe.Pointer(&buf[0]))), uint64(len(buf))}
+
+	iocBuf := ioc.PackedBytes()
+
+	// Note pointer to first item in iocBuf buffer
+	if err := ioctl(uintptr(m.fd), MEGASAS_IOC_FIRMWARE, uintptr(unsafe.Pointer(&iocBuf[0]))); err != nil {
+		log.Fatal(err)
+	}
+}
+
 // GetDeviceList retrieves a list of physical devices attached to the specified host
 func (m *MegasasIoctl) GetDeviceList(host uint16) ([]MegasasPDAddress, error) {
 	respBuf := make([]byte, 4096)
@@ -214,6 +280,17 @@ func OpenMegasasIoctl() error {
 	for _, pd := range devices {
 		if pd.SCSIDevType == 0 { // SCSI disk
 			fmt.Printf("%5d   %3d      %5d  %#x\n", pd.EnclosureId, pd.SlotNumber, pd.DeviceId, pd.SASAddr[0])
+		}
+	}
+
+	fmt.Println()
+
+	for _, pd := range devices {
+		if pd.SCSIDevType == 0 { // SCSI disk
+			cdb := []byte{SCSI_INQUIRY, 0, 0, 0, INQ_REPLY_LEN, 0}
+			resp := make([]byte, 512)
+			m.PassThru(0, uint8(pd.DeviceId), cdb, resp, SG_DXFER_FROM_DEV)
+			fmt.Printf("diskNum: %d  INQUIRY data: %.8s  %.16s  %.4s\n", pd.DeviceId, resp[8:], resp[16:], resp[32:])
 		}
 	}
 
