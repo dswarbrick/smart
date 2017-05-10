@@ -293,8 +293,6 @@ func OpenMegasasIoctl() error {
 		}
 	}
 
-	fmt.Println()
-
 	// Send ATA IDENTIFY command as a CDB16 passthru command
 	cdb = []byte{SCSI_ATA_PASSTHRU_16, 0x08, 0x0e, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xec, 0x00}
 	respBuf = make([]byte, 512)
@@ -303,11 +301,18 @@ func OpenMegasasIoctl() error {
 	ident_buf := IdentifyDeviceData{}
 	binary.Read(bytes.NewBuffer(respBuf), nativeEndian, &ident_buf)
 
+	fmt.Println("\nATA IDENTIFY data follows:")
 	fmt.Printf("Serial Number: %s\n", swapBytes(ident_buf.SerialNumber[:]))
 	fmt.Printf("Firmware Revision: %s\n", swapBytes(ident_buf.FirmwareRevision[:]))
 	fmt.Printf("Model Number: %s\n", swapBytes(ident_buf.ModelNumber[:]))
 
-	fmt.Println()
+	db, err := openDriveDb("drivedb.toml")
+	if err != nil {
+		return err
+	}
+
+	thisDrive := db.lookupDrive(ident_buf.ModelNumber[:])
+	fmt.Printf("Drive DB contains %d entries. Using model: %s\n", len(db.Drives), thisDrive.Family)
 
 	// Send ATA SMART READ command as a CDB16 passthru command
 	cdb = []byte{SCSI_ATA_PASSTHRU_16, 0x08, 0x0e, 0x00, 0xd0, 0x00, 0x01, 0x00, 0x00, 0x00, 0x4f, 0x00, 0xc2, 0x00, 0xb0, 0x00}
@@ -316,23 +321,7 @@ func OpenMegasasIoctl() error {
 
 	smart := smartPage{}
 	binary.Read(bytes.NewBuffer(respBuf[:362]), nativeEndian, &smart)
-
-	fmt.Printf("SMART structure version: %d\n", smart.Version)
-	fmt.Printf("ID# ATTRIBUTE_NAME           FLAG     VALUE WORST RESERVED RAW_VALUE     VENDOR_BYTES\n")
-
-	for _, attr := range smart.Attrs {
-		if attr.Id != 0 {
-			var rawValue uint64
-
-			for i := 5; i >= 0; i-- {
-				rawValue |= uint64(attr.VendorBytes[i]) << uint64(i*8)
-			}
-
-			fmt.Printf("%3d %-24s %#04x   %03d   %03d   %03d      %-12d  %v (%s)\n",
-				attr.Id, "(name)", attr.Flags, attr.Value, attr.Worst, attr.Reserved,
-				rawValue, attr.VendorBytes, "(conv)")
-		}
-	}
+	printSMART(smart, thisDrive)
 
 	return nil
 }
