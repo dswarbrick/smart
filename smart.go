@@ -16,6 +16,7 @@ import (
 	"github.com/BurntSushi/toml"
 )
 
+// SMART attribute conversion rule
 type attrConv struct {
 	Conv string
 	Name string
@@ -38,9 +39,9 @@ type driveDb struct {
 type smartAttr struct {
 	Id          uint8
 	Flags       uint16
-	Value       uint8
-	Worst       uint8
-	VendorBytes [6]byte
+	Value       uint8   // normalised value
+	Worst       uint8   // worst value
+	VendorBytes [6]byte // vendor-specific (and sometimes device-specific) data
 	Reserved    uint8
 }
 
@@ -115,16 +116,23 @@ func openDriveDb(dbfile string) (driveDb, error) {
 	return db, nil
 }
 
+// decodeVendorBytes decodes the six-byte vendor byte array based on the conversion rule passed as
+// conv. The conversion may also include the reserved byte, normalised value or worst value byte.
 func (sa *smartAttr) decodeVendorBytes(conv string) (r uint64) {
 	vb := sa.VendorBytes
 
 	// TODO: Complete other attr conversion, honour specified byte order
 	switch conv {
+	case "raw16(raw16)", "raw16(avg16)":
+		r = uint64(vb[0]) | uint64(vb[1])<<8
 	case "raw24(raw8)", "raw24/raw24", "raw24/raw32":
 		r = uint64(vb[0]) | uint64(vb[1])<<8 | uint64(vb[2])<<16
 	case "raw48":
 		r = uint64(vb[0]) | uint64(vb[1])<<8 | uint64(vb[2])<<16 |
 			uint64(vb[3])<<24 | uint64(vb[4])<<32 | uint64(vb[5])<<40
+	case "raw56":
+		r = uint64(vb[0]) | uint64(vb[1])<<8 | uint64(vb[2])<<16 | uint64(vb[3])<<24 |
+			uint64(vb[4])<<32 | uint64(vb[5])<<40 | uint64(sa.Reserved)<<48
 	case "tempminmax":
 		// This is device specific!
 		r = uint64(vb[0])
