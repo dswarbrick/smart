@@ -47,6 +47,8 @@ type IdentifyDeviceData struct {
 }
 
 func ReadSMART(device string) error {
+	var inqBuff inquiryResponse
+
 	dev, err := openDevice(device)
 	if err != nil {
 		return fmt.Errorf("Cannot open device %s: %v", device, err)
@@ -56,14 +58,13 @@ func ReadSMART(device string) error {
 
 	io_hdr := sgIoHdr{interface_id: 'S', dxfer_direction: SG_DXFER_FROM_DEV, timeout: 20000}
 
-	inquiry_cdb := SCSICDB6{OpCode: SCSI_INQUIRY, AllocLen: INQ_REPLY_LEN}
-	inqBuff := make([]byte, INQ_REPLY_LEN)
+	inquiry_cdb := SCSICDB6{OpCode: SCSI_INQUIRY, AllocLen: uint8(unsafe.Sizeof(inqBuff))}
 	sense_buf := make([]byte, 32)
 
 	io_hdr.cmd_len = uint8(unsafe.Sizeof(inquiry_cdb))
 	io_hdr.mx_sb_len = uint8(len(sense_buf))
-	io_hdr.dxfer_len = uint32(len(inqBuff))
-	io_hdr.dxferp = uintptr(unsafe.Pointer(&inqBuff[0]))
+	io_hdr.dxfer_len = uint32(unsafe.Sizeof(inqBuff))
+	io_hdr.dxferp = uintptr(unsafe.Pointer(&inqBuff))
 	io_hdr.cmdp = uintptr(unsafe.Pointer(&inquiry_cdb))
 	io_hdr.sbp = uintptr(unsafe.Pointer(&sense_buf[0]))
 
@@ -71,7 +72,7 @@ func ReadSMART(device string) error {
 		return fmt.Errorf("SgExecute INQUIRY: %v", err)
 	}
 
-	fmt.Printf("SCSI INQUIRY: %.8s  %.16s  %.4s\n", inqBuff[8:], inqBuff[16:], inqBuff[32:])
+	fmt.Println("SCSI INQUIRY:", inqBuff)
 
 	cdb16 := [16]byte{}
 

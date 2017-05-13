@@ -32,30 +32,30 @@ const (
 	INQ_REPLY_LEN = 36 // Minimum length of standard INQUIRY response
 )
 
-// SCSI generic IO
+// SCSI generic IO, analogous to sg_io_hdr_t
 type sgIoHdr struct {
-	interface_id    int32
-	dxfer_direction int32
-	cmd_len         uint8
-	mx_sb_len       uint8
-	iovec_count     uint16
-	dxfer_len       uint32
-	dxferp          uintptr
-	cmdp            uintptr // Command pointer
-	sbp             uintptr // Sense buf pointer
-	timeout         uint32
-	flags           uint32
-	pack_id         int32
-	usr_ptr         uintptr
-	status          uint8
-	masked_status   uint8
-	msg_status      uint8
-	sb_len_wr       uint8
-	host_status     uint16
-	driver_status   uint16
-	resid           int32
-	duration        uint32
-	info            uint32
+	interface_id    int32   // 'S' for SCSI generic (required)
+	dxfer_direction int32   // data transfer direction
+	cmd_len         uint8   // SCSI command length (<= 16 bytes)
+	mx_sb_len       uint8   // max length to write to sbp
+	iovec_count     uint16  // 0 implies no scatter gather
+	dxfer_len       uint32  // byte count of data transfer
+	dxferp          uintptr // points to data transfer memory or scatter gather list
+	cmdp            uintptr // points to command to perform
+	sbp             uintptr // points to sense_buffer memory
+	timeout         uint32  // MAX_UINT -> no timeout (unit: millisec)
+	flags           uint32  // 0 -> default, see SG_FLAG...
+	pack_id         int32   // unused internally (normally)
+	usr_ptr         uintptr // unused internally
+	status          uint8   // SCSI status
+	masked_status   uint8   // shifted, masked scsi status
+	msg_status      uint8   // messaging level data (optional)
+	sb_len_wr       uint8   // byte count actually written to sbp
+	host_status     uint16  // errors from host adapter
+	driver_status   uint16  // errors from software driver
+	resid           int32   // dxfer_len - actual_transferred
+	duration        uint32  // time taken by cmd (unit: millisec)
+	info            uint32  // auxiliary information
 }
 
 // SCSICDB6 is a 6-byte SCSI command descriptor block
@@ -66,6 +66,21 @@ type SCSICDB6 struct {
 	Reserved2 uint8
 	AllocLen  uint8
 	Control   uint8
+}
+
+// SCSI INQUIRY response
+type inquiryResponse struct {
+	Peripheral   byte // peripheral qualifier, device type
+	_            byte
+	Version      byte
+	_            [5]byte
+	VendorIdent  [8]byte
+	ProductIdent [16]byte
+	ProductRev   [4]byte
+}
+
+func (inq inquiryResponse) String() string {
+	return fmt.Sprintf("%.8s  %.16s  %.4s", inq.VendorIdent, inq.ProductIdent, inq.ProductRev)
 }
 
 type SCSIDevice struct {
