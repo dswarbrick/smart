@@ -19,6 +19,9 @@ const (
 	SG_DXFER_FROM_DEV    = -3
 	SG_DXFER_TO_FROM_DEV = -4
 
+	SG_INFO_OK_MASK = 0x1
+	SG_INFO_OK      = 0x0
+
 	SG_IO = 0x2285
 
 	// SCSI commands used by this package
@@ -97,8 +100,9 @@ func (d *SCSIDevice) execGenericIO(hdr *sgIoHdr) error {
 	}
 
 	// See http://www.t10.org/lists/2status.htm for SCSI status codes
-	if hdr.status != 0 {
-		return fmt.Errorf("SCSI generic ioctl returned non-zero status: %#02x", hdr.status)
+	if hdr.info&SG_INFO_OK_MASK != SG_INFO_OK {
+		return fmt.Errorf("SCSI status: %#02x, host status: %#02x, driver status: %#02x",
+			hdr.status, hdr.host_status, hdr.driver_status)
 	}
 
 	return nil
