@@ -143,12 +143,13 @@ func (sa *smartAttr) decodeVendorBytes(conv string) (r uint64) {
 
 func printSMART(smart smartPage, drive driveModel) {
 	fmt.Printf("\nSMART structure version: %d\n", smart.Version)
-	fmt.Printf("ID# ATTRIBUTE_NAME           FLAG     VALUE WORST RESERVED RAW_VALUE     VENDOR_BYTES\n")
+	fmt.Printf("ID# ATTRIBUTE_NAME           FLAG     VALUE WORST RESERVED TYPE     UPDATED RAW_VALUE     VENDOR_BYTES\n")
 
 	for _, attr := range smart.Attrs {
 		var (
-			rawValue uint64
-			conv     attrConv
+			rawValue              uint64
+			conv                  attrConv
+			attrType, attrUpdated string
 		)
 
 		if attr.Id == 0 {
@@ -160,8 +161,22 @@ func printSMART(smart smartPage, drive driveModel) {
 			rawValue = attr.decodeVendorBytes(conv.Conv)
 		}
 
-		fmt.Printf("%3d %-24s %#04x   %03d   %03d   %03d      %-12d  %v (%s)\n",
-			attr.Id, conv.Name, attr.Flags, attr.Value, attr.Worst, attr.Reserved,
-			rawValue, attr.VendorBytes, conv.Conv)
+		// Pre-fail / advisory bit
+		if attr.Flags&0x0001 > 0 {
+			attrType = "Pre-fail"
+		} else {
+			attrType = "Old_age"
+		}
+
+		// Online data collection bit
+		if attr.Flags&0x0002 > 0 {
+			attrUpdated = "Always"
+		} else {
+			attrUpdated = "Offline"
+		}
+
+		fmt.Printf("%3d %-24s %#04x   %03d   %03d   %03d      %-8s %-7s %-12d  %v (%s)\n",
+			attr.Id, conv.Name, attr.Flags, attr.Value, attr.Worst, attr.Reserved, attrType,
+			attrUpdated, rawValue, attr.VendorBytes, conv.Conv)
 	}
 }
