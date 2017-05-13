@@ -47,7 +47,10 @@ type IdentifyDeviceData struct {
 }
 
 func ReadSMART(device string) error {
-	var inqBuff inquiryResponse
+	var (
+		inqBuff  inquiryResponse
+		identBuf IdentifyDeviceData
+	)
 
 	dev, err := openDevice(device)
 	if err != nil {
@@ -56,11 +59,11 @@ func ReadSMART(device string) error {
 
 	defer dev.close()
 
-	io_hdr := sgIoHdr{interface_id: 'S', dxfer_direction: SG_DXFER_FROM_DEV, timeout: 20000}
-
-	inquiry_cdb := SCSICDB6{OpCode: SCSI_INQUIRY, AllocLen: uint8(unsafe.Sizeof(inqBuff))}
+	inquiry_cdb := CDB6{SCSI_INQUIRY}
+	binary.BigEndian.PutUint16(inquiry_cdb[3:], uint16(unsafe.Sizeof(inqBuff)))
 	sense_buf := make([]byte, 32)
 
+	io_hdr := sgIoHdr{interface_id: 'S', dxfer_direction: SG_DXFER_FROM_DEV, timeout: 20000}
 	io_hdr.cmd_len = uint8(unsafe.Sizeof(inquiry_cdb))
 	io_hdr.mx_sb_len = uint8(len(sense_buf))
 	io_hdr.dxfer_len = uint32(unsafe.Sizeof(inqBuff))
@@ -74,18 +77,17 @@ func ReadSMART(device string) error {
 
 	fmt.Println("SCSI INQUIRY:", inqBuff)
 
-	cdb16 := [16]byte{}
+	cdb16 := CDB16{}
 
-	io_hdr = sgIoHdr{interface_id: 'S', dxfer_direction: SG_DXFER_FROM_DEV, timeout: 20000}
 	// 0x08 : ATA protocol (4 << 1, PIO data-in)
 	// 0x0e : BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
-	cdb16 = [16]byte{SCSI_ATA_PASSTHRU_16, 0x08, 0x0e, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, ATA_IDENTIFY_DEVICE, 0x00}
-	ident_buf := IdentifyDeviceData{}
+	cdb16 = CDB16{SCSI_ATA_PASSTHRU_16, 0x08, 0x0e, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, ATA_IDENTIFY_DEVICE, 0x00}
 
+	io_hdr = sgIoHdr{interface_id: 'S', dxfer_direction: SG_DXFER_FROM_DEV, timeout: 20000}
 	io_hdr.cmd_len = uint8(len(cdb16))
 	io_hdr.mx_sb_len = uint8(len(sense_buf))
-	io_hdr.dxfer_len = uint32(unsafe.Sizeof(ident_buf))
-	io_hdr.dxferp = uintptr(unsafe.Pointer(&ident_buf))
+	io_hdr.dxfer_len = uint32(unsafe.Sizeof(identBuf))
+	io_hdr.dxferp = uintptr(unsafe.Pointer(&identBuf))
 	io_hdr.cmdp = uintptr(unsafe.Pointer(&cdb16))
 	io_hdr.sbp = uintptr(unsafe.Pointer(&sense_buf[0]))
 
@@ -94,16 +96,16 @@ func ReadSMART(device string) error {
 	}
 
 	fmt.Println("\nATA IDENTIFY data follows:")
-	fmt.Printf("Serial Number: %s\n", swapBytes(ident_buf.SerialNumber[:]))
-	fmt.Printf("Firmware Revision: %s\n", swapBytes(ident_buf.FirmwareRevision[:]))
-	fmt.Printf("Model Number: %s\n", swapBytes(ident_buf.ModelNumber[:]))
+	fmt.Printf("Serial Number: %s\n", swapBytes(identBuf.SerialNumber[:]))
+	fmt.Printf("Firmware Revision: %s\n", swapBytes(identBuf.FirmwareRevision[:]))
+	fmt.Printf("Model Number: %s\n", swapBytes(identBuf.ModelNumber[:]))
 
 	db, err := openDriveDb("drivedb.toml")
 	if err != nil {
 		return err
 	}
 
-	thisDrive := db.lookupDrive(ident_buf.ModelNumber[:])
+	thisDrive := db.lookupDrive(identBuf.ModelNumber[:])
 	fmt.Printf("Drive DB contains %d entries. Using model: %s\n", len(db.Drives), thisDrive.Family)
 
 	// FIXME: Check that device supports SMART before trying to read data page
@@ -113,12 +115,12 @@ func ReadSMART(device string) error {
 	 * command code B0h, feature register D0h
 	 * LBA mid register 4Fh, LBA high register C2h
 	 */
-	io_hdr = sgIoHdr{interface_id: 'S', dxfer_direction: SG_DXFER_FROM_DEV, timeout: 20000}
 	// 0x08 : ATA protocol (4 << 1, PIO data-in)
 	// 0x0e : BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
-	cdb16 = [16]byte{SCSI_ATA_PASSTHRU_16, 0x08, 0x0e, 0x00, SMART_READ_DATA, 0x00, 0x01, 0x00, 0x00, 0x00, 0x4f, 0x00, 0xc2, 0x00, ATA_SMART, 0x00}
+	cdb16 = CDB16{SCSI_ATA_PASSTHRU_16, 0x08, 0x0e, 0x00, SMART_READ_DATA, 0x00, 0x01, 0x00, 0x00, 0x00, 0x4f, 0x00, 0xc2, 0x00, ATA_SMART, 0x00}
 	resp_buf := [512]byte{}
 
+	io_hdr = sgIoHdr{interface_id: 'S', dxfer_direction: SG_DXFER_FROM_DEV, timeout: 20000}
 	io_hdr.cmd_len = uint8(len(cdb16))
 	io_hdr.mx_sb_len = uint8(len(sense_buf))
 	io_hdr.dxfer_len = uint32(len(resp_buf))

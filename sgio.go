@@ -3,10 +3,6 @@
  * Copyright 2017 Daniel Swarbrick
 
  * SCSI generic IO functions
- * TODO:
- * - SCSI CDBs cannot be simplified down to just 6, 10, 12 and 16 byte CDBs
- * - Bytes that make up the CDB have different meanings depending on whether it's a read or write,
- *   or what specific command it is, and thus cannot be simply mapped to a struct.
  */
 
 package smart
@@ -58,15 +54,9 @@ type sgIoHdr struct {
 	info            uint32  // auxiliary information
 }
 
-// SCSICDB6 is a 6-byte SCSI command descriptor block
-type SCSICDB6 struct {
-	OpCode    uint8
-	Lun       uint8
-	Reserved1 uint8
-	Reserved2 uint8
-	AllocLen  uint8
-	Control   uint8
-}
+// SCSI CDB types
+type CDB6 [6]byte
+type CDB16 [16]byte
 
 // SCSI INQUIRY response
 type inquiryResponse struct {
