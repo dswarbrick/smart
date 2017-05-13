@@ -8,6 +8,7 @@
 package smart
 
 import (
+	"encoding/binary"
 	"fmt"
 	"syscall"
 	"unsafe"
@@ -28,8 +29,25 @@ const (
 	SCSI_INQUIRY         = 0x12
 	SCSI_ATA_PASSTHRU_16 = 0x85
 
-	INQ_REPLY_LEN = 36 // Minimum length of standard INQUIRY response
+	DEFAULT_TIMEOUT = 20000 // Timeout in milliseconds
+	INQ_REPLY_LEN   = 36    // Minimum length of standard INQUIRY response
 )
+
+type sgioError struct {
+	scsiStatus   uint8
+	hostStatus   uint16
+	driverStatus uint16
+	senseBuf     [32]byte
+}
+
+func (e sgioError) Error() string {
+	return fmt.Sprintf("SCSI status: %#02x, host status: %#02x, driver status: %#02x",
+		e.scsiStatus, e.hostStatus, e.driverStatus)
+}
+
+// SCSI CDB types
+type CDB6 [6]byte
+type CDB16 [16]byte
 
 // SCSI generic IO, analogous to sg_io_hdr_t
 type sgIoHdr struct {
@@ -56,10 +74,6 @@ type sgIoHdr struct {
 	duration        uint32  // time taken by cmd (unit: millisec)
 	info            uint32  // auxiliary information
 }
-
-// SCSI CDB types
-type CDB6 [6]byte
-type CDB16 [16]byte
 
 // SCSI INQUIRY response
 type inquiryResponse struct {
@@ -101,9 +115,35 @@ func (d *SCSIDevice) execGenericIO(hdr *sgIoHdr) error {
 
 	// See http://www.t10.org/lists/2status.htm for SCSI status codes
 	if hdr.info&SG_INFO_OK_MASK != SG_INFO_OK {
-		return fmt.Errorf("SCSI status: %#02x, host status: %#02x, driver status: %#02x",
-			hdr.status, hdr.host_status, hdr.driver_status)
+		err := sgioError{
+			scsiStatus:   hdr.status,
+			hostStatus:   hdr.host_status,
+			driverStatus: hdr.driver_status,
+		}
+		return err
 	}
 
 	return nil
+}
+
+func (d *SCSIDevice) inquiry() (inquiryResponse, error) {
+	var resp inquiryResponse
+
+	cdb := CDB6{SCSI_INQUIRY}
+	binary.BigEndian.PutUint16(cdb[3:], uint16(unsafe.Sizeof(resp)))
+	senseBuf := make([]byte, 32)
+
+	io_hdr := sgIoHdr{interface_id: 'S', dxfer_direction: SG_DXFER_FROM_DEV, timeout: DEFAULT_TIMEOUT}
+	io_hdr.cmd_len = uint8(unsafe.Sizeof(cdb))
+	io_hdr.mx_sb_len = uint8(len(senseBuf))
+	io_hdr.dxfer_len = uint32(unsafe.Sizeof(resp))
+	io_hdr.dxferp = uintptr(unsafe.Pointer(&resp))
+	io_hdr.cmdp = uintptr(unsafe.Pointer(&cdb))
+	io_hdr.sbp = uintptr(unsafe.Pointer(&senseBuf[0]))
+
+	if err := d.execGenericIO(&io_hdr); err != nil {
+		return resp, err
+	}
+
+	return resp, nil
 }
