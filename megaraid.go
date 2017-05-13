@@ -86,6 +86,7 @@ type megasas_pthru_frame struct {
 	sgl                    megasas_sge64
 }
 
+// megasas_iocpacket struct - caution: megasas driver expects packet struct
 type megasas_iocpacket struct {
 	host_no   uint16
 	__pad1    uint16
@@ -93,10 +94,8 @@ type megasas_iocpacket struct {
 	sge_count uint32
 	sense_off uint32
 	sense_len uint32
-	// FIXME: This is actually a union of megasas_header / megasas_pthru_frame / megasas_dcmd_frame
-	frame [128]byte
-	// FIXME: Go is inserting 4 bytes of padding before this in order to 64-bit align the sgl member
-	sgl [MAX_IOCTL_SGE]Iovec
+	frame     [128]byte // FIXME: actually a union of megasas_header / megasas_pthru_frame / megasas_dcmd_frame
+	sgl       [MAX_IOCTL_SGE]Iovec
 }
 
 // Megasas physical device address
@@ -118,7 +117,7 @@ type MegasasIoctl struct {
 
 var (
 	// 0xc1944d01 - Beware: cannot use unsafe.Sizeof(megasas_iocpacket{}) due to Go struct padding!
-	MEGASAS_IOC_FIRMWARE = _iowr('M', 1, 404)
+	MEGASAS_IOC_FIRMWARE = _iowr('M', 1, uintptr(binary.Size(megasas_iocpacket{})))
 )
 
 // MakeDev returns the device ID for the specified major and minor numbers, equivalent to
