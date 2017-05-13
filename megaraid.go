@@ -264,7 +264,7 @@ func (m *MegasasIoctl) GetDeviceList(host uint16) ([]MegasasPDAddress, error) {
 }
 
 func OpenMegasasIoctl() error {
-	var cdb, respBuf []byte
+	var respBuf []byte
 
 	m, _ := CreateMegasasIoctl()
 	fmt.Printf("%#v\n", m)
@@ -285,18 +285,23 @@ func OpenMegasasIoctl() error {
 
 	for _, pd := range devices {
 		if pd.SCSIDevType == 0 { // SCSI disk
-			cdb = []byte{SCSI_INQUIRY, 0, 0, 0, INQ_REPLY_LEN, 0}
+			var inqBuf inquiryResponse
+
+			cdb := CDB6{SCSI_INQUIRY}
+			binary.BigEndian.PutUint16(cdb[3:], INQ_REPLY_LEN)
+
 			respBuf = make([]byte, 512)
-			m.PassThru(0, uint8(pd.DeviceId), cdb, respBuf, SG_DXFER_FROM_DEV)
-			fmt.Printf("diskNum: %d  INQUIRY data: %.8s  %.16s  %.4s\n",
-				pd.DeviceId, respBuf[8:], respBuf[16:], respBuf[32:])
+			m.PassThru(0, uint8(pd.DeviceId), cdb[:], respBuf, SG_DXFER_FROM_DEV)
+
+			binary.Read(bytes.NewReader(respBuf), nativeEndian, &inqBuf)
+			fmt.Printf("diskNum: %d  INQUIRY data: %s\n", pd.DeviceId, inqBuf)
 		}
 	}
 
 	// Send ATA IDENTIFY command as a CDB16 passthru command
-	cdb = []byte{SCSI_ATA_PASSTHRU_16, 0x08, 0x0e, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xec, 0x00}
+	cdb := CDB16{SCSI_ATA_PASSTHRU_16, 0x08, 0x0e, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xec, 0x00}
 	respBuf = make([]byte, 512)
-	m.PassThru(0, 26, cdb, respBuf, SG_DXFER_FROM_DEV)
+	m.PassThru(0, 26, cdb[:], respBuf, SG_DXFER_FROM_DEV)
 
 	ident_buf := IdentifyDeviceData{}
 	binary.Read(bytes.NewBuffer(respBuf), nativeEndian, &ident_buf)
@@ -315,9 +320,9 @@ func OpenMegasasIoctl() error {
 	fmt.Printf("Drive DB contains %d entries. Using model: %s\n", len(db.Drives), thisDrive.Family)
 
 	// Send ATA SMART READ command as a CDB16 passthru command
-	cdb = []byte{SCSI_ATA_PASSTHRU_16, 0x08, 0x0e, 0x00, 0xd0, 0x00, 0x01, 0x00, 0x00, 0x00, 0x4f, 0x00, 0xc2, 0x00, 0xb0, 0x00}
+	cdb = CDB16{SCSI_ATA_PASSTHRU_16, 0x08, 0x0e, 0x00, 0xd0, 0x00, 0x01, 0x00, 0x00, 0x00, 0x4f, 0x00, 0xc2, 0x00, 0xb0, 0x00}
 	respBuf = make([]byte, 512)
-	m.PassThru(0, 26, cdb, respBuf, SG_DXFER_FROM_DEV)
+	m.PassThru(0, 26, cdb[:], respBuf, SG_DXFER_FROM_DEV)
 
 	smart := smartPage{}
 	binary.Read(bytes.NewBuffer(respBuf[:362]), nativeEndian, &smart)

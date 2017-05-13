@@ -48,7 +48,7 @@ type IdentifyDeviceData struct {
 
 func ReadSMART(device string) error {
 	var (
-		inqBuff  inquiryResponse
+		inqBuf   inquiryResponse
 		identBuf IdentifyDeviceData
 	)
 
@@ -60,14 +60,14 @@ func ReadSMART(device string) error {
 	defer dev.close()
 
 	inquiry_cdb := CDB6{SCSI_INQUIRY}
-	binary.BigEndian.PutUint16(inquiry_cdb[3:], uint16(unsafe.Sizeof(inqBuff)))
+	binary.BigEndian.PutUint16(inquiry_cdb[3:], uint16(unsafe.Sizeof(inqBuf)))
 	sense_buf := make([]byte, 32)
 
 	io_hdr := sgIoHdr{interface_id: 'S', dxfer_direction: SG_DXFER_FROM_DEV, timeout: 20000}
 	io_hdr.cmd_len = uint8(unsafe.Sizeof(inquiry_cdb))
 	io_hdr.mx_sb_len = uint8(len(sense_buf))
-	io_hdr.dxfer_len = uint32(unsafe.Sizeof(inqBuff))
-	io_hdr.dxferp = uintptr(unsafe.Pointer(&inqBuff))
+	io_hdr.dxfer_len = uint32(unsafe.Sizeof(inqBuf))
+	io_hdr.dxferp = uintptr(unsafe.Pointer(&inqBuf))
 	io_hdr.cmdp = uintptr(unsafe.Pointer(&inquiry_cdb))
 	io_hdr.sbp = uintptr(unsafe.Pointer(&sense_buf[0]))
 
@@ -75,7 +75,7 @@ func ReadSMART(device string) error {
 		return fmt.Errorf("SgExecute INQUIRY: %v", err)
 	}
 
-	fmt.Println("SCSI INQUIRY:", inqBuff)
+	fmt.Println("SCSI INQUIRY:", inqBuf)
 
 	cdb16 := CDB16{}
 
