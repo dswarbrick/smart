@@ -115,13 +115,22 @@ func openDriveDb(dbfile string) (driveDb, error) {
 	return db, nil
 }
 
-// Swap bytes in a byte slice
-func swapBytes(s []byte) []byte {
-	for i := 0; i < len(s); i += 2 {
-		s[i], s[i+1] = s[i+1], s[i]
+func (sa *smartAttr) decodeVendorBytes(conv string) (r uint64) {
+	vb := sa.VendorBytes
+
+	// TODO: Complete other attr conversion, honour specified byte order
+	switch conv {
+	case "raw24(raw8)", "raw24/raw24", "raw24/raw32":
+		r = uint64(vb[0]) | uint64(vb[1])<<8 | uint64(vb[2])<<16
+	case "raw48":
+		r = uint64(vb[0]) | uint64(vb[1])<<8 | uint64(vb[2])<<16 |
+			uint64(vb[3])<<24 | uint64(vb[4])<<32 | uint64(vb[5])<<40
+	case "tempminmax":
+		// This is device specific!
+		r = uint64(vb[0])
 	}
 
-	return s
+	return r
 }
 
 func printSMART(smart smartPage, drive driveModel) {
@@ -129,31 +138,22 @@ func printSMART(smart smartPage, drive driveModel) {
 	fmt.Printf("ID# ATTRIBUTE_NAME           FLAG     VALUE WORST RESERVED RAW_VALUE     VENDOR_BYTES\n")
 
 	for _, attr := range smart.Attrs {
-		var rawValue uint64
+		var (
+			rawValue uint64
+			conv     attrConv
+		)
 
 		if attr.Id == 0 {
 			break
 		}
 
-		attrconv := drive.Presets[strconv.Itoa(int(attr.Id))]
-
-		switch attrconv.Conv {
-		case "raw24(raw8)":
-			// Big-endian 24-bit number, optionally with 8 bit values
-			for i := 2; i >= 0; i-- {
-				rawValue |= uint64(attr.VendorBytes[i]) << uint64(i*8)
-			}
-		case "raw48":
-			// Big-endian 48-bit number
-			for i := 5; i >= 0; i-- {
-				rawValue |= uint64(attr.VendorBytes[i]) << uint64(i*8)
-			}
-		case "tempminmax":
-			rawValue = uint64(attr.VendorBytes[0])
+		conv, ok := drive.Presets[strconv.Itoa(int(attr.Id))]
+		if ok {
+			rawValue = attr.decodeVendorBytes(conv.Conv)
 		}
 
 		fmt.Printf("%3d %-24s %#04x   %03d   %03d   %03d      %-12d  %v (%s)\n",
-			attr.Id, attrconv.Name, attr.Flags, attr.Value, attr.Worst, attr.Reserved,
-			rawValue, attr.VendorBytes, attrconv.Conv)
+			attr.Id, conv.Name, attr.Flags, attr.Value, attr.Worst, attr.Reserved,
+			rawValue, attr.VendorBytes, conv.Conv)
 	}
 }

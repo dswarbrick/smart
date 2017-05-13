@@ -10,8 +10,8 @@ package smart
 import (
 	"bytes"
 	"encoding/binary"
-	"path/filepath"
 	"fmt"
+	"path/filepath"
 	"unsafe"
 )
 
@@ -146,4 +146,13 @@ func ScanDevices() {
 	for _, file := range files {
 		fmt.Println(file)
 	}
+}
+
+// Swap bytes in a byte slice
+func swapBytes(s []byte) []byte {
+	for i := 0; i < len(s); i += 2 {
+		s[i], s[i+1] = s[i+1], s[i]
+	}
+
+	return s
 }
