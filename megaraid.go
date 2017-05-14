@@ -271,7 +271,8 @@ func OpenMegasasIoctl() error {
 	defer m.Close()
 
 	// FIXME: Don't assume that host is always zero
-	devices, _ := m.GetDeviceList(0)
+	host := uint16(0)
+	devices, _ := m.GetDeviceList(host)
 
 	fmt.Println("\nEncl.  Slot  Device Id  SAS Address")
 	for _, pd := range devices {
@@ -297,11 +298,16 @@ func OpenMegasasIoctl() error {
 		}
 	}
 
+	// FIXME: Obtain this from user and verify that it's a valid device ID
+	diskNum := uint8(26)
+
 	// Send ATA IDENTIFY command as a CDB16 passthru command
-	cdb := CDB16{SCSI_ATA_PASSTHRU_16, 0x08, 0x0e, 0x00, 0x00, 0x00, 0x01}
-	cdb[14] = ATA_IDENTIFY_DEVICE
+	cdb := CDB16{SCSI_ATA_PASSTHRU_16}
+	cdb[1] = 0x08                 // ATA protocol (4 << 1, PIO data-in)
+	cdb[2] = 0x0e                 // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
+	cdb[14] = ATA_IDENTIFY_DEVICE // command
 	respBuf = make([]byte, 512)
-	m.PassThru(0, 26, cdb[:], respBuf, SG_DXFER_FROM_DEV)
+	m.PassThru(host, diskNum, cdb[:], respBuf, SG_DXFER_FROM_DEV)
 
 	ident_buf := IdentifyDeviceData{}
 	binary.Read(bytes.NewBuffer(respBuf), nativeEndian, &ident_buf)
@@ -320,10 +326,15 @@ func OpenMegasasIoctl() error {
 	fmt.Printf("Drive DB contains %d entries. Using model: %s\n", len(db.Drives), thisDrive.Family)
 
 	// Send ATA SMART READ command as a CDB16 passthru command
-	cdb = CDB16{SCSI_ATA_PASSTHRU_16, 0x08, 0x0e, 0x00, SMART_READ_DATA, 0x00, 0x01, 0x00, 0x00, 0x00, 0x4f, 0x00, 0xc2}
-	cdb[14] = ATA_SMART
+	cdb = CDB16{SCSI_ATA_PASSTHRU_16}
+	cdb[1] = 0x08            // ATA protocol (4 << 1, PIO data-in)
+	cdb[2] = 0x0e            // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
+	cdb[4] = SMART_READ_DATA // feature LSB
+	cdb[10] = 0x4f           // low lba_mid
+	cdb[12] = 0xc2           // low lba_high
+	cdb[14] = ATA_SMART      // command
 	respBuf = make([]byte, 512)
-	m.PassThru(0, 26, cdb[:], respBuf, SG_DXFER_FROM_DEV)
+	m.PassThru(host, diskNum, cdb[:], respBuf, SG_DXFER_FROM_DEV)
 
 	smart := smartPage{}
 	binary.Read(bytes.NewBuffer(respBuf[:362]), nativeEndian, &smart)
