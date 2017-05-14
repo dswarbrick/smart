@@ -9,6 +9,7 @@
  *   - Walk /sys/class/scsi_host/ directory
  *   - "host%d" symlinks enumerate hosts
  *   - "host%d/proc_name" should contain the value "megaraid_sas"
+ * - Use newer MR_DCMD_PD_LIST_QUERY if possible
  */
 
 package smart
@@ -31,7 +32,9 @@ const (
 	MFI_CMD_PD_SCSI_IO = 0x04
 	MFI_CMD_DCMD       = 0x05
 
-	MR_DCMD_PD_GET_LIST = 0x02010000 // Obsolete / deprecated command
+	MR_DCMD_CTRL_GET_INFO = 0x01010000
+	MR_DCMD_PD_GET_LIST   = 0x02010000 // Obsolete / deprecated command
+	MR_DCMD_PD_LIST_QUERY = 0x02010100
 
 	MFI_FRAME_DIR_NONE  = 0x0000
 	MFI_FRAME_DIR_WRITE = 0x0008
