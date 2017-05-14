@@ -91,21 +91,21 @@ func (inq inquiryResponse) String() string {
 }
 
 type SCSIDevice struct {
-	fd int
+	Name string
+	fd   int
 }
 
-func openDevice(device string) (SCSIDevice, error) {
-	var (
-		d   SCSIDevice
-		err error
-	)
-
-	d.fd, err = syscall.Open(device, syscall.O_RDWR, 0600)
-	return d, err
+func newDevice(name string) SCSIDevice {
+	return SCSIDevice{name, -1}
 }
 
-func (d *SCSIDevice) close() {
-	syscall.Close(d.fd)
+func (d *SCSIDevice) open() (err error) {
+	d.fd, err = syscall.Open(d.Name, syscall.O_RDWR, 0600)
+	return err
+}
+
+func (d *SCSIDevice) close() error {
+	return syscall.Close(d.fd)
 }
 
 func (d *SCSIDevice) execGenericIO(hdr *sgIoHdr) error {

@@ -14,6 +14,12 @@ import (
 	"github.com/dswarbrick/smart"
 )
 
+func scanDevices() {
+	for _, device := range smart.ScanDevices() {
+		fmt.Printf("%#v\n", device)
+	}
+}
+
 func main() {
 	fmt.Println("Go smartctl Reference Implementation")
 	fmt.Printf("Built with %s on %s (%s)\n\n", runtime.Version(), runtime.GOOS, runtime.GOARCH)
@@ -31,7 +37,7 @@ func main() {
 	} else if *megaraid {
 		smart.OpenMegasasIoctl()
 	} else if *scan {
-		smart.ScanDevices()
+		scanDevices()
 	} else {
 		flag.PrintDefaults()
 		os.Exit(1)

@@ -48,15 +48,16 @@ type IdentifyDeviceData struct {
 	_                    [512 - 110]byte // TODO: Split out remaining bytes
 }
 
-func ReadSMART(device string) error {
+func ReadSMART(devName string) error {
 	var (
 		identBuf IdentifyDeviceData
 		senseBuf [32]byte
 	)
 
-	dev, err := openDevice(device)
+	dev := newDevice(devName)
+	err := dev.open()
 	if err != nil {
-		return fmt.Errorf("Cannot open device %s: %v", device, err)
+		return fmt.Errorf("Cannot open device %s: %v", dev.Name, err)
 	}
 
 	defer dev.close()
@@ -136,16 +137,20 @@ func ReadSMART(device string) error {
 	return nil
 }
 
-func ScanDevices() {
+func ScanDevices() []SCSIDevice {
+	var devices []SCSIDevice
+
 	// Find all SCSI disk devices
-	files, err := filepath.Glob("/dev/sd*[^1-9]")
+	files, err := filepath.Glob("/dev/sd*[^0-9]")
 	if err != nil {
-		return
+		return devices
 	}
 
 	for _, file := range files {
-		fmt.Println(file)
+		devices = append(devices, newDevice(file))
 	}
+
+	return devices
 }
 
 // Swap bytes in a byte slice
