@@ -214,6 +214,7 @@ func (m *MegasasIoctl) MFI(host uint16, opcode uint32, b []byte) error {
 }
 
 // PassThru sends a SCSI command to a MegaRAID controller
+// TODO: Return error if unsuccessful
 func (m *MegasasIoctl) PassThru(host uint16, diskNum uint8, cdb []byte, buf []byte, dxfer_dir int) {
 	ioc := megasas_iocpacket{host_no: host}
 
@@ -269,7 +270,7 @@ func (m *MegasasIoctl) GetDeviceList(host uint16) ([]MegasasPDAddress, error) {
 	return devices, nil
 }
 
-func OpenMegasasIoctl() error {
+func OpenMegasasIoctl(host uint16, diskNum uint8) error {
 	var respBuf []byte
 
 	m, _ := CreateMegasasIoctl()
@@ -277,18 +278,14 @@ func OpenMegasasIoctl() error {
 
 	defer m.Close()
 
-	// FIXME: Don't assume that host is always zero
-	host := uint16(0)
-
-	// FIXME: Obtain this from user and verify that it's a valid device ID
-	diskNum := uint8(26)
-
 	// Send ATA IDENTIFY command as a CDB16 passthru command
 	cdb := CDB16{SCSI_ATA_PASSTHRU_16}
 	cdb[1] = 0x08                 // ATA protocol (4 << 1, PIO data-in)
 	cdb[2] = 0x0e                 // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
 	cdb[14] = ATA_IDENTIFY_DEVICE // command
 	respBuf = make([]byte, 512)
+
+	// TODO: Check for error status of pass-through command
 	m.PassThru(host, diskNum, cdb[:], respBuf, SG_DXFER_FROM_DEV)
 
 	ident_buf := IdentifyDeviceData{}
@@ -316,6 +313,8 @@ func OpenMegasasIoctl() error {
 	cdb[12] = 0xc2           // low lba_high
 	cdb[14] = ATA_SMART      // command
 	respBuf = make([]byte, 512)
+
+	// TODO: Check for error status of pass-through command
 	m.PassThru(host, diskNum, cdb[:], respBuf, SG_DXFER_FROM_DEV)
 
 	smart := smartPage{}
