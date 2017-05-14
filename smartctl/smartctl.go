@@ -18,6 +18,8 @@ func scanDevices() {
 	for _, device := range smart.ScanDevices() {
 		fmt.Printf("%#v\n", device)
 	}
+
+	smart.MegaScan()
 }
 
 func main() {

@@ -19,14 +19,18 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 	"syscall"
 	"unsafe"
 )
 
 const (
+	SYSFS_SCSI_HOST_DIR = "/sys/class/scsi_host"
+
 	MAX_IOCTL_SGE = 16
 
 	MFI_CMD_PD_SCSI_IO = 0x04
@@ -275,31 +279,6 @@ func OpenMegasasIoctl() error {
 
 	// FIXME: Don't assume that host is always zero
 	host := uint16(0)
-	devices, _ := m.GetDeviceList(host)
-
-	fmt.Println("\nEncl.  Slot  Device Id  SAS Address")
-	for _, pd := range devices {
-		if pd.SCSIDevType == 0 { // SCSI disk
-			fmt.Printf("%5d   %3d      %5d  %#x\n", pd.EnclosureId, pd.SlotNumber, pd.DeviceId, pd.SASAddr[0])
-		}
-	}
-
-	fmt.Println()
-
-	for _, pd := range devices {
-		if pd.SCSIDevType == 0 { // SCSI disk
-			var inqBuf inquiryResponse
-
-			cdb := CDB6{SCSI_INQUIRY}
-			binary.BigEndian.PutUint16(cdb[3:], INQ_REPLY_LEN)
-
-			respBuf = make([]byte, 512)
-			m.PassThru(0, uint8(pd.DeviceId), cdb[:], respBuf, SG_DXFER_FROM_DEV)
-
-			binary.Read(bytes.NewReader(respBuf), nativeEndian, &inqBuf)
-			fmt.Printf("diskNum: %d  INQUIRY data: %s\n", pd.DeviceId, inqBuf)
-		}
-	}
 
 	// FIXME: Obtain this from user and verify that it's a valid device ID
 	diskNum := uint8(26)
@@ -344,4 +323,60 @@ func OpenMegasasIoctl() error {
 	printSMART(smart, thisDrive)
 
 	return nil
+}
+
+// Scan system for MegaRAID adapters and their devices
+func MegaScan() {
+	m, _ := CreateMegasasIoctl()
+	fmt.Printf("%#v\n", m)
+
+	defer m.Close()
+
+	files, err := ioutil.ReadDir(SYSFS_SCSI_HOST_DIR)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, file := range files {
+		if file.Mode()&os.ModeSymlink != 0 {
+			b, err := ioutil.ReadFile(filepath.Join(SYSFS_SCSI_HOST_DIR, file.Name(), "proc_name"))
+			if err != nil {
+				continue
+			}
+
+			if string(bytes.Trim(b, "\n")) == "megaraid_sas" {
+				var hostNum uint16
+
+				if _, err := fmt.Sscanf(file.Name(), "host%d", &hostNum); err != nil {
+					continue
+				}
+
+				devices, _ := m.GetDeviceList(hostNum)
+
+				fmt.Println("\nEncl.  Slot  Device Id  SAS Address")
+				for _, pd := range devices {
+					if pd.SCSIDevType == 0 { // SCSI disk
+						fmt.Printf("%5d   %3d      %5d  %#x\n", pd.EnclosureId, pd.SlotNumber, pd.DeviceId, pd.SASAddr[0])
+					}
+				}
+
+				fmt.Println()
+
+				for _, pd := range devices {
+					if pd.SCSIDevType == 0 { // SCSI disk
+						var inqBuf inquiryResponse
+
+						cdb := CDB6{SCSI_INQUIRY}
+						binary.BigEndian.PutUint16(cdb[3:], INQ_REPLY_LEN)
+
+						respBuf := make([]byte, 512)
+						m.PassThru(0, uint8(pd.DeviceId), cdb[:], respBuf, SG_DXFER_FROM_DEV)
+
+						binary.Read(bytes.NewReader(respBuf), nativeEndian, &inqBuf)
+						fmt.Printf("diskNum: %d  INQUIRY data: %s\n", pd.DeviceId, inqBuf)
+					}
+				}
+			}
+		}
+	}
 }
