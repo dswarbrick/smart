@@ -66,7 +66,7 @@ func init() {
 
 // lookupDrive returns the most appropriate driveModel for a given ATA IDENTIFY value
 func (db *driveDb) lookupDrive(ident []byte) driveModel {
-	var model, defaultModel driveModel
+	var model driveModel
 
 	for _, d := range db.Drives {
 		// Skip placeholder entry
@@ -75,23 +75,25 @@ func (db *driveDb) lookupDrive(ident []byte) driveModel {
 		}
 
 		if d.Family == "DEFAULT" {
-			defaultModel = d
+			model = d
 			continue
 		}
 
 		if d.CompiledRegexp.Match(ident) {
-			model = d
+			model.Family = d.Family
+			model.ModelRegex = d.ModelRegex
+			model.FirmwareRegex = d.FirmwareRegex
+			model.WarningMsg = d.WarningMsg
+			model.CompiledRegexp = d.CompiledRegexp
 
-			// Inherit presets from defaultModel
-			for id, p := range defaultModel.Presets {
+			for id, p := range d.Presets {
 				if _, exists := model.Presets[id]; exists {
 					// Some drives override the conv but don't specify a name, so copy it from default
-					if model.Presets[id].Name == "" {
-						model.Presets[id] = attrConv{Name: p.Name, Conv: model.Presets[id].Conv}
+					if p.Name == "" {
+						p.Name = model.Presets[id].Name
 					}
-				} else {
-					model.Presets[id] = p
 				}
+				model.Presets[id] = attrConv{Name: p.Name, Conv: p.Conv}
 			}
 
 			break
