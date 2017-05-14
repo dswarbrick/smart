@@ -17,7 +17,9 @@ import (
 
 const (
 	// ATA feature register values for SMART
-	SMART_READ_DATA = 0xd0
+	SMART_READ_DATA     = 0xd0
+	SMART_READ_LOG      = 0xd5
+	SMART_RETURN_STATUS = 0xda
 
 	// ATA commands
 	ATA_SMART           = 0xb0
@@ -70,9 +72,9 @@ func ReadSMART(device string) error {
 	cdb16 := CDB16{}
 
 	cdb16 = CDB16{SCSI_ATA_PASSTHRU_16}
-	cdb16[1] = 0x08 // ATA protocol (4 << 1, PIO data-in)
-	cdb16[2] = 0x0e // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
-	cdb16[14] = ATA_IDENTIFY_DEVICE
+	cdb16[1] = 0x08                 // ATA protocol (4 << 1, PIO data-in)
+	cdb16[2] = 0x0e                 // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
+	cdb16[14] = ATA_IDENTIFY_DEVICE // command
 
 	io_hdr := sgIoHdr{interface_id: 'S', dxfer_direction: SG_DXFER_FROM_DEV, timeout: DEFAULT_TIMEOUT}
 	io_hdr.cmd_len = uint8(len(cdb16))
@@ -104,13 +106,14 @@ func ReadSMART(device string) error {
 
 	/*
 	 * SMART READ DATA
-	 * command code B0h, feature register D0h
-	 * LBA mid register 4Fh, LBA high register C2h
 	 */
-	// 0x08 : ATA protocol (4 << 1, PIO data-in)
-	// 0x0e : BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
-	cdb16 = CDB16{SCSI_ATA_PASSTHRU_16, 0x08, 0x0e, 0x00, SMART_READ_DATA, 0x00, 0x01, 0x00, 0x00, 0x00, 0x4f, 0x00, 0xc2}
-	cdb16[14] = ATA_SMART
+	cdb16 = CDB16{SCSI_ATA_PASSTHRU_16}
+	cdb16[1] = 0x08            // ATA protocol (4 << 1, PIO data-in)
+	cdb16[2] = 0x0e            // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
+	cdb16[4] = SMART_READ_DATA // feature LSB
+	cdb16[10] = 0x4f           // low lba_mid
+	cdb16[12] = 0xc2           // low lba_high
+	cdb16[14] = ATA_SMART      // command
 	respBuf := [512]byte{}
 
 	io_hdr = sgIoHdr{interface_id: 'S', dxfer_direction: SG_DXFER_FROM_DEV, timeout: DEFAULT_TIMEOUT}
