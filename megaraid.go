@@ -298,7 +298,8 @@ func OpenMegasasIoctl() error {
 	}
 
 	// Send ATA IDENTIFY command as a CDB16 passthru command
-	cdb := CDB16{SCSI_ATA_PASSTHRU_16, 0x08, 0x0e, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xec, 0x00}
+	cdb := CDB16{SCSI_ATA_PASSTHRU_16, 0x08, 0x0e, 0x00, 0x00, 0x00, 0x01}
+	cdb[14] = ATA_IDENTIFY_DEVICE
 	respBuf = make([]byte, 512)
 	m.PassThru(0, 26, cdb[:], respBuf, SG_DXFER_FROM_DEV)
 
@@ -319,7 +320,8 @@ func OpenMegasasIoctl() error {
 	fmt.Printf("Drive DB contains %d entries. Using model: %s\n", len(db.Drives), thisDrive.Family)
 
 	// Send ATA SMART READ command as a CDB16 passthru command
-	cdb = CDB16{SCSI_ATA_PASSTHRU_16, 0x08, 0x0e, 0x00, 0xd0, 0x00, 0x01, 0x00, 0x00, 0x00, 0x4f, 0x00, 0xc2, 0x00, 0xb0, 0x00}
+	cdb = CDB16{SCSI_ATA_PASSTHRU_16, 0x08, 0x0e, 0x00, SMART_READ_DATA, 0x00, 0x01, 0x00, 0x00, 0x00, 0x4f, 0x00, 0xc2}
+	cdb[14] = ATA_SMART
 	respBuf = make([]byte, 512)
 	m.PassThru(0, 26, cdb[:], respBuf, SG_DXFER_FROM_DEV)
 

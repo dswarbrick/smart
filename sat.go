@@ -69,9 +69,10 @@ func ReadSMART(device string) error {
 
 	cdb16 := CDB16{}
 
-	// 0x08 : ATA protocol (4 << 1, PIO data-in)
-	// 0x0e : BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
-	cdb16 = CDB16{SCSI_ATA_PASSTHRU_16, 0x08, 0x0e, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, ATA_IDENTIFY_DEVICE, 0x00}
+	cdb16 = CDB16{SCSI_ATA_PASSTHRU_16}
+	cdb16[1] = 0x08 // ATA protocol (4 << 1, PIO data-in)
+	cdb16[2] = 0x0e // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
+	cdb16[14] = ATA_IDENTIFY_DEVICE
 
 	io_hdr := sgIoHdr{interface_id: 'S', dxfer_direction: SG_DXFER_FROM_DEV, timeout: DEFAULT_TIMEOUT}
 	io_hdr.cmd_len = uint8(len(cdb16))
@@ -108,7 +109,8 @@ func ReadSMART(device string) error {
 	 */
 	// 0x08 : ATA protocol (4 << 1, PIO data-in)
 	// 0x0e : BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
-	cdb16 = CDB16{SCSI_ATA_PASSTHRU_16, 0x08, 0x0e, 0x00, SMART_READ_DATA, 0x00, 0x01, 0x00, 0x00, 0x00, 0x4f, 0x00, 0xc2, 0x00, ATA_SMART, 0x00}
+	cdb16 = CDB16{SCSI_ATA_PASSTHRU_16, 0x08, 0x0e, 0x00, SMART_READ_DATA, 0x00, 0x01, 0x00, 0x00, 0x00, 0x4f, 0x00, 0xc2}
+	cdb16[14] = ATA_SMART
 	respBuf := [512]byte{}
 
 	io_hdr = sgIoHdr{interface_id: 'S', dxfer_direction: SG_DXFER_FROM_DEV, timeout: DEFAULT_TIMEOUT}
