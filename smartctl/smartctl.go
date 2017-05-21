@@ -19,14 +19,15 @@ func scanDevices() {
 		fmt.Printf("%#v\n", device)
 	}
 
-	smart.MegaScan()
-
 	// Open megaraid_sas ioctl device and scan for hosts / devices
 	if m, err := smart.CreateMegasasIoctl(); err == nil {
 		defer m.Close()
-
-		fmt.Printf("%#v\n", m)
+		for _, device := range m.ScanDevices() {
+			fmt.Printf("%#v\n", device)
+		}
 	}
+
+	//smart.MegaScan()
 }
 
 func main() {

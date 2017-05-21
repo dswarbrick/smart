@@ -122,6 +122,13 @@ type MegasasIoctl struct {
 	fd          int
 }
 
+type MegasasDevice struct {
+	Name     string
+	hostNum  uint16
+	deviceId uint16
+	ctl      *MegasasIoctl
+}
+
 var (
 	// 0xc1944d01 - Beware: cannot use unsafe.Sizeof(megasas_iocpacket{}) due to Go struct padding!
 	MEGASAS_IOC_FIRMWARE = _iowr('M', 1, uintptr(binary.Size(megasas_iocpacket{})))
@@ -252,8 +259,8 @@ func (m *MegasasIoctl) PassThru(host uint16, diskNum uint8, cdb []byte, buf []by
 	}
 }
 
-// GetDeviceList retrieves a list of physical devices attached to the specified host
-func (m *MegasasIoctl) GetDeviceList(host uint16) ([]MegasasPDAddress, error) {
+// GetPDList retrieves a list of physical devices attached to the specified host
+func (m *MegasasIoctl) GetPDList(host uint16) ([]MegasasPDAddress, error) {
 	respBuf := make([]byte, 4096)
 
 	if err := m.MFI(0, MR_DCMD_PD_GET_LIST, respBuf); err != nil {
@@ -299,6 +306,43 @@ func (m *MegasasIoctl) ScanHosts() ([]uint16, error) {
 	return hosts, nil
 }
 
+// ScanDevices scans systme for (presumably) SMART-capable devices on all available host adapters
+func (m *MegasasIoctl) ScanDevices() []MegasasDevice {
+	var mdevs []MegasasDevice
+
+	hosts, _ := m.ScanHosts()
+	for _, hostNum := range hosts {
+		devices, _ := m.GetPDList(hostNum)
+		for _, pd := range devices {
+			if pd.SCSIDevType == 0 { // SCSI disk
+				md := MegasasDevice{
+					Name:     fmt.Sprintf("megaraid%d_%d", hostNum, pd.DeviceId),
+					hostNum:  hostNum,
+					deviceId: pd.DeviceId,
+					ctl:      m,
+				}
+				mdevs = append(mdevs, md)
+			}
+		}
+	}
+
+	return mdevs
+}
+
+// inquiry fetches a standard SCSI INQUIRY response from device
+func (d *MegasasDevice) inquiry() inquiryResponse {
+	var inqBuf inquiryResponse
+
+	cdb := CDB6{SCSI_INQUIRY}
+	binary.BigEndian.PutUint16(cdb[3:], INQ_REPLY_LEN)
+
+	respBuf := make([]byte, 512)
+	d.ctl.PassThru(d.hostNum, uint8(d.deviceId), cdb[:], respBuf, SG_DXFER_FROM_DEV)
+
+	binary.Read(bytes.NewReader(respBuf), nativeEndian, &inqBuf)
+	return inqBuf
+}
+
 func OpenMegasasIoctl(host uint16, diskNum uint8) error {
 	var respBuf []byte
 
@@ -306,6 +350,14 @@ func OpenMegasasIoctl(host uint16, diskNum uint8) error {
 	fmt.Printf("%#v\n", m)
 
 	defer m.Close()
+
+	md := MegasasDevice{
+		Name:     fmt.Sprintf("megaraid%d_%d", host, diskNum),
+		hostNum:  host,
+		deviceId: uint16(diskNum),
+		ctl:      &m,
+	}
+	fmt.Printf("%#v\n", md)
 
 	// Send ATA IDENTIFY command as a CDB16 passthru command
 	cdb := CDB16{SCSI_ATA_PASSTHRU_16}
@@ -356,13 +408,11 @@ func OpenMegasasIoctl(host uint16, diskNum uint8) error {
 // Scan system for MegaRAID adapters and their devices
 func MegaScan() {
 	m, _ := CreateMegasasIoctl()
-	fmt.Printf("%#v\n", m)
-
 	defer m.Close()
 
 	hosts, _ := m.ScanHosts()
 	for _, hostNum := range hosts {
-		devices, _ := m.GetDeviceList(hostNum)
+		devices, _ := m.GetPDList(hostNum)
 
 		fmt.Println("\nEncl.  Slot  Device Id  SAS Address")
 		for _, pd := range devices {
@@ -375,16 +425,14 @@ func MegaScan() {
 
 		for _, pd := range devices {
 			if pd.SCSIDevType == 0 { // SCSI disk
-				var inqBuf inquiryResponse
+				md := MegasasDevice{
+					Name:     fmt.Sprintf("megaraid%d_%d", hostNum, pd.DeviceId),
+					hostNum:  hostNum,
+					deviceId: uint16(pd.DeviceId),
+					ctl:      &m,
+				}
 
-				cdb := CDB6{SCSI_INQUIRY}
-				binary.BigEndian.PutUint16(cdb[3:], INQ_REPLY_LEN)
-
-				respBuf := make([]byte, 512)
-				m.PassThru(0, uint8(pd.DeviceId), cdb[:], respBuf, SG_DXFER_FROM_DEV)
-
-				binary.Read(bytes.NewReader(respBuf), nativeEndian, &inqBuf)
-				fmt.Printf("diskNum: %d  INQUIRY data: %s\n", pd.DeviceId, inqBuf)
+				fmt.Printf("diskNum: %d  INQUIRY data: %s\n", pd.DeviceId, md.inquiry())
 			}
 		}
 	}
