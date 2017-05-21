@@ -5,10 +5,6 @@
  * Broadcom (formerly Avago, LSI) MegaRAID ioctl functions
  * TODO:
  * - Improve code comments, refer to in-kernel structs
- * - Device Scan:
- *   - Walk /sys/class/scsi_host/ directory
- *   - "host%d" symlinks enumerate hosts
- *   - "host%d/proc_name" should contain the value "megaraid_sas"
  * - Use newer MR_DCMD_PD_LIST_QUERY if possible
  */
 
@@ -221,8 +217,7 @@ func (m *MegasasIoctl) MFI(host uint16, opcode uint32, b []byte) error {
 }
 
 // PassThru sends a SCSI command to a MegaRAID controller
-// TODO: Return error if unsuccessful
-func (m *MegasasIoctl) PassThru(host uint16, diskNum uint8, cdb []byte, buf []byte, dxfer_dir int) {
+func (m *MegasasIoctl) PassThru(host uint16, diskNum uint8, cdb []byte, buf []byte, dxfer_dir int) error {
 	ioc := megasas_iocpacket{host_no: host}
 
 	// Approximation of C union behaviour
@@ -254,9 +249,7 @@ func (m *MegasasIoctl) PassThru(host uint16, diskNum uint8, cdb []byte, buf []by
 	iocBuf := ioc.PackedBytes()
 
 	// Note pointer to first item in iocBuf buffer
-	if err := ioctl(uintptr(m.fd), MEGASAS_IOC_FIRMWARE, uintptr(unsafe.Pointer(&iocBuf[0]))); err != nil {
-		log.Fatal(err)
-	}
+	return ioctl(uintptr(m.fd), MEGASAS_IOC_FIRMWARE, uintptr(unsafe.Pointer(&iocBuf[0])))
 }
 
 // GetPDList retrieves a list of physical devices attached to the specified host
@@ -330,6 +323,7 @@ func (m *MegasasIoctl) ScanDevices() []MegasasDevice {
 }
 
 // inquiry fetches a standard SCSI INQUIRY response from device
+// TODO: Return error if unsuccessful
 func (d *MegasasDevice) inquiry() inquiryResponse {
 	var inqBuf inquiryResponse
 
@@ -337,7 +331,9 @@ func (d *MegasasDevice) inquiry() inquiryResponse {
 	binary.BigEndian.PutUint16(cdb[3:], INQ_REPLY_LEN)
 
 	respBuf := make([]byte, 512)
-	d.ctl.PassThru(d.hostNum, uint8(d.deviceId), cdb[:], respBuf, SG_DXFER_FROM_DEV)
+	if err := d.ctl.PassThru(d.hostNum, uint8(d.deviceId), cdb[:], respBuf, SG_DXFER_FROM_DEV); err != nil {
+		return inqBuf
+	}
 
 	binary.Read(bytes.NewReader(respBuf), nativeEndian, &inqBuf)
 	return inqBuf
@@ -366,8 +362,9 @@ func OpenMegasasIoctl(host uint16, diskNum uint8) error {
 	cdb[14] = ATA_IDENTIFY_DEVICE // command
 	respBuf = make([]byte, 512)
 
-	// TODO: Check for error status of pass-through command
-	m.PassThru(host, diskNum, cdb[:], respBuf, SG_DXFER_FROM_DEV)
+	if err := m.PassThru(host, diskNum, cdb[:], respBuf, SG_DXFER_FROM_DEV); err != nil {
+		return err
+	}
 
 	ident_buf := IdentifyDeviceData{}
 	binary.Read(bytes.NewBuffer(respBuf), nativeEndian, &ident_buf)
@@ -395,8 +392,9 @@ func OpenMegasasIoctl(host uint16, diskNum uint8) error {
 	cdb[14] = ATA_SMART      // command
 	respBuf = make([]byte, 512)
 
-	// TODO: Check for error status of pass-through command
-	m.PassThru(host, diskNum, cdb[:], respBuf, SG_DXFER_FROM_DEV)
+	if err := m.PassThru(host, diskNum, cdb[:], respBuf, SG_DXFER_FROM_DEV); err != nil {
+		return err
+	}
 
 	smart := smartPage{}
 	binary.Read(bytes.NewBuffer(respBuf[:362]), nativeEndian, &smart)
