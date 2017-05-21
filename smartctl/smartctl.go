@@ -20,6 +20,13 @@ func scanDevices() {
 	}
 
 	smart.MegaScan()
+
+	// Open megaraid_sas ioctl device and scan for hosts / devices
+	if m, err := smart.CreateMegasasIoctl(); err == nil {
+		defer m.Close()
+
+		fmt.Printf("%#v\n", m)
+	}
 }
 
 func main() {

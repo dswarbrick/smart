@@ -116,7 +116,7 @@ type MegasasPDAddress struct {
 	SASAddr           [2]uint64
 }
 
-// Holder for megasas ioctl device
+// Holder for megaraid_sas ioctl device
 type MegasasIoctl struct {
 	DeviceMajor int
 	fd          int
@@ -143,7 +143,7 @@ func (ioc *megasas_iocpacket) PackedBytes() []byte {
 }
 
 // CreateMegasasIoctl determines the device ID for the MegaRAID SAS ioctl device, creates it
-// if necessary, and returns a MegasasIoctl struct to manage the device.
+// if necessary, and returns a MegasasIoctl struct to interact with the megaraid_sas driver.
 func CreateMegasasIoctl() (MegasasIoctl, error) {
 	var (
 		m   MegasasIoctl
@@ -270,6 +270,35 @@ func (m *MegasasIoctl) GetDeviceList(host uint16) ([]MegasasPDAddress, error) {
 	return devices, nil
 }
 
+// ScanHosts scans system for megaraid_sas controllers and returns a slice of host numbers
+func (m *MegasasIoctl) ScanHosts() ([]uint16, error) {
+	var hosts []uint16
+
+	files, err := ioutil.ReadDir(SYSFS_SCSI_HOST_DIR)
+	if err != nil {
+		return hosts, err
+	}
+
+	for _, file := range files {
+		if file.Mode()&os.ModeSymlink != 0 {
+			b, err := ioutil.ReadFile(filepath.Join(SYSFS_SCSI_HOST_DIR, file.Name(), "proc_name"))
+			if err != nil {
+				continue
+			}
+
+			if string(bytes.Trim(b, "\n")) == "megaraid_sas" {
+				var hostNum uint16
+
+				if _, err := fmt.Sscanf(file.Name(), "host%d", &hostNum); err == nil {
+					hosts = append(hosts, hostNum)
+				}
+			}
+		}
+	}
+
+	return hosts, nil
+}
+
 func OpenMegasasIoctl(host uint16, diskNum uint8) error {
 	var respBuf []byte
 
@@ -331,50 +360,31 @@ func MegaScan() {
 
 	defer m.Close()
 
-	files, err := ioutil.ReadDir(SYSFS_SCSI_HOST_DIR)
-	if err != nil {
-		log.Fatal(err)
-	}
+	hosts, _ := m.ScanHosts()
+	for _, hostNum := range hosts {
+		devices, _ := m.GetDeviceList(hostNum)
 
-	for _, file := range files {
-		if file.Mode()&os.ModeSymlink != 0 {
-			b, err := ioutil.ReadFile(filepath.Join(SYSFS_SCSI_HOST_DIR, file.Name(), "proc_name"))
-			if err != nil {
-				continue
+		fmt.Println("\nEncl.  Slot  Device Id  SAS Address")
+		for _, pd := range devices {
+			if pd.SCSIDevType == 0 { // SCSI disk
+				fmt.Printf("%5d   %3d      %5d  %#x\n", pd.EnclosureId, pd.SlotNumber, pd.DeviceId, pd.SASAddr[0])
 			}
+		}
 
-			if string(bytes.Trim(b, "\n")) == "megaraid_sas" {
-				var hostNum uint16
+		fmt.Println()
 
-				if _, err := fmt.Sscanf(file.Name(), "host%d", &hostNum); err != nil {
-					continue
-				}
+		for _, pd := range devices {
+			if pd.SCSIDevType == 0 { // SCSI disk
+				var inqBuf inquiryResponse
 
-				devices, _ := m.GetDeviceList(hostNum)
+				cdb := CDB6{SCSI_INQUIRY}
+				binary.BigEndian.PutUint16(cdb[3:], INQ_REPLY_LEN)
 
-				fmt.Println("\nEncl.  Slot  Device Id  SAS Address")
-				for _, pd := range devices {
-					if pd.SCSIDevType == 0 { // SCSI disk
-						fmt.Printf("%5d   %3d      %5d  %#x\n", pd.EnclosureId, pd.SlotNumber, pd.DeviceId, pd.SASAddr[0])
-					}
-				}
+				respBuf := make([]byte, 512)
+				m.PassThru(0, uint8(pd.DeviceId), cdb[:], respBuf, SG_DXFER_FROM_DEV)
 
-				fmt.Println()
-
-				for _, pd := range devices {
-					if pd.SCSIDevType == 0 { // SCSI disk
-						var inqBuf inquiryResponse
-
-						cdb := CDB6{SCSI_INQUIRY}
-						binary.BigEndian.PutUint16(cdb[3:], INQ_REPLY_LEN)
-
-						respBuf := make([]byte, 512)
-						m.PassThru(0, uint8(pd.DeviceId), cdb[:], respBuf, SG_DXFER_FROM_DEV)
-
-						binary.Read(bytes.NewReader(respBuf), nativeEndian, &inqBuf)
-						fmt.Printf("diskNum: %d  INQUIRY data: %s\n", pd.DeviceId, inqBuf)
-					}
-				}
+				binary.Read(bytes.NewReader(respBuf), nativeEndian, &inqBuf)
+				fmt.Printf("diskNum: %d  INQUIRY data: %s\n", pd.DeviceId, inqBuf)
 			}
 		}
 	}
