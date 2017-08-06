@@ -1,8 +1,8 @@
-/*
- * Go SMART library smartctl reference implementation
- * Copyright 2017 Daniel Swarbrick
- */
+// Copyright 2017 Daniel Swarbrick. All rights reserved.
+// Use of this source code is governed by a GPL license that can be found in the LICENSE file.
 
+// Go SMART library smartctl reference implementation.
+//
 package main
 
 import (

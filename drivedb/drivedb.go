@@ -1,13 +1,11 @@
-/*
- * Smartmontools drivedb.h database to .toml format converter
- * Copyright 2017 Daniel Swarbrick
- */
+// Copyright 2017 Daniel Swarbrick. All rights reserved.
+// Use of this source code is governed by a GPL license that can be found in the LICENSE file.
 
+// Smartmontools drivedb.h database to .toml format converter.
+//
 package main
 
-/*
-#include "drivedb.h"
-*/
+// #include "drivedb.h"
 import "C"
 
 import (

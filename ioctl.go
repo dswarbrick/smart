@@ -1,10 +1,8 @@
-/*
- * Pure Go SMART library
- * Copyright 2017 Daniel Swarbrick
- *
- * Implementation of Linux kernel ioctl macros (<uapi/asm-generic/ioctl.h>)
- * See https://www.kernel.org/doc/Documentation/ioctl/ioctl-number.txt
- */
+// Copyright 2017 Daniel Swarbrick. All rights reserved.
+// Use of this source code is governed by a GPL license that can be found in the LICENSE file.
+
+// Implementation of Linux kernel ioctl macros (<uapi/asm-generic/ioctl.h>).
+// See https://www.kernel.org/doc/Documentation/ioctl/ioctl-number.txt
 
 package smart
 
