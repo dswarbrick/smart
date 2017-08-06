@@ -120,24 +120,42 @@ func openDriveDb(dbfile string) (driveDb, error) {
 
 // decodeVendorBytes decodes the six-byte vendor byte array based on the conversion rule passed as
 // conv. The conversion may also include the reserved byte, normalised value or worst value byte.
-func (sa *smartAttr) decodeVendorBytes(conv string) (r uint64) {
-	vb := sa.VendorBytes
+func (sa *smartAttr) decodeVendorBytes(conv string) uint64 {
+	var (
+		byteOrder string
+		r         uint64
+	)
 
-	// TODO: Complete other attr conversion, honour specified byte order
+	// Default byte orders if not otherwise specified in drivedb
+	// TODO: Handle temperature formats (device-specific)
 	switch conv {
-	case "raw16(raw16)", "raw16(avg16)":
-		r = uint64(vb[0]) | uint64(vb[1])<<8
-	case "raw24(raw8)", "raw24/raw24", "raw24/raw32":
-		r = uint64(vb[0]) | uint64(vb[1])<<8 | uint64(vb[2])<<16
-	case "raw48":
-		r = uint64(vb[0]) | uint64(vb[1])<<8 | uint64(vb[2])<<16 |
-			uint64(vb[3])<<24 | uint64(vb[4])<<32 | uint64(vb[5])<<40
-	case "raw56":
-		r = uint64(vb[0]) | uint64(vb[1])<<8 | uint64(vb[2])<<16 | uint64(vb[3])<<24 |
-			uint64(vb[4])<<32 | uint64(vb[5])<<40 | uint64(sa.Reserved)<<48
-	case "tempminmax":
-		// This is device specific!
-		r = uint64(vb[0])
+	case "raw64", "hex64":
+		byteOrder = "543210wv"
+	case "raw56", "hex56", "raw24/raw32", "msec24hour32":
+		byteOrder = "r543210"
+	default:
+		byteOrder = "543210"
+	}
+
+	// Pick bytes from smartAttr in order specified by byteOrder
+	for _, i := range byteOrder {
+		var b byte
+
+		switch i {
+		case '0', '1', '2', '3', '4', '5':
+			b = sa.VendorBytes[i-48]
+		case 'r':
+			b = sa.Reserved
+		case 'v':
+			b = sa.Value
+		case 'w':
+			b = sa.Worst
+		default:
+			b = 0
+		}
+
+		r <<= 8
+		r |= uint64(b)
 	}
 
 	return r

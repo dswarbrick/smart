@@ -74,7 +74,7 @@ struct drive_settings {
  */
 
 const struct drive_settings builtin_knowndrives[] = {
-  { "$Id$",
+  { "$Id: drivedb.h 4393 2017-02-27 22:03:39Z chrfranke $",
     "-", "-",
     "This is a dummy entry to hold the SVN-Id of drivedb.h",
     ""

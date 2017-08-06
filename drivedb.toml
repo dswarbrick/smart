@@ -1,5 +1,5 @@
 [[Drives]]
-  Family = "$Id$"
+  Family = "$Id: drivedb.h 4393 2017-02-27 22:03:39Z chrfranke $"
   ModelRegex = "-"
   FirmwareRegex = "-"
   WarningMsg = "This is a dummy entry to hold the SVN-Id of drivedb.h"
