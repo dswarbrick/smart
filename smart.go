@@ -161,9 +161,95 @@ func (sa *smartAttr) decodeVendorBytes(conv string) uint64 {
 	return r
 }
 
+func formatRawValue(v uint64, conv string) (s string) {
+	var (
+		raw  [6]uint8
+		word [3]uint16
+	)
+
+	// Split into bytes
+	for i := 0; i < 6; i++ {
+		raw[i] = uint8(v >> uint(i*8))
+	}
+
+	// Split into words
+	for i := 0; i < 3; i++ {
+		word[i] = uint16(v >> uint(i*16))
+	}
+
+	switch conv {
+	case "raw8":
+		s = fmt.Sprintf("%d %d %d %d %d %d",
+			raw[5], raw[4], raw[3], raw[2], raw[1], raw[0])
+	case "raw16":
+		s = fmt.Sprintf("%d %d %d", word[2], word[1], word[0])
+	case "raw48", "raw56", "raw64":
+		s = fmt.Sprintf("%d", v)
+	case "hex48":
+		s = fmt.Sprintf("%#012x", v)
+	case "hex56":
+		s = fmt.Sprintf("%#014x", v)
+	case "hex64":
+		s = fmt.Sprintf("%#016x", v)
+	case "raw16(raw16)":
+		s = fmt.Sprintf("%d", word[0])
+		if (word[1] != 0) || (word[2] != 0) {
+			s += fmt.Sprintf(" (%d %d)", word[2], word[1])
+		}
+	case "raw16(avg16)":
+		s = fmt.Sprintf("%d", word[0])
+		if word[1] != 0 {
+			s += fmt.Sprintf(" (Average %d)", word[1])
+		}
+	case "raw24(raw8)":
+		s = fmt.Sprintf("%d", v&0x00ffffff)
+		if (raw[3] != 0) || (raw[4] != 0) || (raw[5] != 0) {
+			s += fmt.Sprintf(" (%d %d %d)", raw[5], raw[4], raw[3])
+		}
+	case "raw24/raw24":
+		s = fmt.Sprintf("%d/%d", v>>24, v&0x00ffffff)
+	case "raw24/raw32":
+		s = fmt.Sprintf("%d/%d", v>>32, v&0xffffffff)
+	case "min2hour":
+		// minutes
+		minutes := int64(word[0]) + int64(word[1])<<16
+		s = fmt.Sprintf("%dh+%02dm", minutes/60, minutes%60)
+		if word[2] != 0 {
+			s += fmt.Sprintf(" (%d)", word[2])
+		}
+	case "sec2hour":
+		// seconds
+		hours := v / 3600
+		minutes := (v % 3600) / 60
+		seconds := v % 60
+		s = fmt.Sprintf("%dh+%02dm+%02ds", hours, minutes, seconds)
+	case "halfmin2hour":
+		// 30-second counter
+		hours := v / 120
+		minutes := (v % 120) / 2
+		s = fmt.Sprintf("%dh+%02dm", hours, minutes)
+	case "msec24hour32":
+		// hours + milliseconds
+		hours := v & 0xffffffff
+		milliseconds := v >> 32
+		seconds := milliseconds / 1000
+		s = fmt.Sprintf("%dh+%02dm+%02d.%03ds",
+			hours, seconds/60, seconds%60, milliseconds)
+	case "tempminmax":
+		s = "not implemented"
+	case "temp10x":
+		// ten times temperature in Celsius
+		s = fmt.Sprintf("%d.%d", word[0]/10, word[0]%10)
+	default:
+		s = "?"
+	}
+
+	return s
+}
+
 func printSMART(smart smartPage, drive driveModel) {
 	fmt.Printf("\nSMART structure version: %d\n", smart.Version)
-	fmt.Printf("ID# ATTRIBUTE_NAME           FLAG     VALUE WORST RESERVED TYPE     UPDATED RAW_VALUE     VENDOR_BYTES\n")
+	fmt.Printf("ID# ATTRIBUTE_NAME           FLAG     VALUE WORST RESERVED TYPE     UPDATED RAW_VALUE           VENDOR_BYTES\n")
 
 	for _, attr := range smart.Attrs {
 		var (
@@ -182,21 +268,21 @@ func printSMART(smart smartPage, drive driveModel) {
 		}
 
 		// Pre-fail / advisory bit
-		if attr.Flags&0x0001 > 0 {
+		if attr.Flags&0x0001 != 0 {
 			attrType = "Pre-fail"
 		} else {
 			attrType = "Old_age"
 		}
 
 		// Online data collection bit
-		if attr.Flags&0x0002 > 0 {
+		if attr.Flags&0x0002 != 0 {
 			attrUpdated = "Always"
 		} else {
 			attrUpdated = "Offline"
 		}
 
-		fmt.Printf("%3d %-24s %#04x   %03d   %03d   %03d      %-8s %-7s %-12d  %v (%s)\n",
+		fmt.Printf("%3d %-24s %#04x   %03d   %03d   %03d      %-8s %-7s %-18s  %v (%s)\n",
 			attr.Id, conv.Name, attr.Flags, attr.Value, attr.Worst, attr.Reserved, attrType,
-			attrUpdated, rawValue, attr.VendorBytes, conv.Conv)
+			attrUpdated, formatRawValue(rawValue, conv.Conv), attr.VendorBytes, conv.Conv)
 	}
 }
