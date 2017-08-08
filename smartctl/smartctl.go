@@ -10,9 +10,50 @@ import (
 	"fmt"
 	"os"
 	"runtime"
+	"syscall"
+	"unsafe"
 
 	"github.com/dswarbrick/smart"
 )
+
+const (
+	_LINUX_CAPABILITY_VERSION_3 = 0x20080522
+
+	CAP_SYS_RAWIO = 1 << 17
+	CAP_SYS_ADMIN = 1 << 21
+)
+
+type capHeader struct {
+	version uint32
+	pid     int
+}
+
+type capData struct {
+	effective   uint32
+	permitted   uint32
+	inheritable uint32
+}
+
+type capsV3 struct {
+	hdr  capHeader
+	data [2]capData
+}
+
+func checkCaps() {
+	caps := new(capsV3)
+	caps.hdr.version = _LINUX_CAPABILITY_VERSION_3
+
+	// Use RawSyscall since we do not expect it to block
+	_, _, e1 := syscall.RawSyscall(syscall.SYS_CAPGET, uintptr(unsafe.Pointer(&caps.hdr)), uintptr(unsafe.Pointer(&caps.data)), 0)
+	if e1 != 0 {
+		fmt.Println("capget() failed:", e1.Error())
+		return
+	}
+
+	if (caps.data[0].effective&CAP_SYS_RAWIO == 0) && (caps.data[0].effective&CAP_SYS_ADMIN == 0) {
+		fmt.Println("Neither cap_sys_rawio nor cap_sys_admin are in effect. Device access will probably fail.\n")
+	}
+}
 
 func scanDevices() {
 	for _, device := range smart.ScanDevices() {
@@ -38,6 +79,8 @@ func main() {
 	megaraid := flag.String("megaraid", "", "MegaRAID host and device ID from which to read SMART attributes, e.g., megaraid0_23")
 	scan := flag.Bool("scan", false, "Scan for drives that support SMART")
 	flag.Parse()
+
+	checkCaps()
 
 	if *device != "" {
 		if err := smart.ReadSMART(*device); err != nil {
