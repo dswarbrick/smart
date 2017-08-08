@@ -39,6 +39,9 @@ type capsV3 struct {
 	data [2]capData
 }
 
+// checkCaps invokes the capget syscall to check for necessary capabilities. Note that this depends
+// on the binary having the capabilities set (i.e., via the `setcap` utility), and on VFS support.
+// Alternatively, if the binary is executed as root, it automatically has all capabilities set.
 func checkCaps() {
 	caps := new(capsV3)
 	caps.hdr.version = _LINUX_CAPABILITY_VERSION_3
