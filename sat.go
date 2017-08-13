@@ -46,6 +46,7 @@ type IdentifyDeviceData struct {
 	_                    [512 - 110]byte // TODO: Split out remaining bytes
 }
 
+// ReadSMART reads the SMART attributes of a device (ATA command D0h)
 func ReadSMART(devName string) error {
 	var (
 		identBuf IdentifyDeviceData
@@ -131,6 +132,90 @@ func ReadSMART(devName string) error {
 	smart := smartPage{}
 	binary.Read(bytes.NewBuffer(respBuf[:362]), nativeEndian, &smart)
 	printSMART(smart, thisDrive)
+
+	/*
+	 * SMART READ LOG (WIP / experimental)
+	 */
+	cdb16 = CDB16{SCSI_ATA_PASSTHRU_16}
+	cdb16[1] = 0x08           // ATA protocol (4 << 1, PIO data-in)
+	cdb16[2] = 0x0e           // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
+	cdb16[4] = SMART_READ_LOG // feature LSB
+	cdb16[6] = 0x01           // sector count
+	cdb16[8] = 0x00           // SMART log directory
+	cdb16[10] = 0x4f          // low lba_mid
+	cdb16[12] = 0xc2          // low lba_high
+	cdb16[14] = ATA_SMART     // command
+
+	io_hdr = sgIoHdr{interface_id: 'S', dxfer_direction: SG_DXFER_FROM_DEV, timeout: DEFAULT_TIMEOUT}
+	io_hdr.cmd_len = uint8(len(cdb16))
+	io_hdr.mx_sb_len = uint8(len(senseBuf))
+	io_hdr.dxfer_len = uint32(len(respBuf))
+	io_hdr.dxferp = uintptr(unsafe.Pointer(&respBuf))
+	io_hdr.cmdp = uintptr(unsafe.Pointer(&cdb16))
+	io_hdr.sbp = uintptr(unsafe.Pointer(&senseBuf[0]))
+
+	if err = dev.execGenericIO(&io_hdr); err != nil {
+		fmt.Printf("Sense buffer: % x\n", senseBuf[:io_hdr.sb_len_wr])
+		return fmt.Errorf("SgExecute SMART READ LOG: %v", err)
+	}
+
+	smartLogDir := smartLogDirectory{}
+	binary.Read(bytes.NewBuffer(respBuf[:]), nativeEndian, &smartLogDir)
+	fmt.Printf("\nSMART log directory: %+v\n", smartLogDir)
+
+	cdb16 = CDB16{SCSI_ATA_PASSTHRU_16}
+	cdb16[1] = 0x08           // ATA protocol (4 << 1, PIO data-in)
+	cdb16[2] = 0x0e           // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
+	cdb16[4] = SMART_READ_LOG // feature LSB
+	cdb16[6] = 0x01           // sector count
+	cdb16[8] = 0x01           // summary SMART error log
+	cdb16[10] = 0x4f          // low lba_mid
+	cdb16[12] = 0xc2          // low lba_high
+	cdb16[14] = ATA_SMART     // command
+
+	io_hdr = sgIoHdr{interface_id: 'S', dxfer_direction: SG_DXFER_FROM_DEV, timeout: DEFAULT_TIMEOUT}
+	io_hdr.cmd_len = uint8(len(cdb16))
+	io_hdr.mx_sb_len = uint8(len(senseBuf))
+	io_hdr.dxfer_len = uint32(len(respBuf))
+	io_hdr.dxferp = uintptr(unsafe.Pointer(&respBuf))
+	io_hdr.cmdp = uintptr(unsafe.Pointer(&cdb16))
+	io_hdr.sbp = uintptr(unsafe.Pointer(&senseBuf[0]))
+
+	if err = dev.execGenericIO(&io_hdr); err != nil {
+		fmt.Printf("Sense buffer: % x\n", senseBuf[:io_hdr.sb_len_wr])
+		return fmt.Errorf("SgExecute SMART READ LOG: %v", err)
+	}
+
+	sumErrLog := smartSummaryErrorLog{}
+	binary.Read(bytes.NewBuffer(respBuf[:]), nativeEndian, &sumErrLog)
+	fmt.Printf("\nSummary SMART error log: %+v\n", sumErrLog)
+
+	cdb16 = CDB16{SCSI_ATA_PASSTHRU_16}
+	cdb16[1] = 0x08           // ATA protocol (4 << 1, PIO data-in)
+	cdb16[2] = 0x0e           // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
+	cdb16[4] = SMART_READ_LOG // feature LSB
+	cdb16[6] = 0x01           // sector count
+	cdb16[8] = 0x06           // SMART self-test log
+	cdb16[10] = 0x4f          // low lba_mid
+	cdb16[12] = 0xc2          // low lba_high
+	cdb16[14] = ATA_SMART     // command
+
+	io_hdr = sgIoHdr{interface_id: 'S', dxfer_direction: SG_DXFER_FROM_DEV, timeout: DEFAULT_TIMEOUT}
+	io_hdr.cmd_len = uint8(len(cdb16))
+	io_hdr.mx_sb_len = uint8(len(senseBuf))
+	io_hdr.dxfer_len = uint32(len(respBuf))
+	io_hdr.dxferp = uintptr(unsafe.Pointer(&respBuf))
+	io_hdr.cmdp = uintptr(unsafe.Pointer(&cdb16))
+	io_hdr.sbp = uintptr(unsafe.Pointer(&senseBuf[0]))
+
+	if err = dev.execGenericIO(&io_hdr); err != nil {
+		fmt.Printf("Sense buffer: % x\n", senseBuf[:io_hdr.sb_len_wr])
+		return fmt.Errorf("SgExecute SMART READ LOG: %v", err)
+	}
+
+	selfTestLog := smartSelfTestLog{}
+	binary.Read(bytes.NewBuffer(respBuf[:]), nativeEndian, &selfTestLog)
+	fmt.Printf("\nSMART self-test log: %+v\n", selfTestLog)
 
 	return nil
 }

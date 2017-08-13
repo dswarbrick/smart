@@ -51,6 +51,42 @@ type smartPage struct {
 	Attrs   [30]smartAttr
 }
 
+// SMART log address 00h
+type smartLogDirectory struct {
+	Version uint16
+	Address [255]struct {
+		NumPages byte
+		_        byte // Reserved
+	}
+}
+
+// SMART log address 01h
+type smartSummaryErrorLog struct {
+	Version    byte
+	LogIndex   byte
+	LogData    [5][90]byte // TODO: Expand out to error log structure
+	ErrorCount uint16      // Device error count
+	_          [57]byte    // Reserved
+	Checksum   byte        // Two's complement checksum of first 511 bytes
+}
+
+// SMART log address 06h
+type smartSelfTestLog struct {
+	Version uint16
+	Entry   [21]struct {
+		LBA_7          byte   // Content of the LBA field (7:0) when subcommand was issued
+		Status         byte   // Self-test execution status
+		LifeTimestamp  uint16 // Power-on lifetime of the device in hours when subcommand was completed
+		Checkpoint     byte
+		LBA            uint32 // LBA of first error (28-bit addressing)
+		VendorSpecific [15]byte
+	}
+	VendorSpecific uint16
+	Index          byte
+	_              uint16 // Reserved
+	Checksum       byte   // Two's complement checksum of first 511 bytes
+}
+
 var nativeEndian binary.ByteOrder
 
 // Determine native endianness of system
@@ -127,7 +163,6 @@ func (sa *smartAttr) decodeVendorBytes(conv string) uint64 {
 	)
 
 	// Default byte orders if not otherwise specified in drivedb
-	// TODO: Handle temperature formats (device-specific)
 	switch conv {
 	case "raw64", "hex64":
 		byteOrder = "543210wv"
