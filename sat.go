@@ -24,27 +24,25 @@ const (
 	ATA_IDENTIFY_DEVICE = 0xec
 )
 
-// ATA device identify struct
+// ATA IDENTIFY DEVICE struct. ATA8-ACS defines this as a page of 16-bit words. Some fields span
+// multiple words (e.g., model number), but must (?) be byteswapped. Some fields use less than a
+// single word, and are bitmasked together with other fields. Since many of the fields are now
+// retired / obsolete, we only define the fields that are currently used by this package.
 type IdentifyDeviceData struct {
-	GeneralConfiguration uint16
-	NumCylinders         uint16
-	ReservedWord2        uint16
-	NumHeads             uint16
-	Retired1             [2]uint16
-	NumSectorsPerTrack   uint16
-	VendorUnique         [3]uint16
-	SerialNumber         [20]byte
-	Retired2             [2]uint16
-	Obsolete1            uint16
-	FirmwareRevision     [8]byte
-	ModelNumber          [40]byte
-	MaxBlockTransfer     uint8
-	VendorUnique2        uint8
-	ReservedWord48       uint16
-	Capabilities         uint32
-	ObsoleteWords51      [2]uint16
-	_                    [512 - 110]byte // TODO: Split out remaining bytes
-}
+	GeneralConfig    uint16 // Word 0, general configuration. If bit 15 is zero, device is ATA.
+	_                [9]uint16
+	SerialNumber     [20]byte // Word 10..19, device serial number, padded with spaces (20h).
+	_                [3]uint16
+	FirmwareRevision [8]byte  // Word 23..26, device firmware revision, padded with spaces (20h).
+	ModelNumber      [40]byte // Word 27..46, device model number, padded with spaces (20h).
+	_                [38]uint16
+	Word85           uint16 // Word 85, supported commands and feature sets.
+	_                uint16
+	Word87           uint16 // Word 87, supported commands and feature sets.
+	_                [129]uint16
+	RotationRate     uint16 // Word 217, nominal media rotation rate.
+	_                [38]uint16
+} // 512 bytes
 
 // ReadSMART reads the SMART attributes of a device (ATA command D0h)
 func ReadSMART(devName string) error {
@@ -93,6 +91,9 @@ func ReadSMART(devName string) error {
 	fmt.Printf("Serial Number: %s\n", swapBytes(identBuf.SerialNumber[:]))
 	fmt.Printf("Firmware Revision: %s\n", swapBytes(identBuf.FirmwareRevision[:]))
 	fmt.Printf("Model Number: %s\n", swapBytes(identBuf.ModelNumber[:]))
+	fmt.Printf("Rotation Rate: %d\n", identBuf.RotationRate)
+	fmt.Printf("SMART support available: %v\n", identBuf.Word87>>14 == 1)
+	fmt.Printf("SMART support enabled: %v\n", identBuf.Word85&0x0001 != 0)
 
 	db, err := openDriveDb("drivedb.toml")
 	if err != nil {
