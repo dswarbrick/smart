@@ -35,14 +35,61 @@ type IdentifyDeviceData struct {
 	_                [3]uint16
 	FirmwareRevision [8]byte  // Word 23..26, device firmware revision, padded with spaces (20h).
 	ModelNumber      [40]byte // Word 27..46, device model number, padded with spaces (20h).
-	_                [38]uint16
+	_                [28]uint16
+	SATACap          uint16 // Word 76, SATA capabilities.
+	SATACapAddl      uint16 // Word 77, SATA additional capabilities.
+	_                [8]uint16
 	Word85           uint16 // Word 85, supported commands and feature sets.
 	_                uint16
 	Word87           uint16 // Word 87, supported commands and feature sets.
 	_                [129]uint16
 	RotationRate     uint16 // Word 217, nominal media rotation rate.
-	_                [38]uint16
+	_                [4]uint16
+	TransportMajor   uint16 // Word 222, transport major version number.
+	_                [33]uint16
 } // 512 bytes
+
+func (d *IdentifyDeviceData) getTransport() (s string) {
+	if (d.TransportMajor == 0) || (d.TransportMajor == 0xffff) {
+		s = "device does not report transport"
+		return
+	}
+
+	switch d.TransportMajor >> 12 {
+	case 0x0:
+		s = "Parallel ATA"
+	case 0x1:
+		s = "Serial ATA"
+
+		// TODO: Add decoding of current / max SATA speed (word 76, 77)
+		switch log2b(uint(d.TransportMajor & 0x0fff)) {
+		case 0:
+			s += " ATA8-AST"
+		case 1:
+			s += " SATA 1.0a"
+		case 2:
+			s += " SATA II Ext"
+		case 3:
+			s += " SATA 2.5"
+		case 4:
+			s += " SATA 2.6"
+		case 5:
+			s += " SATA 3.0"
+		case 6:
+			s += " SATA 3.1"
+		case 7:
+			s += " SATA 3.2"
+		default:
+			s += fmt.Sprintf(" SATA (%#03x)", d.TransportMajor&0x0fff)
+		}
+	case 0xe:
+		s = fmt.Sprintf("PCIe (%#03x)", d.TransportMajor&0x0fff)
+	default:
+		s = fmt.Sprintf("Unknown (%#04x)", d.TransportMajor)
+	}
+
+	return
+}
 
 // ReadSMART reads the SMART attributes of a device (ATA command D0h)
 func ReadSMART(devName string) error {
@@ -93,7 +140,8 @@ func ReadSMART(devName string) error {
 	fmt.Printf("Model Number: %s\n", swapBytes(identBuf.ModelNumber[:]))
 	fmt.Printf("Rotation Rate: %d\n", identBuf.RotationRate)
 	fmt.Printf("SMART support available: %v\n", identBuf.Word87>>14 == 1)
-	fmt.Printf("SMART support enabled: %v\n", identBuf.Word85&0x0001 != 0)
+	fmt.Printf("SMART support enabled: %v\n", identBuf.Word85&0x1 != 0)
+	fmt.Printf("Transport: %s\n", identBuf.getTransport())
 
 	db, err := openDriveDb("drivedb.toml")
 	if err != nil {
