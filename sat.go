@@ -38,16 +38,66 @@ type IdentifyDeviceData struct {
 	_                [28]uint16
 	SATACap          uint16 // Word 76, SATA capabilities.
 	SATACapAddl      uint16 // Word 77, SATA additional capabilities.
-	_                [8]uint16
+	_                [3]uint16
+	MajorVersion     uint16 // Word 80, major version number.
+	MinorVersion     uint16 // Word 81, minor version number.
+	_                [3]uint16
 	Word85           uint16 // Word 85, supported commands and feature sets.
 	_                uint16
 	Word87           uint16 // Word 87, supported commands and feature sets.
-	_                [129]uint16
+	_                [20]uint16
+	WWN              [4]uint16 // Word 108..111, WWN (World Wide Name).
+	_                [105]uint16
 	RotationRate     uint16 // Word 217, nominal media rotation rate.
 	_                [4]uint16
 	TransportMajor   uint16 // Word 222, transport major version number.
 	_                [33]uint16
 } // 512 bytes
+
+func (d *IdentifyDeviceData) getATAMajorVersion() (s string) {
+	if (d.MajorVersion == 0) || (d.MajorVersion == 0xffff) {
+		s = "device does not report ATA major version"
+		return
+	}
+
+	switch log2b(uint(d.MajorVersion)) {
+	case 1:
+		s = "ATA-1"
+	case 2:
+		s = "ATA-2"
+	case 3:
+		s = "ATA-3"
+	case 4:
+		s = "ATA/ATAPI-4"
+	case 5:
+		s = "ATA/ATAPI-5"
+	case 6:
+		s = "ATA/ATAPI-6"
+	case 7:
+		s = "ATA/ATAPI-7"
+	case 8:
+		s = "ATA8-ACS"
+	case 9:
+		s = "ACS-2"
+	case 10:
+		s = "ACS-3"
+	}
+
+	return
+}
+
+func (d *IdentifyDeviceData) getATAMinorVersion() string {
+	if (d.MinorVersion == 0) || (d.MinorVersion == 0xffff) {
+		return "device does not report ATA minor version"
+	}
+
+	// Since the ATA minor version word is not a bitmask, we simply do a map lookup
+	if s, ok := ataMinorVersions[d.MinorVersion]; ok {
+		return s
+	}
+
+	return "unknown"
+}
 
 func (d *IdentifyDeviceData) getTransport() (s string) {
 	if (d.TransportMajor == 0) || (d.TransportMajor == 0xffff) {
@@ -89,6 +139,14 @@ func (d *IdentifyDeviceData) getTransport() (s string) {
 	}
 
 	return
+}
+
+func (d *IdentifyDeviceData) getWWN() string {
+	naa := d.WWN[0] >> 12
+	oui := (uint32(d.WWN[0]&0x0fff) << 12) | (uint32(d.WWN[1]) >> 4)
+	uniqueID := ((uint64(d.WWN[1]) & 0xf) << 32) | (uint64(d.WWN[2]) << 16) | uint64(d.WWN[3])
+
+	return fmt.Sprintf("%x %06x %09x", naa, oui, uniqueID)
 }
 
 // ReadSMART reads the SMART attributes of a device (ATA command D0h)
@@ -136,12 +194,15 @@ func ReadSMART(devName string) error {
 
 	fmt.Println("\nATA IDENTIFY data follows:")
 	fmt.Printf("Serial Number: %s\n", swapBytes(identBuf.SerialNumber[:]))
+	fmt.Println("LU WWN Device Id:", identBuf.getWWN())
 	fmt.Printf("Firmware Revision: %s\n", swapBytes(identBuf.FirmwareRevision[:]))
 	fmt.Printf("Model Number: %s\n", swapBytes(identBuf.ModelNumber[:]))
 	fmt.Printf("Rotation Rate: %d\n", identBuf.RotationRate)
 	fmt.Printf("SMART support available: %v\n", identBuf.Word87>>14 == 1)
 	fmt.Printf("SMART support enabled: %v\n", identBuf.Word85&0x1 != 0)
-	fmt.Printf("Transport: %s\n", identBuf.getTransport())
+	fmt.Println("ATA Major Version:", identBuf.getATAMajorVersion())
+	fmt.Println("ATA Minor Version:", identBuf.getATAMinorVersion())
+	fmt.Println("Transport:", identBuf.getTransport())
 
 	db, err := openDriveDb("drivedb.toml")
 	if err != nil {
