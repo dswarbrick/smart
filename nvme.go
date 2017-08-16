@@ -70,7 +70,7 @@ type nvmeIdentController struct {
 	Firmware     [8]byte                 // Firmware Revision
 	Rab          uint8                   // Recommended Arbitration Burst
 	IEEE         [3]byte                 // IEEE OUI Identifier
-	Cmic         uint8                   // Controller  Multi-Path  I/O  and  Namespace  Sharing  Capabilities
+	Cmic         uint8                   // Controller Multi-Path I/O and Namespace Sharing Capabilities
 	Mdts         uint8                   // Maximum Data Transfer Size
 	Cntlid       uint16                  // Controller ID
 	Ver          uint32                  // Version
@@ -78,17 +78,17 @@ type nvmeIdentController struct {
 	Rtd3e        uint32                  // RTD3 Entry Latency
 	Oaes         uint32                  // Optional Asynchronous Events Supported
 	Rsvd96       [160]byte               // ...
-	Oacs         uint16                  // Optional  Admin  Command  Support
+	Oacs         uint16                  // Optional Admin Command Support
 	Acl          uint8                   // Abort Command Limit
 	Aerl         uint8                   // Asynchronous Event Request Limit
-	Frmw         uint8                   // Firmware  Updates
+	Frmw         uint8                   // Firmware Updates
 	Lpa          uint8                   // Log Page Attributes
 	Elpe         uint8                   // Error Log Page Entries
 	Npss         uint8                   // Number of Power States Support
 	Avscc        uint8                   // Admin Vendor Specific Command Configuration
 	Apsta        uint8                   // Autonomous Power State Transition Attributes
 	Wctemp       uint16                  // Warning Composite Temperature Threshold
-	Cctemp       uint16                  // Critical Composite  Temperature  Threshold
+	Cctemp       uint16                  // Critical Composite Temperature Threshold
 	Mtfa         uint16                  // Maximum Time for Firmware Activation
 	Hmpre        uint32                  // Host Memory Buffer Preferred Size
 	Hmmin        uint32                  // Host Memory Buffer Minimum Size
