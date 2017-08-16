@@ -63,57 +63,57 @@ type nvmeIdentPowerState struct {
 }
 
 type nvmeIdentController struct {
-	VendorID     uint16
-	Ssvid        uint16
-	SerialNumber [20]byte
-	ModelNumber  [40]byte
-	Firmware     [8]byte
-	Rab          uint8
-	IEEE         [3]byte
-	Cmic         uint8
-	Mdts         uint8 // Max data transfer size (log2 pages)
-	Cntlid       uint16
-	Ver          uint32
-	Rtd3r        uint32
-	Rtd3e        uint32
-	Oaes         uint32
-	Rsvd96       [160]byte
-	Oacs         uint16
-	Acl          uint8
-	Aerl         uint8
-	Frmw         uint8
-	Lpa          uint8
-	Elpe         uint8
-	Npss         uint8
-	Avscc        uint8
-	Apsta        uint8
-	Wctemp       uint16
-	Cctemp       uint16
-	Mtfa         uint16
-	Hmpre        uint32
-	Hmmin        uint32
-	Tnvmcap      [16]byte
-	Unvmcap      [16]byte
-	Rpmbs        uint32
-	Rsvd316      [196]byte
-	Sqes         uint8
-	Cqes         uint8
-	Rsvd514      [2]byte
-	Nn           uint32
-	Oncs         uint16
-	Fuses        uint16
-	Fna          uint8
-	Vwc          uint8
-	Awun         uint16
-	Awupf        uint16
-	Nvscc        uint8
-	Rsvd531      uint8
-	Acwu         uint16
-	Rsvd534      [2]byte
-	Sgls         uint32
-	Rsvd540      [1508]byte
-	Psd          [32]nvmeIdentPowerState
-	Vs           [1024]byte
+	VendorID     uint16                  // PCI Vendor ID
+	Ssvid        uint16                  // PCI Subsystem Vendor ID
+	SerialNumber [20]byte                // Serial Number
+	ModelNumber  [40]byte                // Model Number
+	Firmware     [8]byte                 // Firmware Revision
+	Rab          uint8                   // Recommended Arbitration Burst
+	IEEE         [3]byte                 // IEEE OUI Identifier
+	Cmic         uint8                   // Controller  Multi-Path  I/O  and  Namespace  Sharing  Capabilities
+	Mdts         uint8                   // Maximum Data Transfer Size
+	Cntlid       uint16                  // Controller ID
+	Ver          uint32                  // Version
+	Rtd3r        uint32                  // RTD3 Resume Latency
+	Rtd3e        uint32                  // RTD3 Entry Latency
+	Oaes         uint32                  // Optional Asynchronous Events Supported
+	Rsvd96       [160]byte               // ...
+	Oacs         uint16                  // Optional  Admin  Command  Support
+	Acl          uint8                   // Abort Command Limit
+	Aerl         uint8                   // Asynchronous Event Request Limit
+	Frmw         uint8                   // Firmware  Updates
+	Lpa          uint8                   // Log Page Attributes
+	Elpe         uint8                   // Error Log Page Entries
+	Npss         uint8                   // Number of Power States Support
+	Avscc        uint8                   // Admin Vendor Specific Command Configuration
+	Apsta        uint8                   // Autonomous Power State Transition Attributes
+	Wctemp       uint16                  // Warning Composite Temperature Threshold
+	Cctemp       uint16                  // Critical Composite  Temperature  Threshold
+	Mtfa         uint16                  // Maximum Time for Firmware Activation
+	Hmpre        uint32                  // Host Memory Buffer Preferred Size
+	Hmmin        uint32                  // Host Memory Buffer Minimum Size
+	Tnvmcap      [16]byte                // Total NVM Capacity
+	Unvmcap      [16]byte                // Unallocated NVM Capacity
+	Rpmbs        uint32                  // Replay Protected Memory Block Support
+	Rsvd316      [196]byte               // ...
+	Sqes         uint8                   // Submission Queue Entry Size
+	Cqes         uint8                   // Completion Queue Entry Size
+	Rsvd514      [2]byte                 // (defined in NVMe 1.3 spec)
+	Nn           uint32                  // Number of Namespaces
+	Oncs         uint16                  // Optional NVM Command Support
+	Fuses        uint16                  // Fused Operation Support
+	Fna          uint8                   // Format NVM Attributes
+	Vwc          uint8                   // Volatile Write Cache
+	Awun         uint16                  // Atomic Write Unit Normal
+	Awupf        uint16                  // Atomic Write Unit Power Fail
+	Nvscc        uint8                   // NVM Vendor Specific Command Configuration
+	Rsvd531      uint8                   // ...
+	Acwu         uint16                  // Atomic Compare & Write Unit
+	Rsvd534      [2]byte                 // ...
+	Sgls         uint32                  // SGL Support
+	Rsvd540      [1508]byte              // ...
+	Psd          [32]nvmeIdentPowerState // Power State Descriptors
+	Vs           [1024]byte              // Vendor Specific
 } // 4096 bytes
 
 type nvmeLBAF struct {
@@ -285,6 +285,7 @@ func OpenNVMe(dev string) error {
 	return nil
 }
 
+// le128ToString formats a little-endian 128-bit number (supplied as a 16-byte slice) as string.
 func le128ToString(v [16]byte) string {
 	lo := binary.LittleEndian.Uint64(v[:8])
 	hi := binary.LittleEndian.Uint64(v[8:])
