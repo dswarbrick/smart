@@ -54,7 +54,7 @@ func TestATAIdentify(t *testing.T) {
 	assert := assert.New(t)
 
 	assert.Equal(uintptr(512), unsafe.Sizeof(d))
-	binary.Read(bytes.NewBuffer(ataIdentifyData[:]), binary.LittleEndian, &d)
+	binary.Read(bytes.NewBuffer(ataIdentifyData[:]), nativeEndian, &d)
 
 	assert.Equal("S1DMNEAD123456B     ", string(swapBytes(d.SerialNumber[:])))
 	assert.Equal("EXT0DB6Q", string(swapBytes(d.FirmwareRevision[:])))
