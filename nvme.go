@@ -260,14 +260,41 @@ func OpenNVMe(dev string) error {
 		return err
 	}
 
-	fmt.Printf("%+v\n", buf3)
-
 	var sl nvmeSMARTLog
 
 	binary.Read(bytes.NewBuffer(buf3[:]), nativeEndian, &sl)
-	fmt.Printf("%+v\n", sl)
+
+	fmt.Println("\nSMART data follows:")
+	fmt.Printf("Critical warning: %#02x\n", sl.CritWarning)
+	fmt.Printf("Temperature: %d Celsius\n",
+		((uint16(sl.Temperature[1])<<8)|uint16(sl.Temperature[0]))-273) // Kelvin to degrees Celsius
+	fmt.Printf("Avail. spare: %d%%\n", sl.AvailSpare)
+	fmt.Printf("Avail. spare threshold: %d%%\n", sl.SpareThresh)
+	fmt.Printf("Percentage used: %d%%\n", sl.PercentUsed)
+	fmt.Println("Data units read:", le128ToString(sl.DataUnitsRead))
+	fmt.Println("Data units written:", le128ToString(sl.DataUnitsWritten))
+	fmt.Println("Host read commands:", le128ToString(sl.HostReads))
+	fmt.Println("Host write commands:", le128ToString(sl.HostWrites))
+	fmt.Println("Controller busy time:", le128ToString(sl.CtrlBusyTime))
+	fmt.Println("Power cycles:", le128ToString(sl.PowerCycles))
+	fmt.Println("Power on hours:", le128ToString(sl.PowerOnHours))
+	fmt.Println("Unsafe shutdowns:", le128ToString(sl.UnsafeShutdowns))
+	fmt.Println("Media & data integrity errors:", le128ToString(sl.MediaErrors))
+	fmt.Println("Error information log entries:", le128ToString(sl.NumErrLogEntries))
 
 	return nil
+}
+
+func le128ToString(v [16]byte) string {
+	lo := binary.LittleEndian.Uint64(v[:8])
+	hi := binary.LittleEndian.Uint64(v[8:])
+
+	// Calculate as float64 if upper uint64 is non-zero
+	if hi != 0 {
+		return fmt.Sprintf("~%.0f", float64(hi)*0x10000000000000000+float64(lo))
+	} else {
+		return fmt.Sprintf("%d", lo)
+	}
 }
 
 func readNVMeLogPage(fd int, logID uint8, buf *[]byte) error {
