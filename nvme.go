@@ -9,6 +9,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
+	"math/big"
 	"syscall"
 	"unsafe"
 )
@@ -194,9 +195,6 @@ func OpenNVMe(dev string) error {
 		cdw10:    1, // Identify controller
 	}
 
-	fmt.Printf("unsafe.Sizeof(cmd): %d\n", unsafe.Sizeof(cmd))
-	fmt.Printf("binary.Size(cmd): %d\n", binary.Size(cmd))
-
 	if err := ioctl(uintptr(fd), NVME_IOCTL_ADMIN_CMD, uintptr(unsafe.Pointer(&cmd))); err != nil {
 		return err
 	}
@@ -205,9 +203,6 @@ func OpenNVMe(dev string) error {
 		cmd.opcode, cmd.data_len, cmd.nsid, cmd.cdw10)
 
 	var controller nvmeIdentController
-
-	// Should be 4096
-	fmt.Printf("binary.Size(controller): %d\n", binary.Size(controller))
 
 	binary.Read(bytes.NewBuffer(buf[:]), nativeEndian, &controller)
 
@@ -245,9 +240,6 @@ func OpenNVMe(dev string) error {
 
 	var ns nvmeIdentNamespace
 
-	// Should be 4096
-	fmt.Printf("binary.Size(ns): %d\n", binary.Size(ns))
-
 	binary.Read(bytes.NewBuffer(buf2[:]), nativeEndian, &ns)
 
 	fmt.Printf("Namespace 1 size: %d sectors\n", ns.Nsze)
@@ -264,6 +256,11 @@ func OpenNVMe(dev string) error {
 
 	binary.Read(bytes.NewBuffer(buf3[:]), nativeEndian, &sl)
 
+	// TODO: Implement bytes to "KMGTP" function
+	unitsRead := le128ToBigInt(sl.DataUnitsRead)
+	unitsWritten := le128ToBigInt(sl.DataUnitsWritten)
+	unit := big.NewInt(512 * 1000)
+
 	fmt.Println("\nSMART data follows:")
 	fmt.Printf("Critical warning: %#02x\n", sl.CritWarning)
 	fmt.Printf("Temperature: %d Celsius\n",
@@ -271,31 +268,29 @@ func OpenNVMe(dev string) error {
 	fmt.Printf("Avail. spare: %d%%\n", sl.AvailSpare)
 	fmt.Printf("Avail. spare threshold: %d%%\n", sl.SpareThresh)
 	fmt.Printf("Percentage used: %d%%\n", sl.PercentUsed)
-	fmt.Println("Data units read:", le128ToString(sl.DataUnitsRead))
-	fmt.Println("Data units written:", le128ToString(sl.DataUnitsWritten))
-	fmt.Println("Host read commands:", le128ToString(sl.HostReads))
-	fmt.Println("Host write commands:", le128ToString(sl.HostWrites))
-	fmt.Println("Controller busy time:", le128ToString(sl.CtrlBusyTime))
-	fmt.Println("Power cycles:", le128ToString(sl.PowerCycles))
-	fmt.Println("Power on hours:", le128ToString(sl.PowerOnHours))
-	fmt.Println("Unsafe shutdowns:", le128ToString(sl.UnsafeShutdowns))
-	fmt.Println("Media & data integrity errors:", le128ToString(sl.MediaErrors))
-	fmt.Println("Error information log entries:", le128ToString(sl.NumErrLogEntries))
+	fmt.Printf("Data units read: %d [%d bytes]\n", unitsRead, new(big.Int).Mul(unitsRead, unit))
+	fmt.Printf("Data units written: %d [%d bytes]\n", unitsWritten, new(big.Int).Mul(unitsWritten, unit))
+	fmt.Printf("Host read commands: %d\n", le128ToBigInt(sl.HostReads))
+	fmt.Printf("Host write commands: %d\n", le128ToBigInt(sl.HostWrites))
+	fmt.Printf("Controller busy time: %d\n", le128ToBigInt(sl.CtrlBusyTime))
+	fmt.Printf("Power cycles: %d\n", le128ToBigInt(sl.PowerCycles))
+	fmt.Printf("Power on hours: %d\n", le128ToBigInt(sl.PowerOnHours))
+	fmt.Printf("Unsafe shutdowns: %d\n", le128ToBigInt(sl.UnsafeShutdowns))
+	fmt.Printf("Media & data integrity errors: %d\n", le128ToBigInt(sl.MediaErrors))
+	fmt.Printf("Error information log entries: %d\n", le128ToBigInt(sl.NumErrLogEntries))
 
 	return nil
 }
 
-// le128ToString formats a little-endian 128-bit number (supplied as a 16-byte slice) as string.
-func le128ToString(v [16]byte) string {
-	lo := binary.LittleEndian.Uint64(v[:8])
-	hi := binary.LittleEndian.Uint64(v[8:])
-
-	// Calculate as float64 if upper uint64 is non-zero
-	if hi != 0 {
-		return fmt.Sprintf("~%.0f", float64(hi)*0x10000000000000000+float64(lo))
-	} else {
-		return fmt.Sprintf("%d", lo)
+// le128ToBigInt takes a little-endian 16-byte slice and returns a *big.Int representing it.
+func le128ToBigInt(buf [16]byte) *big.Int {
+	// Int.SetBytes() expects big-endian input, so reverse the bytes locally first
+	rev := make([]byte, 16, 16)
+	for x := 0; x < 16; x++ {
+		rev[x] = buf[16-x-1]
 	}
+
+	return new(big.Int).SetBytes(rev)
 }
 
 func readNVMeLogPage(fd int, logID uint8, buf *[]byte) error {
