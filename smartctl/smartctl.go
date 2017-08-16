@@ -81,6 +81,7 @@ func main() {
 	device := flag.String("device", "", "SATA device from which to read SMART attributes, e.g., /dev/sda")
 	megaraid := flag.String("megaraid", "", "MegaRAID host and device ID from which to read SMART attributes, e.g., megaraid0_23")
 	scan := flag.Bool("scan", false, "Scan for drives that support SMART")
+	nvme := flag.String("nvme", "", "NVMe device from which to read SMART attributes, e.g., /dev/nvme0")
 	flag.Parse()
 
 	checkCaps()
@@ -102,6 +103,11 @@ func main() {
 		}
 
 		smart.OpenMegasasIoctl(host, disk)
+	} else if *nvme != "" {
+		if err := smart.OpenNVMe(*nvme); err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
 	} else if *scan {
 		scanDevices()
 	} else {
