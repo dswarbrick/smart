@@ -34,7 +34,7 @@ func log2b(x uint) uint {
 	return bitLen(x) - 1
 }
 
-// swapBytes swaps the order of every second byte in a byte slice
+// swapBytes swaps the order of every second byte in a byte slice (modifies slice in-place).
 func swapBytes(s []byte) []byte {
 	for i := 0; i < len(s); i += 2 {
 		s[i], s[i+1] = s[i+1], s[i]
