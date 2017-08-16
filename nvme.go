@@ -70,7 +70,7 @@ type nvmeIdentController struct {
 	Rab          uint8
 	IEEE         [3]byte
 	Cmic         uint8
-	Mdts         uint8
+	Mdts         uint8 // Max data transfer size (log2 pages)
 	Cntlid       uint16
 	Ver          uint32
 	Rtd3r        uint32
@@ -113,7 +113,43 @@ type nvmeIdentController struct {
 	Rsvd540      [1508]byte
 	Psd          [32]nvmeIdentPowerState
 	Vs           [1024]byte
+} // 4096 bytes
+
+type nvmeLBAF struct {
+	Ms uint16
+	Ds uint8
+	Rp uint8
 }
+
+type nvmeIdentNamespace struct {
+	Nsze    uint64
+	Ncap    uint64
+	Nuse    uint64
+	Nsfeat  uint8
+	Nlbaf   uint8
+	Flbas   uint8
+	Mc      uint8
+	Dpc     uint8
+	Dps     uint8
+	Nmic    uint8
+	Rescap  uint8
+	Fpi     uint8
+	Rsvd33  uint8
+	Nawun   uint16
+	Nawupf  uint16
+	Nacwu   uint16
+	Nabsn   uint16
+	Nabo    uint16
+	Nabspf  uint16
+	Rsvd46  [2]byte
+	Nvmcap  [16]byte
+	Rsvd64  [40]byte
+	Nguid   [16]byte
+	EUI64   [8]byte
+	Lbaf    [16]nvmeLBAF
+	Rsvd192 [192]byte
+	Vs      [3712]byte
+} // 4096 bytes
 
 // WIP, highly likely to change
 func OpenNVMe(dev string) error {
@@ -151,7 +187,6 @@ func OpenNVMe(dev string) error {
 
 	binary.Read(bytes.NewBuffer(buf[:]), nativeEndian, &controller)
 
-	fmt.Printf("%+v\n", controller)
 	fmt.Println()
 	fmt.Printf("Vendor ID: %#04x\n", controller.VendorID)
 	fmt.Printf("Model number: %s\n", controller.ModelNumber)
@@ -159,6 +194,40 @@ func OpenNVMe(dev string) error {
 	fmt.Printf("Firmware version: %s\n", controller.Firmware)
 	fmt.Printf("IEEE OUI identifier: 0x%02x%02x%02x\n",
 		controller.IEEE[2], controller.IEEE[1], controller.IEEE[0])
+	fmt.Printf("Max. data transfer size: %d pages\n", 1<<controller.Mdts)
+
+	for _, ps := range controller.Psd {
+		if ps.MaxPower > 0 {
+			fmt.Printf("%+v\n", ps)
+		}
+	}
+
+	buf2 := make([]byte, 4096)
+
+	cmd = nvmePassthruCommand{
+		opcode:   NVME_ADMIN_IDENTIFY,
+		nsid:     1, // Namespace 1
+		addr:     uint64(uintptr(unsafe.Pointer(&buf2[0]))),
+		data_len: uint32(len(buf2)),
+		cdw10:    0,
+	}
+
+	if err = ioctl(uintptr(fd), NVME_IOCTL_ADMIN_CMD, uintptr(unsafe.Pointer(&cmd))); err != nil {
+		return err
+	}
+
+	fmt.Printf("NVMe call: opcode=%#02x, size=%#04x, nsid=%#08x, cdw10=%#08x\n",
+		cmd.opcode, cmd.data_len, cmd.nsid, cmd.cdw10)
+
+	var ns nvmeIdentNamespace
+
+	// Should be 4096
+	fmt.Printf("binary.Size(ns): %d\n", binary.Size(ns))
+
+	binary.Read(bytes.NewBuffer(buf2[:]), nativeEndian, &ns)
+
+	fmt.Printf("Namespace 1 size: %d sectors\n", ns.Nsze)
+	fmt.Printf("Namespace 1 utilisation: %d sectors\n", ns.Nuse)
 
 	return nil
 }
