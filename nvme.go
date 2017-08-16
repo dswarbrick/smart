@@ -14,7 +14,8 @@ import (
 )
 
 const (
-	NVME_ADMIN_IDENTIFY = 0x06
+	NVME_ADMIN_GET_LOG_PAGE = 0x02
+	NVME_ADMIN_IDENTIFY     = 0x06
 )
 
 var (
@@ -151,6 +152,29 @@ type nvmeIdentNamespace struct {
 	Vs      [3712]byte
 } // 4096 bytes
 
+type nvmeSMARTLog struct {
+	CritWarning      uint8
+	Temperature      [2]uint8
+	AvailSpare       uint8
+	SpareThresh      uint8
+	PercentUsed      uint8
+	Rsvd6            [26]byte
+	DataUnitsRead    [16]byte
+	DataUnitsWritten [16]byte
+	HostReads        [16]byte
+	HostWrites       [16]byte
+	CtrlBusyTime     [16]byte
+	PowerCycles      [16]byte
+	PowerOnHours     [16]byte
+	UnsafeShutdowns  [16]byte
+	MediaErrors      [16]byte
+	NumErrLogEntries [16]byte
+	WarningTempTime  uint32
+	CritCompTime     uint32
+	TempSensor       [8]uint16
+	Rsvd216          [296]byte
+} // 512 bytes
+
 // WIP, highly likely to change
 func OpenNVMe(dev string) error {
 	fd, err := syscall.Open(dev, syscall.O_RDWR, 0600)
@@ -229,5 +253,37 @@ func OpenNVMe(dev string) error {
 	fmt.Printf("Namespace 1 size: %d sectors\n", ns.Nsze)
 	fmt.Printf("Namespace 1 utilisation: %d sectors\n", ns.Nuse)
 
+	buf3 := make([]byte, 512)
+
+	// Read SMART log
+	if err = readNVMeLogPage(fd, 0x02, &buf3); err != nil {
+		return err
+	}
+
+	fmt.Printf("%+v\n", buf3)
+
+	var sl nvmeSMARTLog
+
+	binary.Read(bytes.NewBuffer(buf3[:]), nativeEndian, &sl)
+	fmt.Printf("%+v\n", sl)
+
 	return nil
+}
+
+func readNVMeLogPage(fd int, logID uint8, buf *[]byte) error {
+	bufLen := len(*buf)
+
+	if (bufLen < 4) || (bufLen > 0x4000) || (bufLen%4 != 0) {
+		return fmt.Errorf("Invalid buffer size")
+	}
+
+	cmd := nvmePassthruCommand{
+		opcode:   NVME_ADMIN_GET_LOG_PAGE,
+		nsid:     0xffffffff, // FIXME
+		addr:     uint64(uintptr(unsafe.Pointer(&(*buf)[0]))),
+		data_len: uint32(bufLen),
+		cdw10:    uint32(logID) | (((uint32(bufLen) / 4) - 1) << 16),
+	}
+
+	return ioctl(uintptr(fd), NVME_IOCTL_ADMIN_CMD, uintptr(unsafe.Pointer(&cmd)))
 }
