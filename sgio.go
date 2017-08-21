@@ -93,16 +93,16 @@ type SCSIDevice struct {
 	fd   int
 }
 
-func newDevice(name string) SCSIDevice {
+func NewSCSIDevice(name string) SCSIDevice {
 	return SCSIDevice{name, -1}
 }
 
-func (d *SCSIDevice) open() (err error) {
+func (d *SCSIDevice) Open() (err error) {
 	d.fd, err = syscall.Open(d.Name, syscall.O_RDWR, 0600)
 	return err
 }
 
-func (d *SCSIDevice) close() error {
+func (d *SCSIDevice) Close() error {
 	return syscall.Close(d.fd)
 }
 

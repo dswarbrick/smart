@@ -396,7 +396,7 @@ func OpenMegasasIoctl(host uint16, diskNum uint8) error {
 
 	smart := smartPage{}
 	binary.Read(bytes.NewBuffer(respBuf[:362]), nativeEndian, &smart)
-	printSMART(smart, thisDrive)
+	printSMARTPage(smart, thisDrive)
 
 	return nil
 }

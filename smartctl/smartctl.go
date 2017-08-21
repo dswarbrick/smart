@@ -87,10 +87,15 @@ func main() {
 	checkCaps()
 
 	if *device != "" {
-		if err := smart.ReadSMART(*device); err != nil {
+		d := smart.NewSATDevice(*device)
+		if err := d.Open(); err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
+
+		defer d.Close()
+
+		d.PrintSMART()
 	} else if *megaraid != "" {
 		var (
 			host uint16

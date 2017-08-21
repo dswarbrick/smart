@@ -352,7 +352,8 @@ func formatRawValue(v uint64, conv string) (s string) {
 	return s
 }
 
-func printSMART(smart smartPage, drive driveModel) {
+// FIXME: This is all ATA-specific and should be moved to ATA code.
+func printSMARTPage(smart smartPage, drive driveModel) {
 	fmt.Printf("\nSMART structure version: %d\n", smart.Version)
 	fmt.Printf("ID# ATTRIBUTE_NAME           FLAG     VALUE WORST RESERVED TYPE     UPDATED RAW_VALUE\n")
 

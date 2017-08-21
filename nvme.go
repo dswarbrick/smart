@@ -185,15 +185,16 @@ func NewNVMeDevice(name string) NVMeDevice {
 	return NVMeDevice{name, -1}
 }
 
-func (d *NVMeDevice) Close() error {
-	return syscall.Close(d.fd)
-}
-
 func (d *NVMeDevice) Open() (err error) {
 	d.fd, err = syscall.Open(d.Name, syscall.O_RDWR, 0600)
 	return err
 }
 
+func (d *NVMeDevice) Close() error {
+	return syscall.Close(d.fd)
+}
+
+// WIP - need to split out functionality further.
 func (d *NVMeDevice) PrintSMART() error {
 	fmt.Println("OK")
 
