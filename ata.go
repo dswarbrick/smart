@@ -12,31 +12,31 @@ import (
 // Table 10 of X3T13/2008D (ATA-3) Revision 7b, January 27, 1997
 // Table 28 of T13/1410D (ATA/ATAPI-6) Revision 3b, February 26, 2002
 // Table 31 of T13/1699-D (ATA8-ACS) Revision 6a, September 6, 2008
-// Table 46 of T13/BSR INCITS 529 (ACS-4) Revision 08, April 28, 2015
+// Table 52 of T13/BSR INCITS 529 (ACS-4) Revision 14, October 14, 2016
 var ataMinorVersions = map[uint16]string{
-	0x0001: "ATA-1 X3T9.2/781D prior to revision 4",
-	0x0002: "ATA-1 published, ANSI X3.221-1994",
-	0x0003: "ATA-1 X3T9.2/781D revision 4",
-	0x0004: "ATA-2 published, ANSI X3.279-1996",
-	0x0005: "ATA-2 X3T10/948D prior to revision 2k",
-	0x0006: "ATA-3 X3T10/2008D revision 1",
-	0x0007: "ATA-2 X3T10/948D revision 2k",
-	0x0008: "ATA-3 X3T10/2008D revision 0",
-	0x0009: "ATA-2 X3T10/948D revision 3",
-	0x000a: "ATA-3 published, ANSI X3.298-1997",
-	0x000b: "ATA-3 X3T10/2008D revision 6",
-	0x000c: "ATA-3 X3T13/2008D revision 7 and 7a",
-	0x000d: "ATA/ATAPI-4 X3T13/1153D revision 6",
-	0x000e: "ATA/ATAPI-4 T13/1153D revision 13",
-	0x000f: "ATA/ATAPI-4 X3T13/1153D revision 7",
-	0x0010: "ATA/ATAPI-4 T13/1153D revision 18",
-	0x0011: "ATA/ATAPI-4 T13/1153D revision 15",
-	0x0012: "ATA/ATAPI-4 published, ANSI NCITS 317-1998",
+	0x0001: "ATA-1 X3T9.2/781D prior to revision 4",      // obsolete
+	0x0002: "ATA-1 published, ANSI X3.221-1994",          // obsolete
+	0x0003: "ATA-1 X3T9.2/781D revision 4",               // obsolete
+	0x0004: "ATA-2 published, ANSI X3.279-1996",          // obsolete
+	0x0005: "ATA-2 X3T10/948D prior to revision 2k",      // obsolete
+	0x0006: "ATA-3 X3T10/2008D revision 1",               // obsolete
+	0x0007: "ATA-2 X3T10/948D revision 2k",               // obsolete
+	0x0008: "ATA-3 X3T10/2008D revision 0",               // obsolete
+	0x0009: "ATA-2 X3T10/948D revision 3",                // obsolete
+	0x000a: "ATA-3 published, ANSI X3.298-1997",          // obsolete
+	0x000b: "ATA-3 X3T10/2008D revision 6",               // obsolete
+	0x000c: "ATA-3 X3T13/2008D revision 7 and 7a",        // obsolete
+	0x000d: "ATA/ATAPI-4 X3T13/1153D revision 6",         // obsolete
+	0x000e: "ATA/ATAPI-4 T13/1153D revision 13",          // obsolete
+	0x000f: "ATA/ATAPI-4 X3T13/1153D revision 7",         // obsolete
+	0x0010: "ATA/ATAPI-4 T13/1153D revision 18",          // obsolete
+	0x0011: "ATA/ATAPI-4 T13/1153D revision 15",          // obsolete
+	0x0012: "ATA/ATAPI-4 published, ANSI NCITS 317-1998", // obsolete
 	0x0013: "ATA/ATAPI-5 T13/1321D revision 3",
-	0x0014: "ATA/ATAPI-4 T13/1153D revision 14",
+	0x0014: "ATA/ATAPI-4 T13/1153D revision 14", // obsolete
 	0x0015: "ATA/ATAPI-5 T13/1321D revision 1",
 	0x0016: "ATA/ATAPI-5 published, ANSI NCITS 340-2000",
-	0x0017: "ATA/ATAPI-4 T13/1153D revision 17",
+	0x0017: "ATA/ATAPI-4 T13/1153D revision 17", // obsolete
 	0x0018: "ATA/ATAPI-6 T13/1410D revision 0",
 	0x0019: "ATA/ATAPI-6 T13/1410D revision 3a",
 	0x001a: "ATA/ATAPI-7 T13/1532D revision 1",
@@ -52,6 +52,7 @@ var ataMinorVersions = map[uint16]string{
 	0x0029: "ATA8-ACS T13/1699-D revision 4",
 	0x0031: "ACS-2 T13/2015-D revision 2",
 	0x0033: "ATA8-ACS T13/1699-D revision 3e",
+	0x0039: "ATA8-ACS T13/1699-D revision 4c",
 	0x0042: "ATA8-ACS T13/1699-D revision 3f",
 	0x0052: "ATA8-ACS T13/1699-D revision 3b",
 	0x005e: "ACS-4 T13/BSR INCITS 529 revision 5",
@@ -61,7 +62,6 @@ var ataMinorVersions = map[uint16]string{
 	0x010a: "ACS-3 published, ANSI INCITS 522-2014",
 	0x0110: "ACS-2 T13/2015-D revision 3",
 	0x011b: "ACS-3 T13/2161-D revision 4",
-	0x0039: "ATA8-ACS T13/1699-D revision 4c",
 }
 
 // ATA IDENTIFY DEVICE struct. ATA8-ACS defines this as a page of 16-bit words. Some fields span
@@ -69,29 +69,29 @@ var ataMinorVersions = map[uint16]string{
 // single word, and are bitmasked together with other fields. Since many of the fields are now
 // retired / obsolete, we only define the fields that are currently used by this package.
 type IdentifyDeviceData struct {
-	GeneralConfig    uint16 // Word 0, general configuration. If bit 15 is zero, device is ATA.
-	_                [9]uint16
-	SerialNumber     [20]byte // Word 10..19, device serial number, padded with spaces (20h).
-	_                [3]uint16
-	FirmwareRevision [8]byte  // Word 23..26, device firmware revision, padded with spaces (20h).
-	ModelNumber      [40]byte // Word 27..46, device model number, padded with spaces (20h).
-	_                [28]uint16
-	SATACap          uint16 // Word 76, SATA capabilities.
-	SATACapAddl      uint16 // Word 77, SATA additional capabilities.
-	_                [3]uint16
-	MajorVersion     uint16 // Word 80, major version number.
-	MinorVersion     uint16 // Word 81, minor version number.
-	_                [3]uint16
-	Word85           uint16 // Word 85, supported commands and feature sets.
-	_                uint16
-	Word87           uint16 // Word 87, supported commands and feature sets.
-	_                [20]uint16
-	WWN              [4]uint16 // Word 108..111, WWN (World Wide Name).
-	_                [105]uint16
-	RotationRate     uint16 // Word 217, nominal media rotation rate.
-	_                [4]uint16
-	TransportMajor   uint16 // Word 222, transport major version number.
-	_                [33]uint16
+	GeneralConfig    uint16      // Word 0, general configuration. If bit 15 is zero, device is ATA.
+	_                [9]uint16   // ...
+	SerialNumber     [20]byte    // Word 10..19, device serial number, padded with spaces (20h).
+	_                [3]uint16   // ...
+	FirmwareRevision [8]byte     // Word 23..26, device firmware revision, padded with spaces (20h).
+	ModelNumber      [40]byte    // Word 27..46, device model number, padded with spaces (20h).
+	_                [28]uint16  // ...
+	SATACap          uint16      // Word 76, SATA capabilities.
+	SATACapAddl      uint16      // Word 77, SATA additional capabilities.
+	_                [3]uint16   // ...
+	MajorVersion     uint16      // Word 80, major version number.
+	MinorVersion     uint16      // Word 81, minor version number.
+	_                [3]uint16   // ...
+	Word85           uint16      // Word 85, supported commands and feature sets.
+	_                uint16      // ...
+	Word87           uint16      // Word 87, supported commands and feature sets.
+	_                [20]uint16  // ...
+	WWN              [4]uint16   // Word 108..111, WWN (World Wide Name).
+	_                [105]uint16 // ...
+	RotationRate     uint16      // Word 217, nominal media rotation rate.
+	_                [4]uint16   // ...
+	TransportMajor   uint16      // Word 222, transport major version number.
+	_                [33]uint16  // ...
 } // 512 bytes
 
 func (d *IdentifyDeviceData) getATAMajorVersion() (s string) {

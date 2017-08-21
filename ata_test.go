@@ -56,9 +56,13 @@ func TestATAIdentify(t *testing.T) {
 	assert.Equal(uintptr(512), unsafe.Sizeof(d))
 	binary.Read(bytes.NewBuffer(ataIdentifyData[:]), nativeEndian, &d)
 
-	assert.Equal("S1DMNEAD123456B     ", string(swapBytes(d.SerialNumber[:])))
-	assert.Equal("EXT0DB6Q", string(swapBytes(d.FirmwareRevision[:])))
-	assert.Equal("Samsung SSD 840 EVO 750GB               ", string(swapBytes(d.ModelNumber[:])))
+	swapBytes(d.SerialNumber[:])
+	swapBytes(d.FirmwareRevision[:])
+	swapBytes(d.ModelNumber[:])
+
+	assert.Equal("S1DMNEAD123456B     ", string(d.SerialNumber[:]))
+	assert.Equal("EXT0DB6Q", string(d.FirmwareRevision[:]))
+	assert.Equal("Samsung SSD 840 EVO 750GB               ", string(d.ModelNumber[:]))
 	assert.Equal("5 002538 85009397f", d.getWWN())
 
 	assert.Equal(uint16(1), d.RotationRate)
