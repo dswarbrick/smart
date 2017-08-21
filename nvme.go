@@ -176,14 +176,26 @@ type nvmeSMARTLog struct {
 	Rsvd216          [296]byte
 } // 512 bytes
 
-// WIP, highly likely to change
-func OpenNVMe(dev string) error {
-	fd, err := syscall.Open(dev, syscall.O_RDWR, 0600)
-	if err != nil {
-		return err
-	}
+type NVMeDevice struct {
+	Name string
+	fd   int
+}
 
-	defer syscall.Close(fd)
+func NewNVMeDevice(name string) NVMeDevice {
+	return NVMeDevice{name, -1}
+}
+
+func (d *NVMeDevice) Close() error {
+	return syscall.Close(d.fd)
+}
+
+func (d *NVMeDevice) Open() (err error) {
+	d.fd, err = syscall.Open(d.Name, syscall.O_RDWR, 0600)
+	return err
+}
+
+func (d *NVMeDevice) PrintSMART() error {
+	fmt.Println("OK")
 
 	buf := make([]byte, 4096)
 
@@ -195,7 +207,7 @@ func OpenNVMe(dev string) error {
 		cdw10:    1, // Identify controller
 	}
 
-	if err := ioctl(uintptr(fd), NVME_IOCTL_ADMIN_CMD, uintptr(unsafe.Pointer(&cmd))); err != nil {
+	if err := ioctl(uintptr(d.fd), NVME_IOCTL_ADMIN_CMD, uintptr(unsafe.Pointer(&cmd))); err != nil {
 		return err
 	}
 
@@ -231,7 +243,7 @@ func OpenNVMe(dev string) error {
 		cdw10:    0,
 	}
 
-	if err = ioctl(uintptr(fd), NVME_IOCTL_ADMIN_CMD, uintptr(unsafe.Pointer(&cmd))); err != nil {
+	if err := ioctl(uintptr(d.fd), NVME_IOCTL_ADMIN_CMD, uintptr(unsafe.Pointer(&cmd))); err != nil {
 		return err
 	}
 
@@ -248,7 +260,7 @@ func OpenNVMe(dev string) error {
 	buf3 := make([]byte, 512)
 
 	// Read SMART log
-	if err = readNVMeLogPage(fd, 0x02, &buf3); err != nil {
+	if err := d.readLogPage(0x02, &buf3); err != nil {
 		return err
 	}
 
@@ -282,18 +294,7 @@ func OpenNVMe(dev string) error {
 	return nil
 }
 
-// le128ToBigInt takes a little-endian 16-byte slice and returns a *big.Int representing it.
-func le128ToBigInt(buf [16]byte) *big.Int {
-	// Int.SetBytes() expects big-endian input, so reverse the bytes locally first
-	rev := make([]byte, 16, 16)
-	for x := 0; x < 16; x++ {
-		rev[x] = buf[16-x-1]
-	}
-
-	return new(big.Int).SetBytes(rev)
-}
-
-func readNVMeLogPage(fd int, logID uint8, buf *[]byte) error {
+func (d *NVMeDevice) readLogPage(logID uint8, buf *[]byte) error {
 	bufLen := len(*buf)
 
 	if (bufLen < 4) || (bufLen > 0x4000) || (bufLen%4 != 0) {
@@ -308,5 +309,16 @@ func readNVMeLogPage(fd int, logID uint8, buf *[]byte) error {
 		cdw10:    uint32(logID) | (((uint32(bufLen) / 4) - 1) << 16),
 	}
 
-	return ioctl(uintptr(fd), NVME_IOCTL_ADMIN_CMD, uintptr(unsafe.Pointer(&cmd)))
+	return ioctl(uintptr(d.fd), NVME_IOCTL_ADMIN_CMD, uintptr(unsafe.Pointer(&cmd)))
+}
+
+// le128ToBigInt takes a little-endian 16-byte slice and returns a *big.Int representing it.
+func le128ToBigInt(buf [16]byte) *big.Int {
+	// Int.SetBytes() expects big-endian input, so reverse the bytes locally first
+	rev := make([]byte, 16, 16)
+	for x := 0; x < 16; x++ {
+		rev[x] = buf[16-x-1]
+	}
+
+	return new(big.Int).SetBytes(rev)
 }

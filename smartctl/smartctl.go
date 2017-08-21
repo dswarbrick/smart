@@ -104,10 +104,15 @@ func main() {
 
 		smart.OpenMegasasIoctl(host, disk)
 	} else if *nvme != "" {
-		if err := smart.OpenNVMe(*nvme); err != nil {
+		d := smart.NewNVMeDevice(*nvme)
+		if err := d.Open(); err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
+
+		defer d.Close()
+
+		d.PrintSMART()
 	} else if *scan {
 		scanDevices()
 	} else {
