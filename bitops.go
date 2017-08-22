@@ -7,6 +7,8 @@
 
 package smart
 
+import "fmt"
+
 func bitLen(x uint) (n uint) {
 	for ; x >= 0x8000; x >>= 16 {
 		n += 16
@@ -41,4 +43,28 @@ func swapBytes(s []byte) []byte {
 	}
 
 	return s
+}
+
+// formatBytes formats a uint64 byte quantity using human-readble units, e.g. kilobyte, megabyte.
+// TODO: Add big.Int variant of this function.
+func formatBytes(v uint64) string {
+	var i int
+
+	suffixes := [...]string{"B", "KB", "MB", "GB", "TB", "PB", "EB"}
+	d := uint64(1)
+
+	for i = 0; i < len(suffixes)-1; i++ {
+		if v >= d*1000 {
+			d *= 1000
+		} else {
+			break
+		}
+	}
+
+	if i == 0 {
+		return fmt.Sprintf("%d %s", v, suffixes[i])
+	} else {
+		// Print 3 significant digits
+		return fmt.Sprintf("%.3g %s", float64(v)/float64(d), suffixes[i])
+	}
 }
