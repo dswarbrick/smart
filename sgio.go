@@ -136,6 +136,8 @@ func (d *SCSIDevice) execGenericIO(hdr *sgIoHdr) error {
 	return nil
 }
 
+// inquiry sends a SCSI INQUIRY command to a device and returns an inquiryResponse struct.
+// TODO: Add support for Vital Product Data (VPD)
 func (d *SCSIDevice) inquiry() (inquiryResponse, error) {
 	var resp inquiryResponse
 
@@ -158,6 +160,32 @@ func (d *SCSIDevice) inquiry() (inquiryResponse, error) {
 	return resp, nil
 }
 
+// modeSense sends a SCSI MODE SENSE(6) command to a device.
+func (d *SCSIDevice) modeSense(pageNum, subPageNum, pageControl uint8) ([]byte, error) {
+	respBuf := make([]byte, 64)
+	senseBuf := make([]byte, 32)
+
+	cdb := CDB6{SCSI_MODE_SENSE_6}
+	cdb[2] = (pageControl << 6) | (pageNum & 0x3f)
+	cdb[3] = subPageNum
+	cdb[4] = uint8(len(respBuf))
+
+	io_hdr := sgIoHdr{interface_id: 'S', dxfer_direction: SG_DXFER_FROM_DEV, timeout: DEFAULT_TIMEOUT}
+	io_hdr.cmd_len = uint8(unsafe.Sizeof(cdb))
+	io_hdr.mx_sb_len = uint8(len(senseBuf))
+	io_hdr.dxfer_len = uint32(len(respBuf))
+	io_hdr.dxferp = uintptr(unsafe.Pointer(&respBuf[0]))
+	io_hdr.cmdp = uintptr(unsafe.Pointer(&cdb))
+	io_hdr.sbp = uintptr(unsafe.Pointer(&senseBuf[0]))
+
+	if err := d.execGenericIO(&io_hdr); err != nil {
+		return respBuf, err
+	}
+
+	return respBuf, nil
+}
+
+// readCapacity sends a SCSI READ CAPACITY(10) command to a device and returns the capacity in bytes.
 func (d *SCSIDevice) readCapacity() (uint64, error) {
 	cdb := CDB10{SCSI_READ_CAPACITY_10}
 	respBuf := make([]byte, 8)
@@ -182,41 +210,23 @@ func (d *SCSIDevice) readCapacity() (uint64, error) {
 	return capacity, nil
 }
 
-func (d *SCSIDevice) modeSense(pageNum, subPageNum, pageControl uint8) error {
-	respBuf := make([]byte, 64)
-	senseBuf := make([]byte, 32)
-
-	cdb := CDB6{SCSI_MODE_SENSE_6}
-	cdb[2] = (pageControl << 6) | (pageNum & 0x3f)
-	cdb[3] = subPageNum
-	cdb[4] = uint8(len(respBuf))
-
-	fmt.Printf("MODE SENSE CDB: % x\n", cdb)
-
-	io_hdr := sgIoHdr{interface_id: 'S', dxfer_direction: SG_DXFER_FROM_DEV, timeout: DEFAULT_TIMEOUT}
-	io_hdr.cmd_len = uint8(unsafe.Sizeof(cdb))
-	io_hdr.mx_sb_len = uint8(len(senseBuf))
-	io_hdr.dxfer_len = uint32(len(respBuf))
-	io_hdr.dxferp = uintptr(unsafe.Pointer(&respBuf[0]))
-	io_hdr.cmdp = uintptr(unsafe.Pointer(&cdb))
-	io_hdr.sbp = uintptr(unsafe.Pointer(&senseBuf[0]))
-
-	if err := d.execGenericIO(&io_hdr); err != nil {
-		return err
-	}
-
-	fmt.Printf("respBuf: %#v\n", respBuf)
-
-	return nil
-}
-
 // Regular SCSI (including SAS, but excluding SATA) SMART functions not yet fully implemented.
 func (d *SCSIDevice) PrintSMART() error {
 	capacity, _ := d.readCapacity()
 	fmt.Printf("Capacity: %d bytes (%s)\n", capacity, formatBytes(capacity))
 
 	// WIP
-	d.modeSense(RIGID_DISK_DRIVE_GEOMETRY_PAGE, 0, MPAGE_CONTROL_DEFAULT)
+	resp, _ := d.modeSense(RIGID_DISK_DRIVE_GEOMETRY_PAGE, 0, MPAGE_CONTROL_DEFAULT)
+	fmt.Printf("MODE SENSE buf: % x\n", resp)
+
+	// TODO: Handle this elegantly for MODE SENSE(10) also
+	respLen := resp[0] + 1
+	bdLen := resp[3]
+	offset := bdLen + 4
+	fmt.Printf("respLen: %d, bdLen: %d, offset: %d\n",
+		respLen, bdLen, offset)
+
+	fmt.Printf("RPM: %d\n", binary.BigEndian.Uint16(resp[offset+20:]))
 
 	return nil
 }
