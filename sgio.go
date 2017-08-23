@@ -24,11 +24,19 @@ const (
 	SG_IO = 0x2285
 
 	// SCSI commands used by this package
-	SCSI_INQUIRY         = 0x12
-	SCSI_ATA_PASSTHRU_16 = 0x85
+	SCSI_INQUIRY          = 0x12
+	SCSI_MODE_SENSE_6     = 0x1a
+	SCSI_READ_CAPACITY_10 = 0x25
+	SCSI_ATA_PASSTHRU_16  = 0x85
 
 	DEFAULT_TIMEOUT = 20000 // Timeout in milliseconds
 	INQ_REPLY_LEN   = 36    // Minimum length of standard INQUIRY response
+
+	// SCSI-3 mode pages
+	RIGID_DISK_DRIVE_GEOMETRY_PAGE = 0x04
+
+	// Mode page control field
+	MPAGE_CONTROL_DEFAULT = 2
 )
 
 type sgioError struct {
@@ -45,6 +53,7 @@ func (e sgioError) Error() string {
 
 // SCSI CDB types
 type CDB6 [6]byte
+type CDB10 [10]byte
 type CDB16 [16]byte
 
 // SCSI generic IO, analogous to sg_io_hdr_t
@@ -149,9 +158,67 @@ func (d *SCSIDevice) inquiry() (inquiryResponse, error) {
 	return resp, nil
 }
 
-// Regular SCSI (including SAS, but excluding SATA) SMART functions not yet implemented.
+func (d *SCSIDevice) readCapacity() (uint64, error) {
+	cdb := CDB10{SCSI_READ_CAPACITY_10}
+	respBuf := make([]byte, 8)
+	senseBuf := make([]byte, 32)
+
+	io_hdr := sgIoHdr{interface_id: 'S', dxfer_direction: SG_DXFER_FROM_DEV, timeout: DEFAULT_TIMEOUT}
+	io_hdr.cmd_len = uint8(unsafe.Sizeof(cdb))
+	io_hdr.mx_sb_len = uint8(len(senseBuf))
+	io_hdr.dxfer_len = uint32(len(respBuf))
+	io_hdr.dxferp = uintptr(unsafe.Pointer(&respBuf[0]))
+	io_hdr.cmdp = uintptr(unsafe.Pointer(&cdb))
+	io_hdr.sbp = uintptr(unsafe.Pointer(&senseBuf[0]))
+
+	if err := d.execGenericIO(&io_hdr); err != nil {
+		return 0, err
+	}
+
+	lastLBA := binary.BigEndian.Uint32(respBuf[0:]) // max. addressable LBA
+	LBsize := binary.BigEndian.Uint32(respBuf[4:])  // logical block (i.e., sector) size
+	capacity := (uint64(lastLBA) + 1) * uint64(LBsize)
+
+	return capacity, nil
+}
+
+func (d *SCSIDevice) modeSense(pageNum, subPageNum, pageControl uint8) error {
+	respBuf := make([]byte, 64)
+	senseBuf := make([]byte, 32)
+
+	cdb := CDB6{SCSI_MODE_SENSE_6}
+	cdb[2] = (pageControl << 6) | (pageNum & 0x3f)
+	cdb[3] = subPageNum
+	cdb[4] = uint8(len(respBuf))
+
+	fmt.Printf("MODE SENSE CDB: % x\n", cdb)
+
+	io_hdr := sgIoHdr{interface_id: 'S', dxfer_direction: SG_DXFER_FROM_DEV, timeout: DEFAULT_TIMEOUT}
+	io_hdr.cmd_len = uint8(unsafe.Sizeof(cdb))
+	io_hdr.mx_sb_len = uint8(len(senseBuf))
+	io_hdr.dxfer_len = uint32(len(respBuf))
+	io_hdr.dxferp = uintptr(unsafe.Pointer(&respBuf[0]))
+	io_hdr.cmdp = uintptr(unsafe.Pointer(&cdb))
+	io_hdr.sbp = uintptr(unsafe.Pointer(&senseBuf[0]))
+
+	if err := d.execGenericIO(&io_hdr); err != nil {
+		return err
+	}
+
+	fmt.Printf("respBuf: %#v\n", respBuf)
+
+	return nil
+}
+
+// Regular SCSI (including SAS, but excluding SATA) SMART functions not yet fully implemented.
 func (d *SCSIDevice) PrintSMART() error {
-	return fmt.Errorf("SCSI / SAS PrintSMART() not yet implemented.")
+	capacity, _ := d.readCapacity()
+	fmt.Printf("Capacity: %d bytes (%s)\n", capacity, formatBytes(capacity))
+
+	// WIP
+	d.modeSense(RIGID_DISK_DRIVE_GEOMETRY_PAGE, 0, MPAGE_CONTROL_DEFAULT)
+
+	return nil
 }
 
 func OpenSCSIAutodetect(name string) (Device, error) {
