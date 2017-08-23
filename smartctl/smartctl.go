@@ -92,7 +92,7 @@ func main() {
 			err error
 		)
 
-		if strings.HasPrefix("/dev/nvme", *device) {
+		if strings.HasPrefix(*device, "/dev/nvme") {
 			d = smart.NewNVMeDevice(*device)
 			err = d.Open()
 		} else {
