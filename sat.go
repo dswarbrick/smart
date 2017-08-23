@@ -24,26 +24,10 @@ const (
 	ATA_IDENTIFY_DEVICE = 0xec
 )
 
-// SATDevice is a wrapper around a generic SCSI device, which handles sending ATA commands via SCSI
-// pass-through (SCSI-ATA Translation).
+// SATDevice is a simple wrapper around an embedded SCSIDevice type, which handles sending ATA
+// commands via SCSI pass-through (SCSI-ATA Translation).
 type SATDevice struct {
-	Name   string
-	device *SCSIDevice
-}
-
-func NewSATDevice(name string) SATDevice {
-	return SATDevice{name, nil}
-}
-
-func (d *SATDevice) Open() error {
-	sg := NewSCSIDevice(d.Name)
-	d.device = &sg
-
-	return d.device.Open()
-}
-
-func (d *SATDevice) Close() error {
-	return d.device.Close()
+	SCSIDevice
 }
 
 func (d *SATDevice) identify() (*IdentifyDeviceData, error) {
@@ -64,7 +48,7 @@ func (d *SATDevice) identify() (*IdentifyDeviceData, error) {
 	io_hdr.cmdp = uintptr(unsafe.Pointer(&cdb16))
 	io_hdr.sbp = uintptr(unsafe.Pointer(&senseBuf[0]))
 
-	if err := d.device.execGenericIO(&io_hdr); err != nil {
+	if err := d.execGenericIO(&io_hdr); err != nil {
 		fmt.Printf("Sense buffer: % x\n", senseBuf[:io_hdr.sb_len_wr])
 		return nil, fmt.Errorf("SgExecute ATA IDENTIFY: %v", err)
 	}
@@ -99,7 +83,7 @@ func (d *SATDevice) readSMARTLog(logPage uint8) ([]byte, error) {
 	io_hdr.cmdp = uintptr(unsafe.Pointer(&cdb16))
 	io_hdr.sbp = uintptr(unsafe.Pointer(&senseBuf[0]))
 
-	if err := d.device.execGenericIO(&io_hdr); err != nil {
+	if err := d.execGenericIO(&io_hdr); err != nil {
 		fmt.Printf("Sense buffer: % x\n", senseBuf[:io_hdr.sb_len_wr])
 		return nil, fmt.Errorf("SgExecute SMART READ LOG: %v", err)
 	}
@@ -109,7 +93,7 @@ func (d *SATDevice) readSMARTLog(logPage uint8) ([]byte, error) {
 
 func (d *SATDevice) PrintSMART() error {
 	// Standard SCSI INQUIRY command
-	inqResp, err := d.device.inquiry()
+	inqResp, err := d.inquiry()
 	if err != nil {
 		return fmt.Errorf("SgExecute INQUIRY: %v", err)
 	}
@@ -165,7 +149,7 @@ func (d *SATDevice) PrintSMART() error {
 	io_hdr.cmdp = uintptr(unsafe.Pointer(&cdb16))
 	io_hdr.sbp = uintptr(unsafe.Pointer(&senseBuf[0]))
 
-	if err = d.device.execGenericIO(&io_hdr); err != nil {
+	if err = d.execGenericIO(&io_hdr); err != nil {
 		fmt.Printf("Sense buffer: % x\n", senseBuf[:io_hdr.sb_len_wr])
 		return fmt.Errorf("SgExecute SMART READ DATA: %v", err)
 	}
@@ -218,7 +202,7 @@ func ScanDevices() []SCSIDevice {
 	}
 
 	for _, file := range files {
-		devices = append(devices, NewSCSIDevice(file))
+		devices = append(devices, SCSIDevice{Name: file, fd: -1})
 	}
 
 	return devices

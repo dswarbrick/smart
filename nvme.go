@@ -181,8 +181,8 @@ type NVMeDevice struct {
 	fd   int
 }
 
-func NewNVMeDevice(name string) NVMeDevice {
-	return NVMeDevice{name, -1}
+func NewNVMeDevice(name string) *NVMeDevice {
+	return &NVMeDevice{name, -1}
 }
 
 func (d *NVMeDevice) Open() (err error) {

@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"os"
 	"runtime"
+	"strings"
 	"syscall"
 	"unsafe"
 
@@ -78,24 +79,37 @@ func main() {
 	fmt.Println("Go smartctl Reference Implementation")
 	fmt.Printf("Built with %s on %s (%s)\n\n", runtime.Version(), runtime.GOOS, runtime.GOARCH)
 
-	device := flag.String("device", "", "SATA device from which to read SMART attributes, e.g., /dev/sda")
+	device := flag.String("device", "", "SATA / NVMe device from which to read SMART attributes, e.g., /dev/sda, /dev/nvme0")
 	megaraid := flag.String("megaraid", "", "MegaRAID host and device ID from which to read SMART attributes, e.g., megaraid0_23")
 	scan := flag.Bool("scan", false, "Scan for drives that support SMART")
-	nvme := flag.String("nvme", "", "NVMe device from which to read SMART attributes, e.g., /dev/nvme0")
 	flag.Parse()
 
 	checkCaps()
 
 	if *device != "" {
-		d := smart.NewSATDevice(*device)
-		if err := d.Open(); err != nil {
+		var (
+			d   smart.Device // interface
+			err error
+		)
+
+		if strings.HasPrefix("/dev/nvme", *device) {
+			d = smart.NewNVMeDevice(*device)
+			err = d.Open()
+		} else {
+			d, err = smart.OpenSCSIAutodetect(*device)
+		}
+
+		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
 
 		defer d.Close()
 
-		d.PrintSMART()
+		if err := d.PrintSMART(); err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
 	} else if *megaraid != "" {
 		var (
 			host uint16
@@ -108,16 +122,6 @@ func main() {
 		}
 
 		smart.OpenMegasasIoctl(host, disk)
-	} else if *nvme != "" {
-		d := smart.NewNVMeDevice(*nvme)
-		if err := d.Open(); err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-
-		defer d.Close()
-
-		d.PrintSMART()
 	} else if *scan {
 		scanDevices()
 	} else {
