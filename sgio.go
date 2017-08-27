@@ -181,22 +181,13 @@ func (d *SCSIDevice) sendCDB(cdb []byte, respBuf *[]byte) error {
 // modeSense sends a SCSI MODE SENSE(6) command to a device.
 func (d *SCSIDevice) modeSense(pageNum, subPageNum, pageControl uint8) ([]byte, error) {
 	respBuf := make([]byte, 64)
-	senseBuf := make([]byte, 32)
 
 	cdb := CDB6{SCSI_MODE_SENSE_6}
 	cdb[2] = (pageControl << 6) | (pageNum & 0x3f)
 	cdb[3] = subPageNum
 	cdb[4] = uint8(len(respBuf))
 
-	io_hdr := sgIoHdr{interface_id: 'S', dxfer_direction: SG_DXFER_FROM_DEV, timeout: DEFAULT_TIMEOUT}
-	io_hdr.cmd_len = uint8(unsafe.Sizeof(cdb))
-	io_hdr.mx_sb_len = uint8(len(senseBuf))
-	io_hdr.dxfer_len = uint32(len(respBuf))
-	io_hdr.dxferp = uintptr(unsafe.Pointer(&respBuf[0]))
-	io_hdr.cmdp = uintptr(unsafe.Pointer(&cdb))
-	io_hdr.sbp = uintptr(unsafe.Pointer(&senseBuf[0]))
-
-	if err := d.execGenericIO(&io_hdr); err != nil {
+	if err := d.sendCDB(cdb[:], &respBuf); err != nil {
 		return respBuf, err
 	}
 
@@ -205,19 +196,10 @@ func (d *SCSIDevice) modeSense(pageNum, subPageNum, pageControl uint8) ([]byte, 
 
 // readCapacity sends a SCSI READ CAPACITY(10) command to a device and returns the capacity in bytes.
 func (d *SCSIDevice) readCapacity() (uint64, error) {
-	cdb := CDB10{SCSI_READ_CAPACITY_10}
 	respBuf := make([]byte, 8)
-	senseBuf := make([]byte, 32)
+	cdb := CDB10{SCSI_READ_CAPACITY_10}
 
-	io_hdr := sgIoHdr{interface_id: 'S', dxfer_direction: SG_DXFER_FROM_DEV, timeout: DEFAULT_TIMEOUT}
-	io_hdr.cmd_len = uint8(unsafe.Sizeof(cdb))
-	io_hdr.mx_sb_len = uint8(len(senseBuf))
-	io_hdr.dxfer_len = uint32(len(respBuf))
-	io_hdr.dxferp = uintptr(unsafe.Pointer(&respBuf[0]))
-	io_hdr.cmdp = uintptr(unsafe.Pointer(&cdb))
-	io_hdr.sbp = uintptr(unsafe.Pointer(&senseBuf[0]))
-
-	if err := d.execGenericIO(&io_hdr); err != nil {
+	if err := d.sendCDB(cdb[:], &respBuf); err != nil {
 		return 0, err
 	}
 
