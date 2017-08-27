@@ -195,7 +195,7 @@ func (d *NVMeDevice) Close() error {
 }
 
 // WIP - need to split out functionality further.
-func (d *NVMeDevice) PrintSMART() error {
+func (d *NVMeDevice) PrintSMART(db *driveDb) error {
 	fmt.Println("OK")
 
 	buf := make([]byte, 4096)

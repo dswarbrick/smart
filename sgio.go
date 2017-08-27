@@ -44,7 +44,7 @@ type sgioError struct {
 	scsiStatus   uint8
 	hostStatus   uint16
 	driverStatus uint16
-	senseBuf     [32]byte
+	senseBuf     [32]byte // FIXME: This is not yet populated by anything
 }
 
 func (e sgioError) Error() string {
@@ -57,7 +57,7 @@ type CDB6 [6]byte
 type CDB10 [10]byte
 type CDB16 [16]byte
 
-// SCSI generic IO, analogous to sg_io_hdr_t
+// SCSI generic ioctl header, defined as sg_io_hdr_t in <scsi/sg.h>
 type sgIoHdr struct {
 	interface_id    int32   // 'S' for SCSI generic (required)
 	dxfer_direction int32   // data transfer direction
@@ -102,7 +102,7 @@ func (inq inquiryResponse) String() string {
 type Device interface {
 	Open() error
 	Close() error
-	PrintSMART() error
+	PrintSMART(*driveDb) error
 }
 
 type SCSIDevice struct {
@@ -211,7 +211,7 @@ func (d *SCSIDevice) readCapacity() (uint64, error) {
 }
 
 // Regular SCSI (including SAS, but excluding SATA) SMART functions not yet fully implemented.
-func (d *SCSIDevice) PrintSMART() error {
+func (d *SCSIDevice) PrintSMART(db *driveDb) error {
 	capacity, _ := d.readCapacity()
 	fmt.Printf("Capacity: %d bytes (%s)\n", capacity, formatBytes(capacity))
 

@@ -140,7 +140,7 @@ func (db *driveDb) lookupDrive(ident []byte) driveModel {
 }
 
 // openDriveDb opens a .toml formatted drive database, unmarshalls it, and returns a driveDb
-func openDriveDb(dbfile string) (driveDb, error) {
+func OpenDriveDb(dbfile string) (driveDb, error) {
 	var db driveDb
 
 	if _, err := toml.DecodeFile(dbfile, &db); err != nil {

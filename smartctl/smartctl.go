@@ -106,7 +106,13 @@ func main() {
 
 		defer d.Close()
 
-		if err := d.PrintSMART(); err != nil {
+		db, err := smart.OpenDriveDb("drivedb.toml")
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
+		if err := d.PrintSMART(&db); err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}

@@ -72,7 +72,7 @@ func (d *SATDevice) readSMARTLog(logPage uint8) ([]byte, error) {
 	return respBuf, nil
 }
 
-func (d *SATDevice) PrintSMART() error {
+func (d *SATDevice) PrintSMART(db *driveDb) error {
 	// Standard SCSI INQUIRY command
 	inqResp, err := d.inquiry()
 	if err != nil {
@@ -97,11 +97,6 @@ func (d *SATDevice) PrintSMART() error {
 	fmt.Println("ATA Major Version:", identBuf.getATAMajorVersion())
 	fmt.Println("ATA Minor Version:", identBuf.getATAMinorVersion())
 	fmt.Println("Transport:", identBuf.getTransport())
-
-	db, err := openDriveDb("drivedb.toml")
-	if err != nil {
-		return err
-	}
 
 	thisDrive := db.lookupDrive(identBuf.ModelNumber[:])
 	fmt.Printf("Drive DB contains %d entries. Using model: %s\n", len(db.Drives), thisDrive.Family)

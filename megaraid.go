@@ -372,7 +372,7 @@ func OpenMegasasIoctl(host uint16, diskNum uint8) error {
 	fmt.Printf("Firmware Revision: %s\n", swapBytes(ident_buf.FirmwareRevision[:]))
 	fmt.Printf("Model Number: %s\n", swapBytes(ident_buf.ModelNumber[:]))
 
-	db, err := openDriveDb("drivedb.toml")
+	db, err := OpenDriveDb("drivedb.toml")
 	if err != nil {
 		return err
 	}
