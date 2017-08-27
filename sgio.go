@@ -6,6 +6,7 @@
 package smart
 
 import (
+	"bytes"
 	"encoding/binary"
 	"fmt"
 	"syscall"
@@ -141,23 +142,40 @@ func (d *SCSIDevice) execGenericIO(hdr *sgIoHdr) error {
 func (d *SCSIDevice) inquiry() (inquiryResponse, error) {
 	var resp inquiryResponse
 
+	respBuf := make([]byte, INQ_REPLY_LEN)
+
 	cdb := CDB6{SCSI_INQUIRY}
-	binary.BigEndian.PutUint16(cdb[3:], uint16(unsafe.Sizeof(resp)))
-	senseBuf := make([]byte, 32)
+	binary.BigEndian.PutUint16(cdb[3:], uint16(len(respBuf)))
 
-	io_hdr := sgIoHdr{interface_id: 'S', dxfer_direction: SG_DXFER_FROM_DEV, timeout: DEFAULT_TIMEOUT}
-	io_hdr.cmd_len = uint8(unsafe.Sizeof(cdb))
-	io_hdr.mx_sb_len = uint8(len(senseBuf))
-	io_hdr.dxfer_len = uint32(unsafe.Sizeof(resp))
-	io_hdr.dxferp = uintptr(unsafe.Pointer(&resp))
-	io_hdr.cmdp = uintptr(unsafe.Pointer(&cdb))
-	io_hdr.sbp = uintptr(unsafe.Pointer(&senseBuf[0]))
-
-	if err := d.execGenericIO(&io_hdr); err != nil {
+	if err := d.sendCDB(cdb[:], &respBuf); err != nil {
 		return resp, err
 	}
 
+	binary.Read(bytes.NewBuffer(respBuf), nativeEndian, &resp)
+
 	return resp, nil
+}
+
+// sendCDB sends a SCSI Command Descriptor Block to the device and writes the response into the
+// supplied []byte pointer.
+// TODO: Return SCSI status code, sense buf etc as part of error
+func (d *SCSIDevice) sendCDB(cdb []byte, respBuf *[]byte) error {
+	senseBuf := make([]byte, 32)
+
+	// Populate required fields of "sg_io_hdr_t" struct
+	hdr := sgIoHdr{
+		interface_id:    'S',
+		dxfer_direction: SG_DXFER_FROM_DEV,
+		timeout:         DEFAULT_TIMEOUT,
+		cmd_len:         uint8(len(cdb)),
+		mx_sb_len:       uint8(len(senseBuf)),
+		dxfer_len:       uint32(len(*respBuf)),
+		dxferp:          uintptr(unsafe.Pointer(&(*respBuf)[0])),
+		cmdp:            uintptr(unsafe.Pointer(&cdb[0])),
+		sbp:             uintptr(unsafe.Pointer(&senseBuf[0])),
+	}
+
+	return d.execGenericIO(&hdr)
 }
 
 // modeSense sends a SCSI MODE SENSE(6) command to a device.

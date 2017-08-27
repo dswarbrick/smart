@@ -10,7 +10,6 @@ import (
 	"encoding/binary"
 	"fmt"
 	"path/filepath"
-	"unsafe"
 )
 
 const (
@@ -30,62 +29,44 @@ type SATDevice struct {
 	SCSIDevice
 }
 
-func (d *SATDevice) identify() (*IdentifyDeviceData, error) {
+func (d *SATDevice) identify() (IdentifyDeviceData, error) {
 	var identBuf IdentifyDeviceData
 
-	senseBuf := make([]byte, 32)
+	respBuf := make([]byte, 512)
 
 	cdb16 := CDB16{SCSI_ATA_PASSTHRU_16}
 	cdb16[1] = 0x08                 // ATA protocol (4 << 1, PIO data-in)
 	cdb16[2] = 0x0e                 // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
 	cdb16[14] = ATA_IDENTIFY_DEVICE // command
 
-	io_hdr := sgIoHdr{interface_id: 'S', dxfer_direction: SG_DXFER_FROM_DEV, timeout: DEFAULT_TIMEOUT}
-	io_hdr.cmd_len = uint8(len(cdb16))
-	io_hdr.mx_sb_len = uint8(len(senseBuf))
-	io_hdr.dxfer_len = uint32(unsafe.Sizeof(identBuf))
-	io_hdr.dxferp = uintptr(unsafe.Pointer(&identBuf))
-	io_hdr.cmdp = uintptr(unsafe.Pointer(&cdb16))
-	io_hdr.sbp = uintptr(unsafe.Pointer(&senseBuf[0]))
-
-	if err := d.execGenericIO(&io_hdr); err != nil {
-		fmt.Printf("Sense buffer: % x\n", senseBuf[:io_hdr.sb_len_wr])
-		return nil, fmt.Errorf("SgExecute ATA IDENTIFY: %v", err)
+	if err := d.sendCDB(cdb16[:], &respBuf); err != nil {
+		return identBuf, fmt.Errorf("sendCDB ATA IDENTIFY: %v", err)
 	}
 
+	binary.Read(bytes.NewBuffer(respBuf), nativeEndian, &identBuf)
 	swapBytes(identBuf.SerialNumber[:])
 	swapBytes(identBuf.FirmwareRevision[:])
 	swapBytes(identBuf.ModelNumber[:])
 
-	return &identBuf, nil
+	return identBuf, nil
 }
 
 // Read SMART log page (WIP / experimental)
 func (d *SATDevice) readSMARTLog(logPage uint8) ([]byte, error) {
-	senseBuf := make([]byte, 32)
 	respBuf := make([]byte, 512)
 
-	cdb16 := CDB16{SCSI_ATA_PASSTHRU_16}
-	cdb16[1] = 0x08           // ATA protocol (4 << 1, PIO data-in)
-	cdb16[2] = 0x0e           // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
-	cdb16[4] = SMART_READ_LOG // feature LSB
-	cdb16[6] = 0x01           // sector count
-	cdb16[8] = logPage        // SMART log page number
-	cdb16[10] = 0x4f          // low lba_mid
-	cdb16[12] = 0xc2          // low lba_high
-	cdb16[14] = ATA_SMART     // command
+	cdb := CDB16{SCSI_ATA_PASSTHRU_16}
+	cdb[1] = 0x08           // ATA protocol (4 << 1, PIO data-in)
+	cdb[2] = 0x0e           // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
+	cdb[4] = SMART_READ_LOG // feature LSB
+	cdb[6] = 0x01           // sector count
+	cdb[8] = logPage        // SMART log page number
+	cdb[10] = 0x4f          // low lba_mid
+	cdb[12] = 0xc2          // low lba_high
+	cdb[14] = ATA_SMART     // command
 
-	io_hdr := sgIoHdr{interface_id: 'S', dxfer_direction: SG_DXFER_FROM_DEV, timeout: DEFAULT_TIMEOUT}
-	io_hdr.cmd_len = uint8(len(cdb16))
-	io_hdr.mx_sb_len = uint8(len(senseBuf))
-	io_hdr.dxfer_len = uint32(len(respBuf))
-	io_hdr.dxferp = uintptr(unsafe.Pointer(&respBuf[0]))
-	io_hdr.cmdp = uintptr(unsafe.Pointer(&cdb16))
-	io_hdr.sbp = uintptr(unsafe.Pointer(&senseBuf[0]))
-
-	if err := d.execGenericIO(&io_hdr); err != nil {
-		fmt.Printf("Sense buffer: % x\n", senseBuf[:io_hdr.sb_len_wr])
-		return nil, fmt.Errorf("SgExecute SMART READ LOG: %v", err)
+	if err := d.sendCDB(cdb[:], &respBuf); err != nil {
+		return respBuf, fmt.Errorf("sendCDB SMART READ LOG: %v", err)
 	}
 
 	return respBuf, nil
@@ -130,28 +111,18 @@ func (d *SATDevice) PrintSMART() error {
 	/*
 	 * SMART READ DATA
 	 */
-	cdb16 := CDB16{SCSI_ATA_PASSTHRU_16}
-	cdb16[1] = 0x08            // ATA protocol (4 << 1, PIO data-in)
-	cdb16[2] = 0x0e            // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
-	cdb16[4] = SMART_READ_DATA // feature LSB
-	cdb16[10] = 0x4f           // low lba_mid
-	cdb16[12] = 0xc2           // low lba_high
-	cdb16[14] = ATA_SMART      // command
+	cdb := CDB16{SCSI_ATA_PASSTHRU_16}
+	cdb[1] = 0x08            // ATA protocol (4 << 1, PIO data-in)
+	cdb[2] = 0x0e            // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
+	cdb[4] = SMART_READ_DATA // feature LSB
+	cdb[10] = 0x4f           // low lba_mid
+	cdb[12] = 0xc2           // low lba_high
+	cdb[14] = ATA_SMART      // command
 
-	senseBuf := make([]byte, 32)
 	respBuf := make([]byte, 512)
 
-	io_hdr := sgIoHdr{interface_id: 'S', dxfer_direction: SG_DXFER_FROM_DEV, timeout: DEFAULT_TIMEOUT}
-	io_hdr.cmd_len = uint8(len(cdb16))
-	io_hdr.mx_sb_len = uint8(len(senseBuf))
-	io_hdr.dxfer_len = uint32(len(respBuf))
-	io_hdr.dxferp = uintptr(unsafe.Pointer(&respBuf[0]))
-	io_hdr.cmdp = uintptr(unsafe.Pointer(&cdb16))
-	io_hdr.sbp = uintptr(unsafe.Pointer(&senseBuf[0]))
-
-	if err = d.execGenericIO(&io_hdr); err != nil {
-		fmt.Printf("Sense buffer: % x\n", senseBuf[:io_hdr.sb_len_wr])
-		return fmt.Errorf("SgExecute SMART READ DATA: %v", err)
+	if err := d.sendCDB(cdb[:], &respBuf); err != nil {
+		return fmt.Errorf("sendCDB SMART READ DATA: %v", err)
 	}
 
 	smart := smartPage{}
