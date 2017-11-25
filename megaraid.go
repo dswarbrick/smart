@@ -20,6 +20,8 @@ import (
 	"strings"
 	"syscall"
 	"unsafe"
+
+	"golang.org/x/sys/unix"
 )
 
 const (
@@ -112,7 +114,7 @@ type MegasasPDAddress struct {
 
 // Holder for megaraid_sas ioctl device
 type MegasasIoctl struct {
-	DeviceMajor int
+	DeviceMajor uint32
 	fd          int
 }
 
@@ -127,13 +129,6 @@ var (
 	// 0xc1944d01 - Beware: cannot use unsafe.Sizeof(megasas_iocpacket{}) due to Go struct padding!
 	MEGASAS_IOC_FIRMWARE = _iowr('M', 1, uintptr(binary.Size(megasas_iocpacket{})))
 )
-
-// MakeDev returns the device ID for the specified major and minor numbers, equivalent to
-// makedev(3). Based on gnu_dev_makedev macro, may be platform dependent!
-func MakeDev(major, minor uint) uint {
-	return (minor & 0xff) | ((major & 0xfff) << 8) |
-		((minor &^ 0xff) << 12) | ((major &^ 0xfff) << 32)
-}
 
 // PackedBytes is a convenience method that will pack a megasas_iocpacket struct in little-endian
 // format and return it as a byte slice
@@ -170,7 +165,7 @@ func CreateMegasasIoctl() (MegasasIoctl, error) {
 			return m, nil
 		}
 
-		syscall.Mknod("/dev/megaraid_sas_ioctl_node", syscall.S_IFCHR, int(MakeDev(uint(m.DeviceMajor), 0)))
+		syscall.Mknod("/dev/megaraid_sas_ioctl_node", syscall.S_IFCHR, int(unix.Mkdev(m.DeviceMajor, 0)))
 	} else {
 		return m, err
 	}
