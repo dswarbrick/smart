@@ -9,8 +9,9 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
-	"syscall"
 	"unsafe"
+
+	"golang.org/x/sys/unix"
 )
 
 const (
@@ -111,12 +112,12 @@ type SCSIDevice struct {
 }
 
 func (d *SCSIDevice) Open() (err error) {
-	d.fd, err = syscall.Open(d.Name, syscall.O_RDWR, 0600)
+	d.fd, err = unix.Open(d.Name, unix.O_RDWR, 0600)
 	return err
 }
 
 func (d *SCSIDevice) Close() error {
-	return syscall.Close(d.fd)
+	return unix.Close(d.fd)
 }
 
 func (d *SCSIDevice) execGenericIO(hdr *sgIoHdr) error {

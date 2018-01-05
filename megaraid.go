@@ -18,7 +18,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"syscall"
 	"unsafe"
 
 	"golang.org/x/sys/unix"
@@ -165,12 +164,12 @@ func CreateMegasasIoctl() (MegasasIoctl, error) {
 			return m, nil
 		}
 
-		syscall.Mknod("/dev/megaraid_sas_ioctl_node", syscall.S_IFCHR, int(unix.Mkdev(m.DeviceMajor, 0)))
+		unix.Mknod("/dev/megaraid_sas_ioctl_node", unix.S_IFCHR, int(unix.Mkdev(m.DeviceMajor, 0)))
 	} else {
 		return m, err
 	}
 
-	m.fd, err = syscall.Open("/dev/megaraid_sas_ioctl_node", syscall.O_RDWR, 0600)
+	m.fd, err = unix.Open("/dev/megaraid_sas_ioctl_node", unix.O_RDWR, 0600)
 
 	if err != nil {
 		return m, err
@@ -181,7 +180,7 @@ func CreateMegasasIoctl() (MegasasIoctl, error) {
 
 // Close closes the file descriptor of the MegasasIoctl instance
 func (m *MegasasIoctl) Close() {
-	syscall.Close(m.fd)
+	unix.Close(m.fd)
 }
 
 // MFI sends a MegaRAID Firmware Interface (MFI) command to the specified host

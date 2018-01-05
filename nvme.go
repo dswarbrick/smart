@@ -10,8 +10,9 @@ import (
 	"encoding/binary"
 	"fmt"
 	"math/big"
-	"syscall"
 	"unsafe"
+
+	"golang.org/x/sys/unix"
 )
 
 const (
@@ -186,12 +187,12 @@ func NewNVMeDevice(name string) *NVMeDevice {
 }
 
 func (d *NVMeDevice) Open() (err error) {
-	d.fd, err = syscall.Open(d.Name, syscall.O_RDWR, 0600)
+	d.fd, err = unix.Open(d.Name, unix.O_RDWR, 0600)
 	return err
 }
 
 func (d *NVMeDevice) Close() error {
-	return syscall.Close(d.fd)
+	return unix.Close(d.fd)
 }
 
 // WIP - need to split out functionality further.

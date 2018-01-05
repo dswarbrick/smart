@@ -6,7 +6,9 @@
 
 package smart
 
-import "syscall"
+import (
+	"golang.org/x/sys/unix"
+)
 
 const (
 	directionNone  = 0
@@ -51,7 +53,7 @@ func _iowr(t, nr, size uintptr) uintptr {
 
 // ioctl executes an ioctl command on the specified file descriptor
 func ioctl(fd, cmd, ptr uintptr) error {
-	_, _, errno := syscall.Syscall(syscall.SYS_IOCTL, fd, cmd, ptr)
+	_, _, errno := unix.Syscall(unix.SYS_IOCTL, fd, cmd, ptr)
 	if errno != 0 {
 		return errno
 	}

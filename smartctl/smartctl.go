@@ -11,8 +11,9 @@ import (
 	"os"
 	"runtime"
 	"strings"
-	"syscall"
 	"unsafe"
+
+	"golang.org/x/sys/unix"
 
 	"github.com/dswarbrick/smart"
 )
@@ -48,7 +49,7 @@ func checkCaps() {
 	caps.hdr.version = _LINUX_CAPABILITY_VERSION_3
 
 	// Use RawSyscall since we do not expect it to block
-	_, _, e1 := syscall.RawSyscall(syscall.SYS_CAPGET, uintptr(unsafe.Pointer(&caps.hdr)), uintptr(unsafe.Pointer(&caps.data)), 0)
+	_, _, e1 := unix.RawSyscall(unix.SYS_CAPGET, uintptr(unsafe.Pointer(&caps.hdr)), uintptr(unsafe.Pointer(&caps.data)), 0)
 	if e1 != 0 {
 		fmt.Println("capget() failed:", e1.Error())
 		return
