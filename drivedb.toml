@@ -1,5 +1,5 @@
 [[Drives]]
-  Family = "$Id: drivedb.h 4393 2017-02-27 22:03:39Z chrfranke $"
+  Family = "$Id: drivedb.h 4635 2017-12-02 14:34:25Z chrfranke $"
   ModelRegex = "-"
   FirmwareRegex = "-"
   WarningMsg = "This is a dummy entry to hold the SVN-Id of drivedb.h"
@@ -205,6 +205,34 @@
       Name = "Power_On_Hours"
 
 [[Drives]]
+  Family = "Swissbit C440 Industrial CompactFlash Card"
+  ModelRegex = "SFCF(2048|4096|8192|16GB|32GB|64GB)H[0-9]BU[24]TO-(C|I)-(MS|QT|NU)-5[0-9]7-STD"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+    [Drives.Presets.196]
+      Conv = "raw24/raw24"
+      Name = "Spare_Blocks"
+    [Drives.Presets.203]
+      Conv = "raw48"
+      Name = "Total_ECC_Errors"
+    [Drives.Presets.213]
+      Conv = "raw24/raw24"
+      Name = "Spare_Blocks_Worst_Chip"
+    [Drives.Presets.214]
+      Conv = "raw48"
+      Name = "Reserved_Attribute"
+    [Drives.Presets.215]
+      Conv = "raw48"
+      Name = "Current_TRIM_Percent"
+    [Drives.Presets.229]
+      Conv = "raw48"
+      Name = "Erase_Count"
+    [Drives.Presets.232]
+      Conv = "raw48"
+      Name = "Total_Number_of_Reads"
+
+[[Drives]]
   Family = "Apacer SSD"
   ModelRegex = "(2|4|8|16|32)GB SATA Flash Drive"
   FirmwareRegex = "SF(DDA01C|I2101D|DE001A)"
@@ -255,11 +283,14 @@
       Name = "Host_Reades_GiB"
 
 [[Drives]]
-  Family = "Apple SD/SM/TS...E/F SSDs"
-  ModelRegex = "APPLE SSD (S[DM]|TS)0?(128|256|512|768)[EFG]"
+  Family = "Apple SD/SM/TS...E/F/G SSDs"
+  ModelRegex = "APPLE SSD (S[DM]|TS)0?(128|256|512|768|1024)[EFG]"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
+    [Drives.Presets.169]
+      Conv = "raw48"
+      Name = "Unknown_Apple_Attrib"
     [Drives.Presets.173]
       Conv = "raw48"
       Name = "Wear_Leveling_Count"
@@ -309,7 +340,7 @@
 
 [[Drives]]
   Family = "Crucial/Micron RealSSD m4/C400/P400"
-  ModelRegex = "C400-MTFDDA[ACK](064|128|256|512)MAM|M4-CT(064|128|256|512)M4SSD[123]|MTFDDA[AK](064|128|256|512|050|100|200|400)MA[MNR]-1[JKS]1.*"
+  ModelRegex = "C400-MTFDDA[ACK](064|128|256|512)MAM|M4-CT(032|064|128|256|512)M4SSD[123]|MTFDDA[AK](064|128|256|512|050|100|200|400)MA[MNR]-1[JKS]1.*"
   FirmwareRegex = "030[9-Z]|03[1-Z].|0[4-Z]..|[1-Z]....*"
   WarningMsg = ""
   [Drives.Presets]
@@ -355,7 +386,7 @@
 
 [[Drives]]
   Family = "Crucial/Micron RealSSD m4/C400"
-  ModelRegex = "C400-MTFDDA[ACK](064|128|256|512)MAM|M4-CT(064|128|256|512)M4SSD[123]"
+  ModelRegex = "C400-MTFDDA[ACK](064|128|256|512)MAM|M4-CT(032|064|128|256|512)M4SSD[123]"
   FirmwareRegex = ""
   WarningMsg = "This drive may hang after 5184 hours of power-on time:\nhttp://www.tomshardware.com/news/Crucial-m4-Firmware-BSOD,14544.html\nSee the following web pages for firmware updates:\nhttp://www.crucial.com/support/firmware.aspx\nhttp://www.micron.com/products/solid-state-storage/client-ssd#software"
   [Drives.Presets]
@@ -392,10 +423,13 @@
 
 [[Drives]]
   Family = "Crucial/Micron MX1/2/300, M5/600, 1100 Client SSDs"
-  ModelRegex = "Crucial_CT(128|256|512)MX100SSD1|Crucial_CT(200|250|256|500|512|1000|1024)MX200SSD[1346]|Crucial_CT(275|525|1050|2050)MX300SSD[14]|Crucial_CT(120|240|480|960)M500SSD[134]|Crucial_CT(128|256|512|1024)M550SSD[134]|Micron_M500_MTFDDA[KTV](120|240|480|960)MAV|(Micron_)?M510[_-]MTFDDA[KTV](128|256)MAZ|(Micron_)?M550[_-]MTFDDA[KTV](064|128|256|512|1T0)MAY|Micron_M600_(EE|MT)FDDA[KTV](128|256|512|1T0)MBF[25Z]?|Micron_1100_MTFDDA[KV](256|512|1T0|2T0)TBN"
+  ModelRegex = "Crucial_CT(128|256|512)MX100SSD1|Crucial_CT(200|250|256|500|512|1000|1024)MX200SSD[1346]|Crucial_CT(275|525|1050|2050)MX300SSD[14]|Crucial_CT(120|240|480|960)M500SSD[134]|Crucial_CT(128|256|512|1024)M550SSD[134]|Micron_M500_MTFDDA[KTV](120|240|480|960)MAV|(Micron_)?M510[_-]MTFDDA[KTV](128|256)MAZ|(Micron_)?M550[_-]MTFDDA[KTV](064|128|256|512|1T0)MAY|Micron_M600_(EE|MT)FDDA[KTV](128|256|512|1T0)MBF[25Z]?|Micron_M500DC_(EE|MT)FDDA[AK](120|240|480|800)MBB|Micron_1100_MTFDDA[KV](256|512|1T0|2T0)TBN|MICRON_M510DC_(EE|MT)FDDAK(120|240|480|800|960)MBP|Micron_5100_(EE|MT)FDDA[KV](240|480|960|1T9|3T8|7T6)T(BY|CB|CC)"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
+    [Drives.Presets.170]
+      Conv = "raw48"
+      Name = "Reserved_Block_Count"
     [Drives.Presets.171]
       Conv = "raw48"
       Name = "Program_Fail_Count"
@@ -417,6 +451,9 @@
     [Drives.Presets.184]
       Conv = "raw48"
       Name = "Error_Correction_Count"
+    [Drives.Presets.195]
+      Conv = "raw48"
+      Name = "Cumulativ_Corrected_ECC"
     [Drives.Presets.202]
       Conv = "raw48"
       Name = "Percent_Lifetime_Used"
@@ -533,7 +570,7 @@
 
 [[Drives]]
   Family = "SandForce Driven SSDs"
-  ModelRegex = "SandForce 1st Ed\\.|ADATA SSD S(396|510|599) .?..GB|ADATA SP[389]00|ADATA SSD S[PX]900 (64|128|256|512)GB-DL2|ADATA XM11 (128|256)GB|ATP Velocity MIV (60|120|240|480)GB|Corsair CSSD-F(40|60|80|115|120|160|240)GBP?2.*|Corsair Force ((3 |LS )?SSD|GS|GT)|FM-25S2S-(60|120|240)GBP2|FTM(06|12|24|48)CT25H|KINGSTON SE50S3(100|240|480)G|KINGSTON SH10[03]S3(90|120|240|480)G|KINGSTON SKC(300S37A|380S3)(60|120|180|240|480)G|KINGSTON SVP200S3(7A)?(60|90|120|240|480)G|KINGSTON SMS200S3(30|60|120)G|KINGSTON SMS450S3(32|64|128)G|KINGSTON (SV300|SKC100|SE100)S3.*G|MKNSSDCR(45|60|90|120|180|240|360|480)GB(-(7|DX7?|MX|G2))?|MKNSSDEC(60|120|240|480|512)GB|MKNSSDAT(30|40|60|120|180|240|480)GB(-(DX|V))?|Mushkin MKNSSDCL(40|60|80|90|115|120|180|240|480)GB-DX2?|OCZ[ -](AGILITY2([ -]EX)?|COLOSSUS2|ONYX2|VERTEX(2|-LE))( [123]\\..*)?|OCZ-NOCTI|OCZ-REVODRIVE3?( X2)?|OCZ-REVODRIVE350|OCZ[ -](VELO|VERTEX2[ -](EX|PRO))( [123]\\..*)?|D2[CR]STK251...-....|OCZ-(AGILITY3|SOLID3|VERTEX3( MI)?)|OCZ Z-DRIVE R4 [CR]M8[48]|OCZ Z-DRIVE 4500|OCZ-VELO DRIVE|TALOS2|(APOC|DENC|DENEVA|FTNC|GFGC|MANG|MMOC|NIMC|TMSC).*|(DENR|DRSAK|EC188|NIMR|PSIR|TRSAK).*|OWC Aura Pro( 6G SSD)?|OWC Mercury Electra (Pro )?[36]G SSD|OWC Mercury E(xtreme|XTREME) Pro (6G |RE )?SSD|Patriot Pyro|SanDisk SDSSDX(60|120|240|480)GG25|SanDisk SDSSDA(120|240|480)G|SuperSSpeed S301 [0-9]*GB|SG9XCS2D(0?50|100|200|400)GESLT|SSD9SC(120|240|480)GED[EA]|(TX32|TX31C1|VN0.?..GCNMK).*|(TX22D1|TX21B1).*|TX52D1.*|TS(64|128|256|512)GSSD[37]20|UGB(88P|99S)GC...H[BF].|SG9XCS(1F|2D)(50|100|200|400)GE01|VisionTek GoDrive (60|120|240|480)GB"
+  ModelRegex = "SandForce 1st Ed\\.|ADATA SSD S(396|510|599) .?..GB|ADATA SP[389]00|ADATA SSD S[PX]900 (64|128|256|512)GB-DL2|ADATA XM11 (128|256)GB|ATP Velocity MIV (60|120|240|480)GB|Corsair CSSD-F(40|60|80|115|120|160|240)GBP?2.*|Corsair Voyager GTX|Corsair Force ((3 |LS )?SSD|GS|GT)|FM-25S2S-(60|120|240)GBP2|FTM(06|12|24|48)CT25H|KINGSTON SE50S3(100|240|480)G|KINGSTON SH10[03]S3(90|120|240|480)G|KINGSTON SKC(300S37A|380S3)(60|120|180|240|480)G|KINGSTON SVP200S3(7A)?(60|90|120|240|480)G|KINGSTON SMS200S3(30|60|120)G|KINGSTON SMS450S3(32|64|128)G|KINGSTON (SV300|SKC100|SE100)S3.*G|MKNSSDCR(45|60|90|120|180|240|360|480)GB(-(7|DX7?|MX|G2))?|MKNSSDEC(60|120|240|480|512)GB|MKNSSDAT(30|40|60|120|180|240|480)GB(-(DX|V))?|Mushkin MKNSSDCL(40|60|80|90|115|120|180|240|480)GB-DX2?|OCZ[ -](AGILITY2([ -]EX)?|COLOSSUS2|ONYX2|VERTEX(2|-LE))( [123]\\..*)?|OCZ-NOCTI|OCZ-REVODRIVE3?( X2)?|OCZ-REVODRIVE350|OCZ[ -](VELO|VERTEX2[ -](EX|PRO))( [123]\\..*)?|D2[CR]STK251...-....|OCZ-(AGILITY3|SOLID3|VERTEX3( MI)?)|OCZ Z-DRIVE R4 [CR]M8[48]|OCZ Z-DRIVE 4500|OCZ-VELO DRIVE|TALOS2|(APOC|DENC|DENEVA|FTNC|GFGC|MANG|MMOC|NIMC|TMSC).*|(DENR|DRSAK|EC188|NIMR|PSIR|TRSAK).*|OWC Aura Pro( 6G SSD)?|OWC Mercury Electra (Pro )?[36]G SSD|OWC Mercury E(xtreme|XTREME) Pro (6G |RE )?SSD|Patriot Pyro|SanDisk SDSSDX(60|120|240|480)GG25|SanDisk SDSSDA(120|240|480)G|SuperSSpeed S301 [0-9]*GB|SG9XCS2D(0?50|100|200|400)GESLT|SSD9SC(120|240|480)GED[EA]|(TX32|TX31C1|VN0.?..GCNMK).*|(TX22D1|TX21B1).*|TX52D1.*|TS(64|128|256|512)GSSD[37]20|UGB(88P|99S)GC...H[BF].|SG9XCS(1F|2D)(50|100|200|400)GE01|VisionTek GoDrive (60|120|240|480)GB"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -626,9 +663,119 @@
       Name = "Power_On_Hours_and_Msec"
 
 [[Drives]]
-  Family = "Phison Driven SSDs"
-  ModelRegex = "KINGSTON SUV300S37A(120|240|480)G|KINGSTON SKC310S3B?7A960G|KINGSTON SKC400S37(128G|256G|512G|1T)|KINGSTON SV310S3(7A|D7|N7A|B7A)960G|KINGSTON SHSS3B?7A(120|240|480|960)G"
+  Family = "StorFly CFast SATA 6Gbps SSDs"
+  ModelRegex = "StorFly VSFCS2C[CI](016|030|060|120|240)G-..."
   FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+    [Drives.Presets.160]
+      Conv = "raw48"
+      Name = "Uncorrectable_Error_Cnt"
+    [Drives.Presets.161]
+      Conv = "raw48"
+      Name = "Spares_Remaining"
+    [Drives.Presets.169]
+      Conv = "raw48"
+      Name = "Lifetime_Remaining%"
+    [Drives.Presets.192]
+      Conv = "raw48"
+      Name = "Unsafe_Shutdown_Count"
+    [Drives.Presets.241]
+      Conv = "raw48"
+      Name = "Host_Writes_32MiB"
+    [Drives.Presets.242]
+      Conv = "raw48"
+      Name = "Host_Reads_32MiB"
+    [Drives.Presets.248]
+      Conv = "raw48"
+      Name = "Lifetime_Remaining%"
+    [Drives.Presets.249]
+      Conv = "raw48"
+      Name = "Spares_Remaining_Perc"
+
+[[Drives]]
+  Family = "Phison Driven SSDs"
+  ModelRegex = "KINGSTON SUV300S37A(120|240|480)G|KINGSTON SKC310S3B?7A960G|KINGSTON SKC400S37(128G|256G|512G|1T)|KINGSTON SV310S3(7A|D7|N7A|B7A)960G|GOODRAM|PNY CS1311 (120|240|480|960)GB SSD|KINGSTON SHSS3B?7A(120|240|480|960)G"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+    [Drives.Presets.10]
+      Conv = "raw48"
+      Name = "Not_In_Use"
+    [Drives.Presets.168]
+      Conv = "raw48"
+      Name = "SATA_Phy_Error_Count"
+    [Drives.Presets.170]
+      Conv = "raw24/raw24:z54z10"
+      Name = "Bad_Blk_Ct_Erl/Lat"
+    [Drives.Presets.173]
+      Conv = "raw16(avg16)"
+      Name = "MaxAvgErase_Ct"
+    [Drives.Presets.175]
+      Conv = "raw48"
+      Name = "Not_In_Use"
+    [Drives.Presets.183]
+      Conv = "raw48"
+      Name = "Unknown_Attribute"
+    [Drives.Presets.192]
+      Conv = "raw48"
+      Name = "Unsafe_Shutdown_Count"
+    [Drives.Presets.196]
+      Conv = "raw48"
+      Name = "Not_In_Use"
+    [Drives.Presets.197]
+      Conv = "raw48"
+      Name = "Not_In_Use"
+    [Drives.Presets.199]
+      Conv = "raw48"
+      Name = "CRC_Error_Count"
+    [Drives.Presets.2]
+      Conv = "raw48"
+      Name = "Not_In_Use"
+    [Drives.Presets.218]
+      Conv = "raw48"
+      Name = "CRC_Error_Count"
+    [Drives.Presets.231]
+      Conv = "raw48"
+      Name = "SSD_Life_Left"
+    [Drives.Presets.233]
+      Conv = "raw48"
+      Name = "Flash_Writes_GiB"
+    [Drives.Presets.240]
+      Conv = "raw48"
+      Name = "Not_In_Use"
+    [Drives.Presets.241]
+      Conv = "raw48"
+      Name = "Lifetime_Writes_GiB"
+    [Drives.Presets.242]
+      Conv = "raw48"
+      Name = "Lifetime_Reads_GiB"
+    [Drives.Presets.244]
+      Conv = "raw48"
+      Name = "Average_Erase_Count"
+    [Drives.Presets.245]
+      Conv = "raw48"
+      Name = "Max_Erase_Count"
+    [Drives.Presets.246]
+      Conv = "raw48"
+      Name = "Total_Erase_Count"
+    [Drives.Presets.3]
+      Conv = "raw48"
+      Name = "Not_In_Use"
+    [Drives.Presets.5]
+      Conv = "raw48"
+      Name = "Retired_Block_Count"
+    [Drives.Presets.7]
+      Conv = "raw48"
+      Name = "Not_In_Use"
+    [Drives.Presets.8]
+      Conv = "raw48"
+      Name = "Not_In_Use"
+
+[[Drives]]
+  Family = "Phison Driven OEM SSDs"
+  ModelRegex = "SATA SSD"
+  FirmwareRegex = "(S9FM02\\.1|SBFM10\\.5)"
   WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.10]
@@ -995,8 +1142,8 @@
       Name = "Host_Writes"
 
 [[Drives]]
-  Family = "InnoDisk InnoLite SATADOM D150QV-L SSDs"
-  ModelRegex = "InnoLite SATADOM D150QV-L"
+  Family = "InnoDisk InnoLite SATADOM D150QV SSDs"
+  ModelRegex = "InnoLite SATADOM D150QV.*"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -1004,11 +1151,11 @@
       Conv = "raw48"
       Name = "SATA_PHY_Error_Count"
     [Drives.Presets.170]
-      Conv = "raw48"
-      Name = "Bad_Block_Count"
+      Conv = "raw16"
+      Name = "Bad_Block_Count_New/Tot"
     [Drives.Presets.173]
-      Conv = "raw48"
-      Name = "Erase_Count"
+      Conv = "raw16"
+      Name = "Erase_Count_Max/Avg"
     [Drives.Presets.175]
       Conv = "raw48"
       Name = "Bad_Cluster_Table_Count"
@@ -1019,8 +1166,8 @@
       Conv = "hex48"
       Name = "Flash_ID"
     [Drives.Presets.235]
-      Conv = "raw48"
-      Name = "Later_Bad_Block"
+      Conv = "raw16"
+      Name = "Lat_Bad_Blk_Era/Wri/Rea"
     [Drives.Presets.236]
       Conv = "raw48"
       Name = "Unstable_Power_Count"
@@ -1133,8 +1280,8 @@
       Name = "Flash_Writes_32MiB"
 
 [[Drives]]
-  Family = "Innodisk 3IE3/3ME3 SSDs"
-  ModelRegex = "(2.5\" SATA SSD|CFast|InnoDisk Corp\\. - mSATA|Mini PCIeDOM|mSATA mini|M\\.2 \\(S42\\)|SATA Slim|SATADOM-[MS][HLV]) 3[IM]E3( V2)?"
+  Family = "Innodisk 3IE3/3ME3/3ME4 SSDs"
+  ModelRegex = "(2.5\" SATA SSD|CFast|InnoDisk Corp\\. - mSATA|Mini PCIeDOM|mSATA( mini)?|M\\.2 \\(S42\\)|SATA Slim|SATADOM-[MS][HLV]( Type [CD])?) 3([IM]E3|ME4)( V2)?"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -1633,8 +1780,51 @@
       Name = "Power_On_Hours_and_Msec"
 
 [[Drives]]
+  Family = "Intel 540 Series SSDs"
+  ModelRegex = "INTEL SSDSC[K2]KW(120H|180H|240H|360H|480H|010X)6"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+    [Drives.Presets.170]
+      Conv = "raw48"
+      Name = "Available_Reservd_Space"
+    [Drives.Presets.171]
+      Conv = "raw48"
+      Name = "Program_Fail_Count"
+    [Drives.Presets.172]
+      Conv = "raw48"
+      Name = "Erase_Fail_Count"
+    [Drives.Presets.174]
+      Conv = "raw48"
+      Name = "Unexpect_Power_Loss_Ct"
+    [Drives.Presets.183]
+      Conv = "raw48"
+      Name = "SATA_Downshift_Count"
+    [Drives.Presets.187]
+      Conv = "raw48"
+      Name = "Uncorrectable_Error_Cnt"
+    [Drives.Presets.225]
+      Conv = "raw48"
+      Name = "Host_Writes_32MiB"
+    [Drives.Presets.226]
+      Conv = "raw48"
+      Name = "Workld_Media_Wear_Indic"
+    [Drives.Presets.227]
+      Conv = "raw48"
+      Name = "Workld_Host_Reads_Perc"
+    [Drives.Presets.228]
+      Conv = "raw48"
+      Name = "Workload_Minutes"
+    [Drives.Presets.249]
+      Conv = "raw48"
+      Name = "NAND_Writes_1GiB"
+    [Drives.Presets.9]
+      Conv = "msec24hour32"
+      Name = "Power_On_Hours_and_Msec"
+
+[[Drives]]
   Family = "Intel 730 and DC S35x0/3610/3700 Series SSDs"
-  ModelRegex = "INTEL SSDSC(1N|2B)[ABPX]((080|100|120|160|200|240|300|400|480|600|800)G[346]T?|(012|016)T[46])"
+  ModelRegex = "INTEL SSDSC(1N|2B)[ABPX]((080|100|120|150|160|200|240|300|400|480|600|800)G[3467]T?|(012|016)T[46])"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -1692,6 +1882,52 @@
     [Drives.Presets.243]
       Conv = "raw48"
       Name = "NAND_Writes_32MiB"
+
+[[Drives]]
+  Family = "Intel 3710 Series SSDs"
+  ModelRegex = "INTEL SSDSC2BA(200G|400G|800G|012T)4.?"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+    [Drives.Presets.170]
+      Conv = "raw48"
+      Name = "Available_Reservd_Space"
+    [Drives.Presets.171]
+      Conv = "raw48"
+      Name = "Program_Fail_Count"
+    [Drives.Presets.172]
+      Conv = "raw48"
+      Name = "Erase_Fail_Count"
+    [Drives.Presets.174]
+      Conv = "raw48"
+      Name = "Unexpect_Power_Loss_Ct"
+    [Drives.Presets.183]
+      Conv = "raw48"
+      Name = "SATA_Downshift_Count"
+    [Drives.Presets.187]
+      Conv = "raw48"
+      Name = "Uncorrectable_Error_Cnt"
+    [Drives.Presets.225]
+      Conv = "raw48"
+      Name = "Host_Writes_32MiB"
+    [Drives.Presets.226]
+      Conv = "raw48"
+      Name = "Workld_Media_Wear_Indic"
+    [Drives.Presets.227]
+      Conv = "raw48"
+      Name = "Workld_Host_Reads_Perc"
+    [Drives.Presets.228]
+      Conv = "raw48"
+      Name = "Workload_Minutes"
+    [Drives.Presets.234]
+      Conv = "raw24/raw32:04321"
+      Name = "Thermal_Throttle"
+    [Drives.Presets.243]
+      Conv = "raw48"
+      Name = "NAND_Writes_32MiB"
+    [Drives.Presets.9]
+      Conv = "msec24hour32"
+      Name = "Power_On_Hours_and_Msec"
 
 [[Drives]]
   Family = "Kingston branded X25-V SSDs"
@@ -1838,7 +2074,7 @@
 
 [[Drives]]
   Family = "Samsung based SSDs"
-  ModelRegex = "SAMSUNG SSD PM800 .*GB|SAMSUNG SSD PM810 .*GB|SAMSUNG SSD PM851 (mSATA |M\\.2 )?(2280 )?(128|256|512)GB|SAMSUNG SSD SM841N (mSATA )?(128|256|512)GB|SAMSUNG 470 Series SSD|Samsung SSD 750 EVO (120|250|500)GB|SAMSUNG SSD 830 Series|MZ7PC(512|256|128|064)HA(GH|FU|DR)-000.*|Samsung SSD 840 (PRO )?Series|Samsung SSD 8[45]0 EVO (mSATA |M\\.2 )?((120|250|500|750)G|1T)B( mSATA)?|Samsung SSD 850 PRO ((128|256|512)G|1T)B|SAMSUNG MZ7PA256HMDR-.*|SAMSUNG MZ[7M]PC(032|064|128|256|512)HBCD-.*|SAMSUNG MZ7TD(128|256)HAFV-.*|SAMSUNG MZ7WD((120|240)H[AC]FV|480HAGM|960HAGP)-00003|SAMSUNG MZ[7N]TE(128|256|512)HMHP-.*|SAMSUNG MZ7GE(240HMGR|(480|960)HMHP)-00003|SAMSUNG MZ7LM(120|240|480|960|1T9|3T8)HC(JM|HP|GR|FD)-.*|SAMSUNG MZ7KM(120|240|480|960|1T9)HA(JM|HP|GR|FD|JM)-.*|SAMSUNG MZN(LF|TY)(128|256)H[CD]HP-.*|SAMSUNG MZ[7N]LN(128|256|512)H[CM](GR|HP|JH|JP)-.*|SAMSUNG MZHPV(128|256|512)HDGL-.*"
+  ModelRegex = "SAMSUNG SSD PM800 .*GB|SAMSUNG SSD PM810 .*GB|SAMSUNG SSD PM851 (mSATA |M\\.2 )?(2280 )?(128|256|512)GB|SAMSUNG SSD SM841N (mSATA )?(128|256|512)GB|SAMSUNG 470 Series SSD|Samsung SSD 750 EVO (120|250|500)GB|SAMSUNG SSD 830 Series|SAMSUNG SSD PM830 .*|MZ7PC(512|256|128|064)HA(GH|FU|DR)-000.*|Samsung SSD 840 (PRO )?Series|Samsung SSD 8[45]0 EVO .*|Samsung SSD 850 PRO ((128|256|512)G|1T)B|SAMSUNG MZ7PA256HMDR-.*|Samsung SSD 845DC EVO .*|SAMSUNG MZ[7M]PC(032|064|128|256|512)HBCD-.*|SAMSUNG MZ7TD(128|256)HAFV-.*|SAMSUNG MZ7WD((120|240)H[AC]FV|480HAGM|960HAGP)-00003|SAMSUNG MZ[7N]TE(128|256|512)HMHP-.*|SAMSUNG MZ7GE(240HMGR|(480|960)HMHP)-00003|SAMSUNG MZ7LM(120|240|480|960|1T9|3T8)HC(JM|HP|GR|FD)-.*|SAMSUNG MZ7KM(120|240|480|960|1T9)HA(JM|HP|GR|FD|JM)-.*|SAMSUNG MZN(LF|TY)(128|256)H[CD]HP-.*|SAMSUNG MZ[7N]LN(128|256|512|1T0)H[ACM](GR|HP|HQ|J[HPQ]|LR)-.*|SAMSUNG SSD PM871 .*|SAMSUNG MZHPV(128|256|512)HDGL-.*"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -1917,7 +2153,7 @@
 
 [[Drives]]
   Family = "Marvell based SanDisk SSDs"
-  ModelRegex = "SanDisk SD5SG2[0-9]*G1052E|SanDisk SD6S[BF][12]M[0-9]*G(1022I?)?|SanDisk SD7S[BN]6S-?(128|256|512)G(1122|-1006)|SanDisk SD8SB8U((128|256|512)G|1T00)1122|SanDisk SDSSDHP[0-9]*G|SanDisk (SDSSDHII|Ultra II )[0-9]*GB?|SanDisk SDSSDXPS?[0-9]*G"
+  ModelRegex = "SanDisk SD5SG2[0-9]*G1052E|SanDisk SD6S[BF][12]M[0-9]*G(1022I?)?|SanDisk SD7S[BN]6S-?(128|256|512)G(1122|-1006)|SanDisk SD8SB8U((128|256|512)G|1T00)1122|SanDisk SDSSDHP[0-9]*G|SanDisk (SDSSDHII|Ultra II )[0-9]*GB?|SanDisk SDSSDXPS?[0-9]*G|SSD SATAIII 16GB"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -2014,8 +2250,154 @@
       Name = "Thermal_Throttle"
 
 [[Drives]]
+  Family = "Sandisk SATA Cloudspeed Max and GEN2 ESS SSDs"
+  ModelRegex = "SD[A-Z0-9]{2}[1-3][A-Z]{3}-?[0-9]{3}[GT]-?1[A-Z0-9]{3}"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+    [Drives.Presets.13]
+      Conv = "raw48"
+      Name = "Lifetime_UECC_Ct"
+    [Drives.Presets.170]
+      Conv = "raw48"
+      Name = "Reserve_Erase_BlkCt"
+    [Drives.Presets.171]
+      Conv = "raw48"
+      Name = "Program_Fail_Ct"
+    [Drives.Presets.172]
+      Conv = "raw48"
+      Name = "Erase_Fail_Ct"
+    [Drives.Presets.173]
+      Conv = "raw48"
+      Name = "Percent_Life_Used"
+    [Drives.Presets.174]
+      Conv = "raw48"
+      Name = "Unexpect_Power_Loss"
+    [Drives.Presets.175]
+      Conv = "raw48"
+      Name = "Lifetime_Die_Failure_Ct"
+    [Drives.Presets.177]
+      Conv = "raw48"
+      Name = "Lifetime_Remaining%"
+    [Drives.Presets.178]
+      Conv = "raw48"
+      Name = "SSD_LifeLeft(0.01%)"
+    [Drives.Presets.180]
+      Conv = "raw48"
+      Name = "Undetected_Data_Err_Ct"
+    [Drives.Presets.183]
+      Conv = "raw48"
+      Name = "LT_Link_Rate_DwnGrd_Ct"
+    [Drives.Presets.191]
+      Conv = "raw48"
+      Name = "Clean_Shutdown_Ct"
+    [Drives.Presets.192]
+      Conv = "raw48"
+      Name = "Unclean_Shutdown_Ct"
+    [Drives.Presets.196]
+      Conv = "raw48"
+      Name = "Lifetime_Retried_Blk_Ct"
+    [Drives.Presets.204]
+      Conv = "raw48"
+      Name = "Average_Block-Erase_Ct"
+    [Drives.Presets.205]
+      Conv = "raw48"
+      Name = "Read_Retry_Enable_Ct"
+    [Drives.Presets.206]
+      Conv = "raw48"
+      Name = "Successful_RaidRecov_Ct"
+    [Drives.Presets.207]
+      Conv = "raw48"
+      Name = "Trimmed_Sector_Ct"
+    [Drives.Presets.211]
+      Conv = "raw48"
+      Name = "Read_Disturb_ReallocEvt"
+    [Drives.Presets.233]
+      Conv = "raw48"
+      Name = "Lifetime_Nand_Writes"
+    [Drives.Presets.235]
+      Conv = "raw48"
+      Name = "Capacitor_Health"
+    [Drives.Presets.244]
+      Conv = "raw48"
+      Name = "Therm_Throt_Activation"
+    [Drives.Presets.245]
+      Conv = "raw48"
+      Name = "Drive_Life_Remaining%"
+    [Drives.Presets.253]
+      Conv = "raw48"
+      Name = "SPI_Test_Remaining"
+    [Drives.Presets.32]
+      Conv = "raw48"
+      Name = "Lifetime_Write_AmpFctr"
+    [Drives.Presets.33]
+      Conv = "raw48"
+      Name = "Write_AmpFctr"
+
+[[Drives]]
+  Family = "Sandisk SATA CS1K GEN1 ESS SSDs"
+  ModelRegex = "SD[A-Z0-9]{2}[NO][A-Z0-9]{3}-?[0-9]{3}[GT]-?1[A-Z0-9]{3}"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+    [Drives.Presets.1]
+      Conv = "raw48"
+      Name = "UECC_Ct"
+    [Drives.Presets.170]
+      Conv = "raw48"
+      Name = "Reserve_Blk_Remaining"
+    [Drives.Presets.171]
+      Conv = "raw48"
+      Name = "Program_Fail_Ct"
+    [Drives.Presets.172]
+      Conv = "raw48"
+      Name = "Erase_Fail_Ct"
+    [Drives.Presets.173]
+      Conv = "raw48"
+      Name = "Drive_Life_Used%"
+    [Drives.Presets.174]
+      Conv = "raw48"
+      Name = "Unexpect_PwrLoss_Ct"
+    [Drives.Presets.175]
+      Conv = "raw48"
+      Name = "PwrLoss_ProtectionFail"
+    [Drives.Presets.177]
+      Conv = "raw48"
+      Name = "DriveLife_Remaining%"
+    [Drives.Presets.178]
+      Conv = "raw48"
+      Name = "SSD_Life_Left"
+    [Drives.Presets.180]
+      Conv = "raw48"
+      Name = "End_to_End_Err_Detect"
+    [Drives.Presets.190]
+      Conv = "raw48"
+      Name = "Drive_Temp_Warning"
+    [Drives.Presets.195]
+      Conv = "raw48"
+      Name = "Uncorrectable_Err_Ct"
+    [Drives.Presets.2]
+      Conv = "raw48"
+      Name = "Internal_File_Check"
+    [Drives.Presets.202]
+      Conv = "raw48"
+      Name = "Exception_Mode_Status"
+    [Drives.Presets.233]
+      Conv = "raw48"
+      Name = "Number_Of_Write_Ct"
+    [Drives.Presets.245]
+      Conv = "raw48"
+      Name = "DriveLife_Used%"
+    [Drives.Presets.32]
+      Conv = "raw48"
+      Name = "Write_Ampflication"
+    [Drives.Presets.5]
+      Conv = "raw16(raw16)"
+      Name = "Retried_Blk_Ct"
+
+[[Drives]]
   Family = "SiliconMotion based SSDs"
-  ModelRegex = "CT(120|250|500|1000)BX100SSD1|CT(240|480|960)BX200SSD1|TS((16|32|64|128|256|512)G|1T)(SSD|MSA)(370S?|420I?)|ADATA SP550"
+  ModelRegex = "R3SL(120|240|480|960)G|CT(120|250|500|1000)BX100SSD1|CT(240|480|960)BX200SSD1|TS((16|32|64|128|256|512)G|1T)(SSD|MSA)(370S?|420I?)|TS(16|32|64|128|512|256)GMTS400S?|TS(120|240)GMTS420|TS(128G|256G|512G|1T)SSD230S|TS(120|240|480|960)GSSD220S|TS(16G|32G|64G|128G|256G|512G|1T)MTS800S?|TS(16|32|64)GMSA630|MKNSSDRE(1TB|2TB|512GB|500GB|256GB|250GB)|MKNSSDTR(240|500|250|120|480|240)GB(-LT)?|LITEON LMH-(128|256|512)V2M-.*|ADATA SP550"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -2079,6 +2461,82 @@
     [Drives.Presets.247]
       Conv = "raw48"
       Name = "Raid_Recoverty_Ct"
+
+[[Drives]]
+  Family = "SMART Modular Technologies mSATA XL+ SLC SSDs"
+  ModelRegex = "SH9MST6D[0-9]*GJSI?[0-9]*"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+    [Drives.Presets.1]
+      Conv = "raw48"
+      Name = "Uncorrectable_ECC_Cnt"
+    [Drives.Presets.100]
+      Conv = "raw48"
+      Name = "Total_Erase_Count"
+    [Drives.Presets.14]
+      Conv = "raw48"
+      Name = "Device_Capacity_LBAs"
+    [Drives.Presets.15]
+      Conv = "raw48"
+      Name = "User_Capacity_LBAs"
+    [Drives.Presets.16]
+      Conv = "raw48"
+      Name = "Init_Spare_Blocks_Avail"
+    [Drives.Presets.168]
+      Conv = "raw48"
+      Name = "SATA_PHY_Err_Ct"
+    [Drives.Presets.17]
+      Conv = "raw48"
+      Name = "Spare_Blocks_Remaining"
+    [Drives.Presets.170]
+      Conv = "raw48"
+      Name = "Initial_Bad_Block_Count"
+    [Drives.Presets.172]
+      Conv = "raw48"
+      Name = "Erase_Fail_Count"
+    [Drives.Presets.173]
+      Conv = "raw48"
+      Name = "Max_Erase_Count"
+    [Drives.Presets.174]
+      Conv = "raw48"
+      Name = "Unexpect_Power_Loss_Ct"
+    [Drives.Presets.175]
+      Conv = "raw48"
+      Name = "Average_Erase_Count"
+    [Drives.Presets.197]
+      Conv = "raw48"
+      Name = "Not_In_Use"
+    [Drives.Presets.198]
+      Conv = "raw48"
+      Name = "Not_In_Use"
+    [Drives.Presets.199]
+      Conv = "raw48"
+      Name = "SATA_CRC_Error_Count"
+    [Drives.Presets.202]
+      Conv = "raw48"
+      Name = "Perc_Rated_Life_Used"
+    [Drives.Presets.231]
+      Conv = "raw48"
+      Name = "Perc_Rated_Life_Remain"
+    [Drives.Presets.232]
+      Conv = "raw48"
+      Name = "Read_Fail_Count"
+    [Drives.Presets.234]
+      Conv = "raw48"
+      Name = "Flash_Reads_LBAs"
+    [Drives.Presets.235]
+      Conv = "raw48"
+      Name = "Flash_Writes_LBAs"
+    [Drives.Presets.241]
+      Conv = "raw48"
+      Name = "Host_Writes_LBAs"
+    [Drives.Presets.242]
+      Conv = "raw48"
+      Name = "Host_Reads_LBAs"
+    [Drives.Presets.9]
+      Conv = "raw48"
+      Name = "Power_On_Hours"
 
 [[Drives]]
   Family = "Smart Storage Systems Xcel-10 SSDs"
@@ -2912,6 +3370,26 @@
   [Drives.Presets]
 
 [[Drives]]
+  Family = "Seagate FireCuda 2.5"
+  ModelRegex = "ST(500|1000|2000)LX0(01|15|25)-.*"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+    [Drives.Presets.240]
+      Conv = "msec24hour32"
+      Name = ""
+
+[[Drives]]
+  Family = "Seagate FireCuda 3.5"
+  ModelRegex = "ST[12]000DX002-.*"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+    [Drives.Presets.240]
+      Conv = "msec24hour32"
+      Name = ""
+
+[[Drives]]
   Family = "Seagate Samsung SpinPoint M9TU (USB)"
   ModelRegex = "ST(1500|2000)LM00[58] HN-M[0-9]*AAD"
   FirmwareRegex = ""
@@ -2955,6 +3433,70 @@
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
+
+[[Drives]]
+  Family = "SK hynix SATA SSDs"
+  ModelRegex = "SK ?hynix SC(210|300|308|313).*|HFS(128|256|512)G32MND-(2200|3210)A|HFS(120|250|500)G32TND-N1A2A"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+    [Drives.Presets.100]
+      Conv = "raw48"
+      Name = "Total_Erase_Count"
+    [Drives.Presets.168]
+      Conv = "raw48"
+      Name = "Min_Erase_Count"
+    [Drives.Presets.169]
+      Conv = "raw48"
+      Name = "Max_Erase_Count"
+    [Drives.Presets.171]
+      Conv = "raw48"
+      Name = "Program_Fail_Count"
+    [Drives.Presets.172]
+      Conv = "raw48"
+      Name = "Erase_Fail_Count"
+    [Drives.Presets.173]
+      Conv = "raw48"
+      Name = "Wear_Leveling_Count"
+    [Drives.Presets.174]
+      Conv = "raw48"
+      Name = "Unexpect_Power_Loss_Ct"
+    [Drives.Presets.176]
+      Conv = "raw48"
+      Name = "Unused_Rsvd_Blk_Cnt_Tot"
+    [Drives.Presets.180]
+      Conv = "raw48"
+      Name = "Erase_Fail_Count"
+    [Drives.Presets.181]
+      Conv = "raw48"
+      Name = "Non4k_Aligned_Access"
+    [Drives.Presets.183]
+      Conv = "raw48"
+      Name = "SATA_Downshift_Count"
+    [Drives.Presets.201]
+      Conv = "raw48"
+      Name = "Percent_Lifetime_Remain"
+    [Drives.Presets.212]
+      Conv = "raw48"
+      Name = "Phy_Error_Count"
+    [Drives.Presets.231]
+      Conv = "raw48"
+      Name = "SSD_Life_Left"
+    [Drives.Presets.241]
+      Conv = "raw48"
+      Name = "Total_Writes_GiB"
+    [Drives.Presets.242]
+      Conv = "raw48"
+      Name = "Total_Reads_GiB"
+    [Drives.Presets.243]
+      Conv = "raw48"
+      Name = "Total_Media_Writes"
+    [Drives.Presets.250]
+      Conv = "raw48"
+      Name = "Read_Retry_Count"
+    [Drives.Presets.5]
+      Conv = "raw48"
+      Name = "Retired_Block_Count"
 
 [[Drives]]
   Family = "Maxtor Fireball 541DX"
@@ -3713,7 +4255,7 @@
 
 [[Drives]]
   Family = "HGST Travelstar 7K1000"
-  ModelRegex = "HGST HTS721010A9E630"
+  ModelRegex = "HGST HT[ES]7210(10|75)A9E63[01]"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -3756,6 +4298,13 @@
 [[Drives]]
   Family = "Hitachi CinemaStar 5K320"
   ModelRegex = "Hitachi HCS5C32(25|32)SLA380"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+
+[[Drives]]
+  Family = "Hitachi CinemaStar 5K1000"
+  ModelRegex = "Hitachi HCS5C10(10|75|50|32|25|16)CLA382"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -3881,14 +4430,14 @@
 
 [[Drives]]
   Family = "Hitachi Deskstar 7K3000"
-  ModelRegex = "Hitachi HDS7230((15|20)BLA642|30ALA640)"
+  ModelRegex = "Hitachi HDS7230((15|20)BLA642|30ALA640|30BLE640)"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi/HGST Deskstar 7K4000"
-  ModelRegex = "Hitachi HDS724040ALE640"
+  ModelRegex = "(Hitachi|HGST) HDS724040ALE640"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -3927,6 +4476,16 @@
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
+
+[[Drives]]
+  Family = "Hitachi/HGST Ultrastar 7K2"
+  ModelRegex = "(Hitachi|HGST) HUS722T[12]TALA604"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+    [Drives.Presets.16]
+      Conv = "raw48"
+      Name = "Gas_Gauge"
 
 [[Drives]]
   Family = "HGST Ultrastar 7K6000"
@@ -4010,6 +4569,20 @@
 [[Drives]]
   Family = "Toshiba 2.5\" HDD MK..50GACY"
   ModelRegex = "TOSHIBA MK8050GACY"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+
+[[Drives]]
+  Family = "Toshiba 2.5\" HDD MK..34GSX"
+  ModelRegex = "TOSHIBA MK(80|12|10)34GSX"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+
+[[Drives]]
+  Family = "Toshiba 2.5\" HDD MK..32GSX"
+  ModelRegex = "TOSHIBA MK(10|80|60|40)32GSX"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -4146,6 +4719,20 @@
   [Drives.Presets]
 
 [[Drives]]
+  Family = "Toshiba 2.5\" HDD MQ03ABB..."
+  ModelRegex = "TOSHIBA MQ03ABB[23]00"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+
+[[Drives]]
+  Family = "Toshiba 2.5\" HDD MQ03UBB..."
+  ModelRegex = "TOSHIBA MQ03UBB(300|200|250)"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+
+[[Drives]]
   Family = "Toshiba 3.5\" HDD MK.002TSKB"
   ModelRegex = "TOSHIBA MK(10|20)02TSKB"
   FirmwareRegex = ""
@@ -4168,7 +4755,7 @@
 
 [[Drives]]
   Family = "Toshiba 3.5\" MG04ACA... Enterprise HDD"
-  ModelRegex = "TOSHIBA MG04ACA[23456]00[AE]"
+  ModelRegex = "TOSHIBA MG04ACA[23456]00[AE].?"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -4195,6 +4782,13 @@
   [Drives.Presets]
 
 [[Drives]]
+  Family = "Toshiba P300"
+  ModelRegex = "TOSHIBA HDWD1(30|20|10|05)"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+
+[[Drives]]
   Family = "Toshiba 1.8\" HDD"
   ModelRegex = "TOSHIBA MK[23468]00[4-9]GA[HL]"
   FirmwareRegex = ""
@@ -4214,6 +4808,25 @@
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
+
+[[Drives]]
+  Family = "Toshiba HG6 Series SSD"
+  ModelRegex = "TOSHIBA THNS[NF]J(060|128|256|512)G[BCAM8VD][SCN][TU].*"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+    [Drives.Presets.167]
+      Conv = "raw48"
+      Name = "SSD_Protect_Mode"
+    [Drives.Presets.168]
+      Conv = "raw48"
+      Name = "SATA_PHY_Error_Count"
+    [Drives.Presets.169]
+      Conv = "raw48"
+      Name = "Bad_Block_Count"
+    [Drives.Presets.173]
+      Conv = "raw48"
+      Name = "Erase_Count"
 
 [[Drives]]
   Family = ""
@@ -4595,7 +5208,7 @@
 
 [[Drives]]
   Family = "Seagate Barracuda 7200.12"
-  ModelRegex = "ST3(160318|25031[128]|320418|50041[038]|750(518|52[358])|100052[348])AS"
+  ModelRegex = "ST3(160318|25031[128]|320418|50041[038]|750(518|52[358])|100052[348]|320413|160316)AS"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -4649,6 +5262,19 @@
 [[Drives]]
   Family = "Seagate Barracuda 7200.14 (AF)"
   ModelRegex = "ST(1000|1500|2000|2500|3000)DM00[0-3]-.*|APPLE HDD ST3000DM001"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+    [Drives.Presets.188]
+      Conv = "raw16"
+      Name = ""
+    [Drives.Presets.240]
+      Conv = "msec24hour32"
+      Name = ""
+
+[[Drives]]
+  Family = "Seagate Barracuda 3.5"
+  ModelRegex = "ST(4000DM00[45]|3000DM008|3000DM009|2000DM006|2000DM007|1000DM010|500DM009)-.*"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -4734,6 +5360,16 @@
   [Drives.Presets]
 
 [[Drives]]
+  Family = "Seagate Barracuda 2.5 5400"
+  ModelRegex = "ST(5000LM000|[34]000LM024|2000LM015|1000LM048|500LM030)-.*"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+    [Drives.Presets.183]
+      Conv = "raw48"
+      Name = "SATA_Downshift_Count"
+
+[[Drives]]
   Family = "Seagate Barracuda ES.2"
   ModelRegex = "ST3(25031|50032|75033|100034)0NS"
   FirmwareRegex = "SN[01]6|MA(0[^7]|[^0].)"
@@ -4805,7 +5441,7 @@
 
 [[Drives]]
   Family = "Seagate Enterprise Capacity 3.5 HDD"
-  ModelRegex = "ST([24568]|10)000NM0[01][1248][46]-.*"
+  ModelRegex = "ST([24568]|10)000NM0[01][0-48][456]-.*"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -4818,7 +5454,14 @@
 
 [[Drives]]
   Family = "Seagate NAS HDD"
-  ModelRegex = "ST[234]000VN000-.*"
+  ModelRegex = "ST([234]000VN000|[468]000VN00(02|21|12|31|3))-.*"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+
+[[Drives]]
+  Family = "Seagate IronWolf"
+  ModelRegex = "ST(10|8|6|4|3|2|1)000VN00(04|22|41|8|7|2|4)-.*"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -4894,8 +5537,8 @@
   [Drives.Presets]
 
 [[Drives]]
-  Family = "Seagate SV35"
-  ModelRegex = "ST([1-4]000VX00[012]|31000526SV|3500411SV)(-.*)?"
+  Family = "Seagate Surveillance"
+  ModelRegex = "ST([1-6]000VX00[01234]1?|31000526SV|3500411SV)(-.*)?"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -4934,6 +5577,61 @@
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
+
+[[Drives]]
+  Family = "WD Blue PC SSD"
+  ModelRegex = "WDC WDS...[TG]1B0[AB].*"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+    [Drives.Presets.165]
+      Conv = "raw48"
+      Name = "Block_Erase_Count"
+    [Drives.Presets.166]
+      Conv = "raw48"
+      Name = "Minimum_PE_Cycles_TLC"
+    [Drives.Presets.167]
+      Conv = "raw48"
+      Name = "Max_Bad_Blocks_per_Die"
+    [Drives.Presets.168]
+      Conv = "raw48"
+      Name = "Maximum_PE_Cycles_TLC"
+    [Drives.Presets.169]
+      Conv = "raw48"
+      Name = "Total_Bad_Blocks"
+    [Drives.Presets.170]
+      Conv = "raw48"
+      Name = "Grown_Bad_Blocks"
+    [Drives.Presets.171]
+      Conv = "raw48"
+      Name = "Program_Fail_Count"
+    [Drives.Presets.172]
+      Conv = "raw48"
+      Name = "Erase_Fail_Count"
+    [Drives.Presets.173]
+      Conv = "raw48"
+      Name = "Average_PE_Cycles_TLC"
+    [Drives.Presets.174]
+      Conv = "raw48"
+      Name = "Unexpected_Power_Loss"
+    [Drives.Presets.230]
+      Conv = "hex48"
+      Name = "Media_Wearout_Indicator"
+    [Drives.Presets.233]
+      Conv = "raw48"
+      Name = "NAND_GB_Written_TLC"
+    [Drives.Presets.234]
+      Conv = "raw48"
+      Name = "NAND_GB_Written_SLC"
+    [Drives.Presets.241]
+      Conv = "raw48"
+      Name = "Total_Host_GB_Written"
+    [Drives.Presets.242]
+      Conv = "raw48"
+      Name = "Total_Host_GB_Read"
+    [Drives.Presets.244]
+      Conv = "raw48"
+      Name = "Temp_Throttle_Status"
 
 [[Drives]]
   Family = "Western Digital Protege"
@@ -5143,7 +5841,7 @@
 
 [[Drives]]
   Family = "Western Digital Black"
-  ModelRegex = "WDC WD(6001|2003|5001|1003|4003|5003|3003|3001)(FZW|FZE|AZE)X-.*|WDC WD(4001|3001|2002|1002|5003|7500|5000|3200|2500|1600)(FAE|AZE)X-.*"
+  ModelRegex = "WDC WD(6001|2003|5001|1003|4003|4004|5003|3003|3001)(FZW|FZE|AZE)X-.*|WDC WD(4001|3001|2002|1002|5003|7500|5000|3200|2500|1600)(FAE|AZE)X-.*"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -5262,7 +5960,7 @@
 
 [[Drives]]
   Family = "Western Digital Red"
-  ModelRegex = "WDC WD(7500BFC|10JFC|[1-6]0EFR|80EFZ)X-.*"
+  ModelRegex = "WDC WD(7500BFC|10JFC|[1-6]0EFR|80E[FZ][AZ])X-.*"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -5272,7 +5970,7 @@
 
 [[Drives]]
   Family = "Western Digital Red Pro"
-  ModelRegex = "WDC WD[234]001FFSX-.*"
+  ModelRegex = "WDC WD([2-68]00[12])FF[SW]X-.*"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -5516,13 +6214,6 @@
   [Drives.Presets]
 
 [[Drives]]
-  Family = "USB: Toshiba Canvio 3.0 Portable Hard Drive; "
-  ModelRegex = "0x0480:0xa007"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
-
-[[Drives]]
   Family = "USB: Toshiba Stor.E; "
   ModelRegex = "0x0480:0xa00[9ace]"
   FirmwareRegex = ""
@@ -5531,7 +6222,7 @@
 
 [[Drives]]
   Family = "USB: Toshiba Canvio; "
-  ModelRegex = "0x0480:0xa(100|20[0c])"
+  ModelRegex = "0x0480:0x(a(007|100|20[027c])|b207)"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -5733,6 +6424,13 @@
   [Drives.Presets]
 
 [[Drives]]
+  Family = "USB: LaCie d2 Quadra; Oxford OXUF934SSA-LQAG "
+  ModelRegex = "0x059f:0x0828"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+
+[[Drives]]
   Family = "USB: LaCie hard disk; JMicron"
   ModelRegex = "0x059f:0x0951"
   FirmwareRegex = ""
@@ -5742,6 +6440,13 @@
 [[Drives]]
   Family = "USB: LaCie Rugged Triple Interface; "
   ModelRegex = "0x059f:0x100c"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+
+[[Drives]]
+  Family = "USB: LaCie Desktop Hard Drive;"
+  ModelRegex = "0x059f:0x1010"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -5789,6 +6494,13 @@
   [Drives.Presets]
 
 [[Drives]]
+  Family = "USB: LaCie D2 USB3; LucidPort USB300 "
+  ModelRegex = "0x059f:0x103d"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+
+[[Drives]]
   Family = "USB: LaCie rikiki USB 3.0; "
   ModelRegex = "0x059f:0x10(49|57)"
   FirmwareRegex = ""
@@ -5819,6 +6531,13 @@
 [[Drives]]
   Family = "USB: ; In-System/Cypress ISD-300A1"
   ModelRegex = "0x05ab:0x0060"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+
+[[Drives]]
+  Family = "USB: Apple; "
+  ModelRegex = "0x05ac:0x8406"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -5896,6 +6615,13 @@
 [[Drives]]
   Family = "USB: ; Innostor IS631"
   ModelRegex = "0x07ab:0x0621"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+
+[[Drives]]
+  Family = "USB: Freecom Quattro 3.0; "
+  ModelRegex = "0x07ab:0xfc77"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -6028,7 +6754,7 @@
 
 [[Drives]]
   Family = "USB: Seagate Expansion Portable; "
-  ModelRegex = "0x0bc2:0x23(00|12|20|21|22)"
+  ModelRegex = "0x0bc2:0x23(00|12|1a|20|21|22)"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -6063,7 +6789,7 @@
 
 [[Drives]]
   Family = "USB: Seagate Expansion Desktop; "
-  ModelRegex = "0x0bc2:0x33(00|1[2a]|2[012]|32)"
+  ModelRegex = "0x0bc2:0x33(00|1[2a]|2[012]|3[02])"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -6118,8 +6844,15 @@
   [Drives.Presets]
 
 [[Drives]]
-  Family = "USB: Seagate FreeAgent GoFlex; "
-  ModelRegex = "0x0bc2:0x612[16]"
+  Family = "USB: Seagate FreeAgent / Maxtor D3; "
+  ModelRegex = "0x0bc2:0x612[136]"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+
+[[Drives]]
+  Family = "USB: Maxtor M3 Portable; "
+  ModelRegex = "0x0bc2:0x61b7"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -6147,7 +6880,7 @@
 
 [[Drives]]
   Family = "USB: Seagate Backup Plus USB 3.0; "
-  ModelRegex = "0x0bc2:0xab(2[01458]|38)"
+  ModelRegex = "0x0bc2:0xab(1e|2[01458]|38|43)"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -6273,14 +7006,14 @@
 
 [[Drives]]
   Family = "USB: WD Elements / My Passport; "
-  ModelRegex = "0x1058:0x(07(0[245a]|1a|30|4[0128a]|a[8e])|08(1[06]|2[02]|3[37a])|10(10|23|4[28]|7d|a[28]|b8)|25(9[9d]|a[12]))"
+  ModelRegex = "0x1058:0x(07(0[245a]|1a|30|4[0128a]|a[8e])|08(1[06]|2[02]|3[37a])|10(10|23|4[28]|7d|a[28]|b8)|25(9[9df]|a[12]|e2|fa))"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
 
 [[Drives]]
-  Family = "USB: WD My Book; "
-  ModelRegex = "0x1058:0x(09(0[06]|10)|11(0[01245]|1[0d]|30|40)|25a3)"
+  Family = "USB: WD My Book / Easystore; "
+  ModelRegex = "0x1058:0x(09(0[06]|10)|11(0[01245]|1[0d]|30|40)|1230|25(a3|ee|fb))"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -6419,6 +7152,20 @@
   [Drives.Presets]
 
 [[Drives]]
+  Family = "USB: ; JMicron JMS578"
+  ModelRegex = "0x152d:0x0578"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+
+[[Drives]]
+  Family = "USB: ; JMicron"
+  ModelRegex = "0x152d:0x0579"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+
+[[Drives]]
   Family = "USB: OCZ THROTTLE OCZESATATHR8G; JMicron JMF601"
   ModelRegex = "0x152d:0x0602"
   FirmwareRegex = ""
@@ -6512,6 +7259,13 @@
 [[Drives]]
   Family = "USB: ; JMicron"
   ModelRegex = "0x152d:0x3569"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+
+[[Drives]]
+  Family = "USB: ; JMicron JMS561U"
+  ModelRegex = "0x152d:0x8561"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -6629,6 +7383,13 @@
   [Drives.Presets]
 
 [[Drives]]
+  Family = "USB: Voyager GTX; "
+  ModelRegex = "0x1b1c:0x1a0e"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+
+[[Drives]]
   Family = "USB: ; SunplusIT"
   ModelRegex = "0x1bcf:0x0c31"
   FirmwareRegex = ""
@@ -6692,6 +7453,13 @@
   [Drives.Presets]
 
 [[Drives]]
+  Family = "USB: PQI bridge; "
+  ModelRegex = "0x3538:0x0064"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+
+[[Drives]]
   Family = "USB: Sharkoon QuickPort XT USB 3.0; "
   ModelRegex = "0x357d:0x7788"
   FirmwareRegex = ""
@@ -6714,7 +7482,7 @@
 
 [[Drives]]
   Family = "USB: Hitachi Touro Mobile; "
-  ModelRegex = "0x4971:0x102[04]"
+  ModelRegex = "0x4971:0x102[034]"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
@@ -6748,8 +7516,15 @@
   [Drives.Presets]
 
 [[Drives]]
+  Family = "USB: ; JMicron JMS566"
+  ModelRegex = "0xa152:0xb566"
+  FirmwareRegex = ""
+  WarningMsg = ""
+  [Drives.Presets]
+
+[[Drives]]
   Family = "USB: ; "
-  ModelRegex = "0xabcd:0x6103"
+  ModelRegex = "0xabcd:0x610[34]"
   FirmwareRegex = ""
   WarningMsg = ""
   [Drives.Presets]
