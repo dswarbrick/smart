@@ -282,8 +282,10 @@ func (d *NVMeDevice) PrintSMART(db *driveDb) error {
 	fmt.Printf("Avail. spare: %d%%\n", sl.AvailSpare)
 	fmt.Printf("Avail. spare threshold: %d%%\n", sl.SpareThresh)
 	fmt.Printf("Percentage used: %d%%\n", sl.PercentUsed)
-	fmt.Printf("Data units read: %d [%d bytes]\n", unitsRead, new(big.Int).Mul(unitsRead, unit))
-	fmt.Printf("Data units written: %d [%d bytes]\n", unitsWritten, new(big.Int).Mul(unitsWritten, unit))
+	fmt.Printf("Data units read: %d [%s]\n",
+		unitsRead, formatBigBytes(new(big.Int).Mul(unitsRead, unit)))
+	fmt.Printf("Data units written: %d [%s]\n",
+		unitsWritten, formatBigBytes(new(big.Int).Mul(unitsWritten, unit)))
 	fmt.Printf("Host read commands: %d\n", le128ToBigInt(sl.HostReads))
 	fmt.Printf("Host write commands: %d\n", le128ToBigInt(sl.HostWrites))
 	fmt.Printf("Controller busy time: %d\n", le128ToBigInt(sl.CtrlBusyTime))
