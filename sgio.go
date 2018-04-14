@@ -45,21 +45,6 @@ type sgIoHdr struct {
 	info            uint32  // auxiliary information
 }
 
-// SCSI INQUIRY response
-type inquiryResponse struct {
-	Peripheral   byte // peripheral qualifier, device type
-	_            byte
-	Version      byte
-	_            [5]byte
-	VendorIdent  [8]byte
-	ProductIdent [16]byte
-	ProductRev   [4]byte
-}
-
-func (inq inquiryResponse) String() string {
-	return fmt.Sprintf("%.8s  %.16s  %.4s", inq.VendorIdent, inq.ProductIdent, inq.ProductRev)
-}
-
 // Top-level device interface. All supported device types must implement these methods.
 type Device interface {
 	Open() error
@@ -101,8 +86,8 @@ func (d *SCSIDevice) execGenericIO(hdr *sgIoHdr) error {
 
 // inquiry sends a SCSI INQUIRY command to a device and returns an inquiryResponse struct.
 // TODO: Add support for Vital Product Data (VPD)
-func (d *SCSIDevice) inquiry() (inquiryResponse, error) {
-	var resp inquiryResponse
+func (d *SCSIDevice) inquiry() (scsi.InquiryResponse, error) {
+	var resp scsi.InquiryResponse
 
 	respBuf := make([]byte, scsi.INQ_REPLY_LEN)
 

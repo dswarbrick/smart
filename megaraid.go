@@ -322,8 +322,8 @@ func (m *MegasasIoctl) ScanDevices() []MegasasDevice {
 
 // inquiry fetches a standard SCSI INQUIRY response from device
 // TODO: Return error if unsuccessful
-func (d *MegasasDevice) inquiry() inquiryResponse {
-	var inqBuf inquiryResponse
+func (d *MegasasDevice) inquiry() scsi.InquiryResponse {
+	var inqBuf scsi.InquiryResponse
 
 	cdb := scsi.CDB6{scsi.SCSI_INQUIRY}
 	binary.BigEndian.PutUint16(cdb[3:], scsi.INQ_REPLY_LEN)

@@ -5,6 +5,10 @@
 
 package scsi
 
+import (
+	"fmt"
+)
+
 const (
 	// SCSI commands used by this package
 	SCSI_INQUIRY          = 0x12
@@ -26,3 +30,18 @@ const (
 type CDB6 [6]byte
 type CDB10 [10]byte
 type CDB16 [16]byte
+
+// SCSI INQUIRY response
+type InquiryResponse struct {
+	Peripheral   byte // peripheral qualifier, device type
+	_            byte
+	Version      byte
+	_            [5]byte
+	VendorIdent  [8]byte
+	ProductIdent [16]byte
+	ProductRev   [4]byte
+}
+
+func (inq InquiryResponse) String() string {
+	return fmt.Sprintf("%.8s  %.16s  %.4s", inq.VendorIdent, inq.ProductIdent, inq.ProductRev)
+}
