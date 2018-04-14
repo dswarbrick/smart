@@ -34,12 +34,3 @@ func Log2b(x uint) int {
 
 	return bits.Len(x) - 1
 }
-
-// SwapBytes swaps the order of every second byte in a byte slice (modifies slice in-place).
-func SwapBytes(s []byte) []byte {
-	for i := 0; i < len(s); i += 2 {
-		s[i], s[i+1] = s[i+1], s[i]
-	}
-
-	return s
-}

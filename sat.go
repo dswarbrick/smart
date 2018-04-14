@@ -47,9 +47,6 @@ func (d *SATDevice) identify() (ata.IdentifyDeviceData, error) {
 	}
 
 	binary.Read(bytes.NewBuffer(respBuf), utils.NativeEndian, &identBuf)
-	utils.SwapBytes(identBuf.SerialNumber[:])
-	utils.SwapBytes(identBuf.FirmwareRevision[:])
-	utils.SwapBytes(identBuf.ModelNumber[:])
 
 	return identBuf, nil
 }
@@ -90,18 +87,18 @@ func (d *SATDevice) PrintSMART(db *driveDb) error {
 	}
 
 	fmt.Println("\nATA IDENTIFY data follows:")
-	fmt.Printf("Serial Number: %s\n", identBuf.SerialNumber)
-	fmt.Println("LU WWN Device Id:", identBuf.GetWWN())
-	fmt.Printf("Firmware Revision: %s\n", identBuf.FirmwareRevision)
-	fmt.Printf("Model Number: %s\n", identBuf.ModelNumber)
+	fmt.Printf("Serial Number: %s\n", identBuf.SerialNumber())
+	fmt.Println("LU WWN Device Id:", identBuf.WWN())
+	fmt.Printf("Firmware Revision: %s\n", identBuf.FirmwareRevision())
+	fmt.Printf("Model Number: %s\n", identBuf.ModelNumber())
 	fmt.Printf("Rotation Rate: %d\n", identBuf.RotationRate)
 	fmt.Printf("SMART support available: %v\n", identBuf.Word87>>14 == 1)
 	fmt.Printf("SMART support enabled: %v\n", identBuf.Word85&0x1 != 0)
-	fmt.Println("ATA Major Version:", identBuf.GetATAMajorVersion())
-	fmt.Println("ATA Minor Version:", identBuf.GetATAMinorVersion())
-	fmt.Println("Transport:", identBuf.GetTransport())
+	fmt.Println("ATA Major Version:", identBuf.ATAMajorVersion())
+	fmt.Println("ATA Minor Version:", identBuf.ATAMinorVersion())
+	fmt.Println("Transport:", identBuf.Transport())
 
-	thisDrive := db.lookupDrive(identBuf.ModelNumber[:])
+	thisDrive := db.lookupDrive(identBuf.ModelNumber())
 	fmt.Printf("Drive DB contains %d entries. Using model: %s\n", len(db.Drives), thisDrive.Family)
 
 	// FIXME: Check that device supports SMART before trying to read data page

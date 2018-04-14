@@ -71,32 +71,33 @@ var ataMinorVersions = map[uint16]string{
 // single word, and are bitmasked together with other fields. Since many of the fields are now
 // retired / obsolete, we only define the fields that are currently used by this package.
 type IdentifyDeviceData struct {
-	GeneralConfig    uint16      // Word 0, general configuration. If bit 15 is zero, device is ATA.
-	_                [9]uint16   // ...
-	SerialNumber     [20]byte    // Word 10..19, device serial number, padded with spaces (20h).
-	_                [3]uint16   // ...
-	FirmwareRevision [8]byte     // Word 23..26, device firmware revision, padded with spaces (20h).
-	ModelNumber      [40]byte    // Word 27..46, device model number, padded with spaces (20h).
-	_                [28]uint16  // ...
-	SATACap          uint16      // Word 76, SATA capabilities.
-	SATACapAddl      uint16      // Word 77, SATA additional capabilities.
-	_                [3]uint16   // ...
-	MajorVersion     uint16      // Word 80, major version number.
-	MinorVersion     uint16      // Word 81, minor version number.
-	_                [3]uint16   // ...
-	Word85           uint16      // Word 85, supported commands and feature sets.
-	_                uint16      // ...
-	Word87           uint16      // Word 87, supported commands and feature sets.
-	_                [20]uint16  // ...
-	WWN              [4]uint16   // Word 108..111, WWN (World Wide Name).
-	_                [105]uint16 // ...
-	RotationRate     uint16      // Word 217, nominal media rotation rate.
-	_                [4]uint16   // ...
-	TransportMajor   uint16      // Word 222, transport major version number.
-	_                [33]uint16  // ...
+	GeneralConfig       uint16      // Word 0, general configuration. If bit 15 is zero, device is ATA.
+	_                   [9]uint16   // ...
+	SerialNumberRaw     [20]byte    // Word 10..19, device serial number, padded with spaces (20h).
+	_                   [3]uint16   // ...
+	FirmwareRevisionRaw [8]byte     // Word 23..26, device firmware revision, padded with spaces (20h).
+	ModelNumberRaw      [40]byte    // Word 27..46, device model number, padded with spaces (20h).
+	_                   [28]uint16  // ...
+	SATACap             uint16      // Word 76, SATA capabilities.
+	SATACapAddl         uint16      // Word 77, SATA additional capabilities.
+	_                   [3]uint16   // ...
+	MajorVersion        uint16      // Word 80, major version number.
+	MinorVersion        uint16      // Word 81, minor version number.
+	_                   [3]uint16   // ...
+	Word85              uint16      // Word 85, supported commands and feature sets.
+	_                   uint16      // ...
+	Word87              uint16      // Word 87, supported commands and feature sets.
+	_                   [20]uint16  // ...
+	WWNRaw              [4]uint16   // Word 108..111, WWN (World Wide Name).
+	_                   [105]uint16 // ...
+	RotationRate        uint16      // Word 217, nominal media rotation rate.
+	_                   [4]uint16   // ...
+	TransportMajor      uint16      // Word 222, transport major version number.
+	_                   [33]uint16  // ...
 } // 512 bytes
 
-func (d *IdentifyDeviceData) GetATAMajorVersion() (s string) {
+// ATAMajorVersion returns the ATA major version from an ATA IDENTIFY command.
+func (d *IdentifyDeviceData) ATAMajorVersion() (s string) {
 	if (d.MajorVersion == 0) || (d.MajorVersion == 0xffff) {
 		s = "device does not report ATA major version"
 		return
@@ -128,7 +129,8 @@ func (d *IdentifyDeviceData) GetATAMajorVersion() (s string) {
 	return
 }
 
-func (d *IdentifyDeviceData) GetATAMinorVersion() string {
+// ATAMinorVersion returns the ATA minor version from an ATA IDENTIFY command.
+func (d *IdentifyDeviceData) ATAMinorVersion() string {
 	if (d.MinorVersion == 0) || (d.MinorVersion == 0xffff) {
 		return "device does not report ATA minor version"
 	}
@@ -141,7 +143,22 @@ func (d *IdentifyDeviceData) GetATAMinorVersion() string {
 	return "unknown"
 }
 
-func (d *IdentifyDeviceData) GetTransport() (s string) {
+// FirmwareVersion returns the firmware version of a device from an ATA IDENTIFY command.
+func (d *IdentifyDeviceData) FirmwareRevision() []byte {
+	return d.swapBytes(d.FirmwareRevisionRaw[:])
+}
+
+// ModelNumber returns the model number of a device from an ATA IDENTIFY command.
+func (d *IdentifyDeviceData) ModelNumber() []byte {
+	return d.swapBytes(d.ModelNumberRaw[:])
+}
+
+// ModelNumber returns the serial number of a device from an ATA IDENTIFY command.
+func (d *IdentifyDeviceData) SerialNumber() []byte {
+	return d.swapBytes(d.SerialNumberRaw[:])
+}
+
+func (d *IdentifyDeviceData) Transport() (s string) {
 	if (d.TransportMajor == 0) || (d.TransportMajor == 0xffff) {
 		s = "device does not report transport"
 		return
@@ -183,10 +200,20 @@ func (d *IdentifyDeviceData) GetTransport() (s string) {
 	return
 }
 
-func (d *IdentifyDeviceData) GetWWN() string {
-	naa := d.WWN[0] >> 12
-	oui := (uint32(d.WWN[0]&0x0fff) << 12) | (uint32(d.WWN[1]) >> 4)
-	uniqueID := ((uint64(d.WWN[1]) & 0xf) << 32) | (uint64(d.WWN[2]) << 16) | uint64(d.WWN[3])
+func (d *IdentifyDeviceData) WWN() string {
+	naa := d.WWNRaw[0] >> 12
+	oui := (uint32(d.WWNRaw[0]&0x0fff) << 12) | (uint32(d.WWNRaw[1]) >> 4)
+	uniqueID := ((uint64(d.WWNRaw[1]) & 0xf) << 32) | (uint64(d.WWNRaw[2]) << 16) | uint64(d.WWNRaw[3])
 
 	return fmt.Sprintf("%x %06x %09x", naa, oui, uniqueID)
+}
+
+func (d *IdentifyDeviceData) swapBytes(b []byte) []byte {
+	tmp := make([]byte, len(b))
+
+	for i := 0; i < len(b); i += 2 {
+		tmp[i], tmp[i+1] = b[i+1], b[i]
+	}
+
+	return tmp
 }

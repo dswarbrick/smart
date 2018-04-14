@@ -365,16 +365,16 @@ func OpenMegasasIoctl(host uint16, diskNum uint8) error {
 	binary.Read(bytes.NewBuffer(respBuf), utils.NativeEndian, &ident_buf)
 
 	fmt.Println("\nATA IDENTIFY data follows:")
-	fmt.Printf("Serial Number: %s\n", utils.SwapBytes(ident_buf.SerialNumber[:]))
-	fmt.Printf("Firmware Revision: %s\n", utils.SwapBytes(ident_buf.FirmwareRevision[:]))
-	fmt.Printf("Model Number: %s\n", utils.SwapBytes(ident_buf.ModelNumber[:]))
+	fmt.Printf("Serial Number: %s\n", ident_buf.SerialNumber())
+	fmt.Printf("Firmware Revision: %s\n", ident_buf.FirmwareRevision())
+	fmt.Printf("Model Number: %s\n", ident_buf.ModelNumber())
 
 	db, err := OpenDriveDb("drivedb.toml")
 	if err != nil {
 		return err
 	}
 
-	thisDrive := db.lookupDrive(ident_buf.ModelNumber[:])
+	thisDrive := db.lookupDrive(ident_buf.ModelNumber())
 	fmt.Printf("Drive DB contains %d entries. Using model: %s\n", len(db.Drives), thisDrive.Family)
 
 	// Send ATA SMART READ command as a CDB16 passthru command
