@@ -24,6 +24,7 @@ import (
 
 	"github.com/dswarbrick/smart/ata"
 	"github.com/dswarbrick/smart/ioctl"
+	"github.com/dswarbrick/smart/scsi"
 	"github.com/dswarbrick/smart/utils"
 )
 
@@ -225,11 +226,11 @@ func (m *MegasasIoctl) PassThru(host uint16, diskNum uint8, cdb []byte, buf []by
 
 	// FIXME: Don't use SG_* here
 	switch dxfer_dir {
-	case SG_DXFER_NONE:
+	case scsi.SG_DXFER_NONE:
 		pthru.flags = MFI_FRAME_DIR_NONE
-	case SG_DXFER_FROM_DEV:
+	case scsi.SG_DXFER_FROM_DEV:
 		pthru.flags = MFI_FRAME_DIR_READ
-	case SG_DXFER_TO_DEV:
+	case scsi.SG_DXFER_TO_DEV:
 		pthru.flags = MFI_FRAME_DIR_WRITE
 	}
 
@@ -323,11 +324,11 @@ func (m *MegasasIoctl) ScanDevices() []MegasasDevice {
 func (d *MegasasDevice) inquiry() inquiryResponse {
 	var inqBuf inquiryResponse
 
-	cdb := CDB6{SCSI_INQUIRY}
-	binary.BigEndian.PutUint16(cdb[3:], INQ_REPLY_LEN)
+	cdb := scsi.CDB6{scsi.SCSI_INQUIRY}
+	binary.BigEndian.PutUint16(cdb[3:], scsi.INQ_REPLY_LEN)
 
 	respBuf := make([]byte, 512)
-	if err := d.ctl.PassThru(d.hostNum, uint8(d.deviceId), cdb[:], respBuf, SG_DXFER_FROM_DEV); err != nil {
+	if err := d.ctl.PassThru(d.hostNum, uint8(d.deviceId), cdb[:], respBuf, scsi.SG_DXFER_FROM_DEV); err != nil {
 		return inqBuf
 	}
 
@@ -352,13 +353,13 @@ func OpenMegasasIoctl(host uint16, diskNum uint8) error {
 	fmt.Printf("%#v\n", md)
 
 	// Send ATA IDENTIFY command as a CDB16 passthru command
-	cdb := CDB16{SCSI_ATA_PASSTHRU_16}
+	cdb := scsi.CDB16{scsi.SCSI_ATA_PASSTHRU_16}
 	cdb[1] = 0x08                 // ATA protocol (4 << 1, PIO data-in)
 	cdb[2] = 0x0e                 // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
 	cdb[14] = ATA_IDENTIFY_DEVICE // command
 	respBuf = make([]byte, 512)
 
-	if err := m.PassThru(host, diskNum, cdb[:], respBuf, SG_DXFER_FROM_DEV); err != nil {
+	if err := m.PassThru(host, diskNum, cdb[:], respBuf, scsi.SG_DXFER_FROM_DEV); err != nil {
 		return err
 	}
 
@@ -379,7 +380,7 @@ func OpenMegasasIoctl(host uint16, diskNum uint8) error {
 	fmt.Printf("Drive DB contains %d entries. Using model: %s\n", len(db.Drives), thisDrive.Family)
 
 	// Send ATA SMART READ command as a CDB16 passthru command
-	cdb = CDB16{SCSI_ATA_PASSTHRU_16}
+	cdb = scsi.CDB16{scsi.SCSI_ATA_PASSTHRU_16}
 	cdb[1] = 0x08            // ATA protocol (4 << 1, PIO data-in)
 	cdb[2] = 0x0e            // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
 	cdb[4] = SMART_READ_DATA // feature LSB
@@ -388,7 +389,7 @@ func OpenMegasasIoctl(host uint16, diskNum uint8) error {
 	cdb[14] = ATA_SMART      // command
 	respBuf = make([]byte, 512)
 
-	if err := m.PassThru(host, diskNum, cdb[:], respBuf, SG_DXFER_FROM_DEV); err != nil {
+	if err := m.PassThru(host, diskNum, cdb[:], respBuf, scsi.SG_DXFER_FROM_DEV); err != nil {
 		return err
 	}
 

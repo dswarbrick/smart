@@ -12,6 +12,7 @@ import (
 	"path/filepath"
 
 	"github.com/dswarbrick/smart/ata"
+	"github.com/dswarbrick/smart/scsi"
 	"github.com/dswarbrick/smart/utils"
 )
 
@@ -37,7 +38,7 @@ func (d *SATDevice) identify() (ata.IdentifyDeviceData, error) {
 
 	respBuf := make([]byte, 512)
 
-	cdb16 := CDB16{SCSI_ATA_PASSTHRU_16}
+	cdb16 := scsi.CDB16{scsi.SCSI_ATA_PASSTHRU_16}
 	cdb16[1] = 0x08                 // ATA protocol (4 << 1, PIO data-in)
 	cdb16[2] = 0x0e                 // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
 	cdb16[14] = ATA_IDENTIFY_DEVICE // command
@@ -55,7 +56,7 @@ func (d *SATDevice) identify() (ata.IdentifyDeviceData, error) {
 func (d *SATDevice) readSMARTLog(logPage uint8) ([]byte, error) {
 	respBuf := make([]byte, 512)
 
-	cdb := CDB16{SCSI_ATA_PASSTHRU_16}
+	cdb := scsi.CDB16{scsi.SCSI_ATA_PASSTHRU_16}
 	cdb[1] = 0x08           // ATA protocol (4 << 1, PIO data-in)
 	cdb[2] = 0x0e           // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
 	cdb[4] = SMART_READ_LOG // feature LSB
@@ -106,7 +107,7 @@ func (d *SATDevice) PrintSMART(db *driveDb) error {
 	/*
 	 * SMART READ DATA
 	 */
-	cdb := CDB16{SCSI_ATA_PASSTHRU_16}
+	cdb := scsi.CDB16{scsi.SCSI_ATA_PASSTHRU_16}
 	cdb[1] = 0x08            // ATA protocol (4 << 1, PIO data-in)
 	cdb[2] = 0x0e            // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
 	cdb[4] = SMART_READ_DATA // feature LSB

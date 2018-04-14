@@ -14,52 +14,9 @@ import (
 	"golang.org/x/sys/unix"
 
 	"github.com/dswarbrick/smart/ioctl"
+	"github.com/dswarbrick/smart/scsi"
 	"github.com/dswarbrick/smart/utils"
 )
-
-const (
-	SG_DXFER_NONE        = -1
-	SG_DXFER_TO_DEV      = -2
-	SG_DXFER_FROM_DEV    = -3
-	SG_DXFER_TO_FROM_DEV = -4
-
-	SG_INFO_OK_MASK = 0x1
-	SG_INFO_OK      = 0x0
-
-	SG_IO = 0x2285
-
-	// SCSI commands used by this package
-	SCSI_INQUIRY          = 0x12
-	SCSI_MODE_SENSE_6     = 0x1a
-	SCSI_READ_CAPACITY_10 = 0x25
-	SCSI_ATA_PASSTHRU_16  = 0x85
-
-	DEFAULT_TIMEOUT = 20000 // Timeout in milliseconds
-	INQ_REPLY_LEN   = 36    // Minimum length of standard INQUIRY response
-
-	// SCSI-3 mode pages
-	RIGID_DISK_DRIVE_GEOMETRY_PAGE = 0x04
-
-	// Mode page control field
-	MPAGE_CONTROL_DEFAULT = 2
-)
-
-type sgioError struct {
-	scsiStatus   uint8
-	hostStatus   uint16
-	driverStatus uint16
-	senseBuf     [32]byte // FIXME: This is not yet populated by anything
-}
-
-func (e sgioError) Error() string {
-	return fmt.Sprintf("SCSI status: %#02x, host status: %#02x, driver status: %#02x",
-		e.scsiStatus, e.hostStatus, e.driverStatus)
-}
-
-// SCSI CDB types
-type CDB6 [6]byte
-type CDB10 [10]byte
-type CDB16 [16]byte
 
 // SCSI generic ioctl header, defined as sg_io_hdr_t in <scsi/sg.h>
 type sgIoHdr struct {
@@ -124,16 +81,16 @@ func (d *SCSIDevice) Close() error {
 }
 
 func (d *SCSIDevice) execGenericIO(hdr *sgIoHdr) error {
-	if err := ioctl.Ioctl(uintptr(d.fd), SG_IO, uintptr(unsafe.Pointer(hdr))); err != nil {
+	if err := ioctl.Ioctl(uintptr(d.fd), scsi.SG_IO, uintptr(unsafe.Pointer(hdr))); err != nil {
 		return err
 	}
 
 	// See http://www.t10.org/lists/2status.htm for SCSI status codes
-	if hdr.info&SG_INFO_OK_MASK != SG_INFO_OK {
-		err := sgioError{
-			scsiStatus:   hdr.status,
-			hostStatus:   hdr.host_status,
-			driverStatus: hdr.driver_status,
+	if hdr.info&scsi.SG_INFO_OK_MASK != scsi.SG_INFO_OK {
+		err := scsi.SgioError{
+			ScsiStatus:   hdr.status,
+			HostStatus:   hdr.host_status,
+			DriverStatus: hdr.driver_status,
 		}
 		return err
 	}
@@ -146,9 +103,9 @@ func (d *SCSIDevice) execGenericIO(hdr *sgIoHdr) error {
 func (d *SCSIDevice) inquiry() (inquiryResponse, error) {
 	var resp inquiryResponse
 
-	respBuf := make([]byte, INQ_REPLY_LEN)
+	respBuf := make([]byte, scsi.INQ_REPLY_LEN)
 
-	cdb := CDB6{SCSI_INQUIRY}
+	cdb := scsi.CDB6{scsi.SCSI_INQUIRY}
 	binary.BigEndian.PutUint16(cdb[3:], uint16(len(respBuf)))
 
 	if err := d.sendCDB(cdb[:], &respBuf); err != nil {
@@ -169,8 +126,8 @@ func (d *SCSIDevice) sendCDB(cdb []byte, respBuf *[]byte) error {
 	// Populate required fields of "sg_io_hdr_t" struct
 	hdr := sgIoHdr{
 		interface_id:    'S',
-		dxfer_direction: SG_DXFER_FROM_DEV,
-		timeout:         DEFAULT_TIMEOUT,
+		dxfer_direction: scsi.SG_DXFER_FROM_DEV,
+		timeout:         scsi.DEFAULT_TIMEOUT,
 		cmd_len:         uint8(len(cdb)),
 		mx_sb_len:       uint8(len(senseBuf)),
 		dxfer_len:       uint32(len(*respBuf)),
@@ -186,7 +143,7 @@ func (d *SCSIDevice) sendCDB(cdb []byte, respBuf *[]byte) error {
 func (d *SCSIDevice) modeSense(pageNum, subPageNum, pageControl uint8) ([]byte, error) {
 	respBuf := make([]byte, 64)
 
-	cdb := CDB6{SCSI_MODE_SENSE_6}
+	cdb := scsi.CDB6{scsi.SCSI_MODE_SENSE_6}
 	cdb[2] = (pageControl << 6) | (pageNum & 0x3f)
 	cdb[3] = subPageNum
 	cdb[4] = uint8(len(respBuf))
@@ -201,7 +158,7 @@ func (d *SCSIDevice) modeSense(pageNum, subPageNum, pageControl uint8) ([]byte, 
 // readCapacity sends a SCSI READ CAPACITY(10) command to a device and returns the capacity in bytes.
 func (d *SCSIDevice) readCapacity() (uint64, error) {
 	respBuf := make([]byte, 8)
-	cdb := CDB10{SCSI_READ_CAPACITY_10}
+	cdb := scsi.CDB10{scsi.SCSI_READ_CAPACITY_10}
 
 	if err := d.sendCDB(cdb[:], &respBuf); err != nil {
 		return 0, err
@@ -220,7 +177,7 @@ func (d *SCSIDevice) PrintSMART(db *driveDb) error {
 	fmt.Printf("Capacity: %d bytes (%s)\n", capacity, formatBytes(capacity))
 
 	// WIP
-	resp, _ := d.modeSense(RIGID_DISK_DRIVE_GEOMETRY_PAGE, 0, MPAGE_CONTROL_DEFAULT)
+	resp, _ := d.modeSense(scsi.RIGID_DISK_DRIVE_GEOMETRY_PAGE, 0, scsi.MPAGE_CONTROL_DEFAULT)
 	fmt.Printf("MODE SENSE buf: % x\n", resp)
 
 	// TODO: Handle this elegantly for MODE SENSE(10) also
