@@ -17,6 +17,7 @@ import (
 
 	"github.com/dswarbrick/smart"
 	"github.com/dswarbrick/smart/drivedb"
+	"github.com/dswarbrick/smart/nvme"
 	"github.com/dswarbrick/smart/scsi"
 )
 
@@ -96,7 +97,7 @@ func main() {
 		)
 
 		if strings.HasPrefix(*device, "/dev/nvme") {
-			d = smart.NewNVMeDevice(*device)
+			d = nvme.NewNVMeDevice(*device)
 			err = d.Open()
 		} else {
 			d, err = scsi.OpenSCSIAutodetect(*device)
