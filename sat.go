@@ -31,7 +31,7 @@ const (
 // SATDevice is a simple wrapper around an embedded SCSIDevice type, which handles sending ATA
 // commands via SCSI pass-through (SCSI-ATA Translation).
 type SATDevice struct {
-	SCSIDevice
+	scsi.SCSIDevice
 }
 
 func (d *SATDevice) identify() (ata.IdentifyDeviceData, error) {
@@ -44,7 +44,7 @@ func (d *SATDevice) identify() (ata.IdentifyDeviceData, error) {
 	cdb16[2] = 0x0e                 // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
 	cdb16[14] = ATA_IDENTIFY_DEVICE // command
 
-	if err := d.sendCDB(cdb16[:], &respBuf); err != nil {
+	if err := d.SendCDB(cdb16[:], &respBuf); err != nil {
 		return identBuf, fmt.Errorf("sendCDB ATA IDENTIFY: %v", err)
 	}
 
@@ -67,7 +67,7 @@ func (d *SATDevice) readSMARTLog(logPage uint8) ([]byte, error) {
 	cdb[12] = 0xc2          // low lba_high
 	cdb[14] = ATA_SMART     // command
 
-	if err := d.sendCDB(cdb[:], &respBuf); err != nil {
+	if err := d.SendCDB(cdb[:], &respBuf); err != nil {
 		return respBuf, fmt.Errorf("sendCDB SMART READ LOG: %v", err)
 	}
 
@@ -76,7 +76,7 @@ func (d *SATDevice) readSMARTLog(logPage uint8) ([]byte, error) {
 
 func (d *SATDevice) PrintSMART(db *drivedb.DriveDb) error {
 	// Standard SCSI INQUIRY command
-	inqResp, err := d.inquiry()
+	inqResp, err := d.Inquiry()
 	if err != nil {
 		return fmt.Errorf("SgExecute INQUIRY: %v", err)
 	}
@@ -118,7 +118,7 @@ func (d *SATDevice) PrintSMART(db *drivedb.DriveDb) error {
 
 	respBuf := make([]byte, 512)
 
-	if err := d.sendCDB(cdb[:], &respBuf); err != nil {
+	if err := d.SendCDB(cdb[:], &respBuf); err != nil {
 		return fmt.Errorf("sendCDB SMART READ DATA: %v", err)
 	}
 
@@ -160,8 +160,8 @@ func (d *SATDevice) PrintSMART(db *drivedb.DriveDb) error {
 }
 
 // TODO: Make this discover NVMe and MegaRAID devices also.
-func ScanDevices() []SCSIDevice {
-	var devices []SCSIDevice
+func ScanDevices() []scsi.SCSIDevice {
+	var devices []scsi.SCSIDevice
 
 	// Find all SCSI disk devices
 	files, err := filepath.Glob("/dev/sd*[^0-9]")
@@ -170,7 +170,7 @@ func ScanDevices() []SCSIDevice {
 	}
 
 	for _, file := range files {
-		devices = append(devices, SCSIDevice{Name: file, fd: -1})
+		devices = append(devices, scsi.SCSIDevice{Name: file})
 	}
 
 	return devices
