@@ -3,10 +3,12 @@
 
 // ATA response parsing
 
-package smart
+package ata
 
 import (
 	"fmt"
+
+	"github.com/dswarbrick/smart/utils"
 )
 
 // Table 10 of X3T13/2008D (ATA-3) Revision 7b, January 27, 1997
@@ -94,13 +96,13 @@ type IdentifyDeviceData struct {
 	_                [33]uint16  // ...
 } // 512 bytes
 
-func (d *IdentifyDeviceData) getATAMajorVersion() (s string) {
+func (d *IdentifyDeviceData) GetATAMajorVersion() (s string) {
 	if (d.MajorVersion == 0) || (d.MajorVersion == 0xffff) {
 		s = "device does not report ATA major version"
 		return
 	}
 
-	switch log2b(uint(d.MajorVersion)) {
+	switch utils.Log2b(uint(d.MajorVersion)) {
 	case 1:
 		s = "ATA-1"
 	case 2:
@@ -126,7 +128,7 @@ func (d *IdentifyDeviceData) getATAMajorVersion() (s string) {
 	return
 }
 
-func (d *IdentifyDeviceData) getATAMinorVersion() string {
+func (d *IdentifyDeviceData) GetATAMinorVersion() string {
 	if (d.MinorVersion == 0) || (d.MinorVersion == 0xffff) {
 		return "device does not report ATA minor version"
 	}
@@ -139,7 +141,7 @@ func (d *IdentifyDeviceData) getATAMinorVersion() string {
 	return "unknown"
 }
 
-func (d *IdentifyDeviceData) getTransport() (s string) {
+func (d *IdentifyDeviceData) GetTransport() (s string) {
 	if (d.TransportMajor == 0) || (d.TransportMajor == 0xffff) {
 		s = "device does not report transport"
 		return
@@ -152,7 +154,7 @@ func (d *IdentifyDeviceData) getTransport() (s string) {
 		s = "Serial ATA"
 
 		// TODO: Add decoding of current / max SATA speed (word 76, 77)
-		switch log2b(uint(d.TransportMajor & 0x0fff)) {
+		switch utils.Log2b(uint(d.TransportMajor & 0x0fff)) {
 		case 0:
 			s += " ATA8-AST"
 		case 1:
@@ -181,7 +183,7 @@ func (d *IdentifyDeviceData) getTransport() (s string) {
 	return
 }
 
-func (d *IdentifyDeviceData) getWWN() string {
+func (d *IdentifyDeviceData) GetWWN() string {
 	naa := d.WWN[0] >> 12
 	oui := (uint32(d.WWN[0]&0x0fff) << 12) | (uint32(d.WWN[1]) >> 4)
 	uniqueID := ((uint64(d.WWN[1]) & 0xf) << 32) | (uint64(d.WWN[2]) << 16) | uint64(d.WWN[3])

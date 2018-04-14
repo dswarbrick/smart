@@ -56,7 +56,7 @@ func checkCaps() {
 	}
 
 	if (caps.data[0].effective&CAP_SYS_RAWIO == 0) && (caps.data[0].effective&CAP_SYS_ADMIN == 0) {
-		fmt.Println("Neither cap_sys_rawio nor cap_sys_admin are in effect. Device access will probably fail.\n")
+		fmt.Println("Neither cap_sys_rawio nor cap_sys_admin are in effect. Device access will probably fail.")
 	}
 }
 

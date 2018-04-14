@@ -1,7 +1,7 @@
 // Copyright 2017-18 Daniel Swarbrick. All rights reserved.
 // Use of this source code is governed by a GPL license that can be found in the LICENSE file.
 
-package smart
+package ata
 
 import (
 	"bytes"
@@ -10,6 +10,8 @@ import (
 	"unsafe"
 
 	"github.com/stretchr/testify/assert"
+
+	"github.com/dswarbrick/smart/utils"
 )
 
 // ATA IDENTIFY DEVICE (command ECh)
@@ -54,16 +56,25 @@ func TestATAIdentify(t *testing.T) {
 	assert := assert.New(t)
 
 	assert.Equal(uintptr(512), unsafe.Sizeof(d))
-	binary.Read(bytes.NewBuffer(ataIdentifyData[:]), nativeEndian, &d)
+	binary.Read(bytes.NewBuffer(ataIdentifyData[:]), utils.NativeEndian, &d)
 
-	swapBytes(d.SerialNumber[:])
-	swapBytes(d.FirmwareRevision[:])
-	swapBytes(d.ModelNumber[:])
+	utils.SwapBytes(d.SerialNumber[:])
+	utils.SwapBytes(d.FirmwareRevision[:])
+	utils.SwapBytes(d.ModelNumber[:])
 
 	assert.Equal("S1DMNEAD123456B     ", string(d.SerialNumber[:]))
 	assert.Equal("EXT0DB6Q", string(d.FirmwareRevision[:]))
 	assert.Equal("Samsung SSD 840 EVO 750GB               ", string(d.ModelNumber[:]))
-	assert.Equal("5 002538 85009397f", d.getWWN())
+	assert.Equal("5 002538 85009397f", d.GetWWN())
 
 	assert.Equal(uint16(1), d.RotationRate)
+}
+
+// swapBytes swaps the order of every second byte in a byte slice (modifies slice in-place).
+func swapBytes(s []byte) []byte {
+	for i := 0; i < len(s); i += 2 {
+		s[i], s[i+1] = s[i+1], s[i]
+	}
+
+	return s
 }

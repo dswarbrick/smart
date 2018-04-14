@@ -12,6 +12,8 @@ import (
 	"unsafe"
 
 	"golang.org/x/sys/unix"
+
+	"github.com/dswarbrick/smart/utils"
 )
 
 const (
@@ -152,7 +154,7 @@ func (d *SCSIDevice) inquiry() (inquiryResponse, error) {
 		return resp, err
 	}
 
-	binary.Read(bytes.NewBuffer(respBuf), nativeEndian, &resp)
+	binary.Read(bytes.NewBuffer(respBuf), utils.NativeEndian, &resp)
 
 	return resp, nil
 }

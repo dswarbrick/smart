@@ -6,12 +6,10 @@
 package smart
 
 import (
-	"encoding/binary"
 	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
-	"unsafe"
 
 	"github.com/BurntSushi/toml"
 )
@@ -85,19 +83,6 @@ type smartSelfTestLog struct {
 	Index          byte
 	_              uint16 // Reserved
 	Checksum       byte   // Two's complement checksum of first 511 bytes
-}
-
-var nativeEndian binary.ByteOrder
-
-// Determine native endianness of system
-func init() {
-	i := uint32(1)
-	b := (*[4]byte)(unsafe.Pointer(&i))
-	if b[0] == 1 {
-		nativeEndian = binary.LittleEndian
-	} else {
-		nativeEndian = binary.BigEndian
-	}
 }
 
 // lookupDrive returns the most appropriate driveModel for a given ATA IDENTIFY value

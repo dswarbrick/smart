@@ -21,6 +21,9 @@ import (
 	"unsafe"
 
 	"golang.org/x/sys/unix"
+
+	"github.com/dswarbrick/smart/ata"
+	"github.com/dswarbrick/smart/utils"
 )
 
 const (
@@ -133,7 +136,7 @@ var (
 // format and return it as a byte slice
 func (ioc *megasas_iocpacket) PackedBytes() []byte {
 	b := new(bytes.Buffer)
-	binary.Write(b, nativeEndian, ioc)
+	binary.Write(b, utils.NativeEndian, ioc)
 	return b.Bytes()
 }
 
@@ -253,11 +256,11 @@ func (m *MegasasIoctl) GetPDList(host uint16) ([]MegasasPDAddress, error) {
 		return nil, err
 	}
 
-	respCount := nativeEndian.Uint32(respBuf[4:])
+	respCount := utils.NativeEndian.Uint32(respBuf[4:])
 
 	// Create a device array large enough to hold the specified number of devices
 	devices := make([]MegasasPDAddress, respCount)
-	binary.Read(bytes.NewBuffer(respBuf[8:]), nativeEndian, &devices)
+	binary.Read(bytes.NewBuffer(respBuf[8:]), utils.NativeEndian, &devices)
 
 	return devices, nil
 }
@@ -327,7 +330,7 @@ func (d *MegasasDevice) inquiry() inquiryResponse {
 		return inqBuf
 	}
 
-	binary.Read(bytes.NewReader(respBuf), nativeEndian, &inqBuf)
+	binary.Read(bytes.NewReader(respBuf), utils.NativeEndian, &inqBuf)
 	return inqBuf
 }
 
@@ -358,13 +361,13 @@ func OpenMegasasIoctl(host uint16, diskNum uint8) error {
 		return err
 	}
 
-	ident_buf := IdentifyDeviceData{}
-	binary.Read(bytes.NewBuffer(respBuf), nativeEndian, &ident_buf)
+	ident_buf := ata.IdentifyDeviceData{}
+	binary.Read(bytes.NewBuffer(respBuf), utils.NativeEndian, &ident_buf)
 
 	fmt.Println("\nATA IDENTIFY data follows:")
-	fmt.Printf("Serial Number: %s\n", swapBytes(ident_buf.SerialNumber[:]))
-	fmt.Printf("Firmware Revision: %s\n", swapBytes(ident_buf.FirmwareRevision[:]))
-	fmt.Printf("Model Number: %s\n", swapBytes(ident_buf.ModelNumber[:]))
+	fmt.Printf("Serial Number: %s\n", utils.SwapBytes(ident_buf.SerialNumber[:]))
+	fmt.Printf("Firmware Revision: %s\n", utils.SwapBytes(ident_buf.FirmwareRevision[:]))
+	fmt.Printf("Model Number: %s\n", utils.SwapBytes(ident_buf.ModelNumber[:]))
 
 	db, err := OpenDriveDb("drivedb.toml")
 	if err != nil {
@@ -389,7 +392,7 @@ func OpenMegasasIoctl(host uint16, diskNum uint8) error {
 	}
 
 	smart := smartPage{}
-	binary.Read(bytes.NewBuffer(respBuf[:362]), nativeEndian, &smart)
+	binary.Read(bytes.NewBuffer(respBuf[:362]), utils.NativeEndian, &smart)
 	printSMARTPage(smart, thisDrive)
 
 	return nil

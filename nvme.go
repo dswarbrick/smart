@@ -13,6 +13,8 @@ import (
 	"unsafe"
 
 	"golang.org/x/sys/unix"
+
+	"github.com/dswarbrick/smart/utils"
 )
 
 const (
@@ -218,7 +220,7 @@ func (d *NVMeDevice) PrintSMART(db *driveDb) error {
 
 	var controller nvmeIdentController
 
-	binary.Read(bytes.NewBuffer(buf[:]), nativeEndian, &controller)
+	binary.Read(bytes.NewBuffer(buf[:]), utils.NativeEndian, &controller)
 
 	fmt.Println()
 	fmt.Printf("Vendor ID: %#04x\n", controller.VendorID)
@@ -254,7 +256,7 @@ func (d *NVMeDevice) PrintSMART(db *driveDb) error {
 
 	var ns nvmeIdentNamespace
 
-	binary.Read(bytes.NewBuffer(buf2[:]), nativeEndian, &ns)
+	binary.Read(bytes.NewBuffer(buf2[:]), utils.NativeEndian, &ns)
 
 	fmt.Printf("Namespace 1 size: %d sectors\n", ns.Nsze)
 	fmt.Printf("Namespace 1 utilisation: %d sectors\n", ns.Nuse)
@@ -268,7 +270,7 @@ func (d *NVMeDevice) PrintSMART(db *driveDb) error {
 
 	var sl nvmeSMARTLog
 
-	binary.Read(bytes.NewBuffer(buf3[:]), nativeEndian, &sl)
+	binary.Read(bytes.NewBuffer(buf3[:]), utils.NativeEndian, &sl)
 
 	// TODO: Implement bytes to "KMGTP" function
 	unitsRead := le128ToBigInt(sl.DataUnitsRead)

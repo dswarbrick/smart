@@ -8,22 +8,7 @@ package smart
 import (
 	"fmt"
 	"math/big"
-	"math/bits"
 )
-
-// log2b finds the most significant bit set in a uint.
-func log2b(x uint) int {
-	return bits.Len(x) - 1
-}
-
-// swapBytes swaps the order of every second byte in a byte slice (modifies slice in-place).
-func swapBytes(s []byte) []byte {
-	for i := 0; i < len(s); i += 2 {
-		s[i], s[i+1] = s[i+1], s[i]
-	}
-
-	return s
-}
 
 // formatBytes formats a uint64 byte quantity using human-readble units, e.g. kilobyte, megabyte.
 // TODO: Add big.Int variant of this function.

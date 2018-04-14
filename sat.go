@@ -10,6 +10,9 @@ import (
 	"encoding/binary"
 	"fmt"
 	"path/filepath"
+
+	"github.com/dswarbrick/smart/ata"
+	"github.com/dswarbrick/smart/utils"
 )
 
 const (
@@ -29,8 +32,8 @@ type SATDevice struct {
 	SCSIDevice
 }
 
-func (d *SATDevice) identify() (IdentifyDeviceData, error) {
-	var identBuf IdentifyDeviceData
+func (d *SATDevice) identify() (ata.IdentifyDeviceData, error) {
+	var identBuf ata.IdentifyDeviceData
 
 	respBuf := make([]byte, 512)
 
@@ -43,10 +46,10 @@ func (d *SATDevice) identify() (IdentifyDeviceData, error) {
 		return identBuf, fmt.Errorf("sendCDB ATA IDENTIFY: %v", err)
 	}
 
-	binary.Read(bytes.NewBuffer(respBuf), nativeEndian, &identBuf)
-	swapBytes(identBuf.SerialNumber[:])
-	swapBytes(identBuf.FirmwareRevision[:])
-	swapBytes(identBuf.ModelNumber[:])
+	binary.Read(bytes.NewBuffer(respBuf), utils.NativeEndian, &identBuf)
+	utils.SwapBytes(identBuf.SerialNumber[:])
+	utils.SwapBytes(identBuf.FirmwareRevision[:])
+	utils.SwapBytes(identBuf.ModelNumber[:])
 
 	return identBuf, nil
 }
@@ -88,15 +91,15 @@ func (d *SATDevice) PrintSMART(db *driveDb) error {
 
 	fmt.Println("\nATA IDENTIFY data follows:")
 	fmt.Printf("Serial Number: %s\n", identBuf.SerialNumber)
-	fmt.Println("LU WWN Device Id:", identBuf.getWWN())
+	fmt.Println("LU WWN Device Id:", identBuf.GetWWN())
 	fmt.Printf("Firmware Revision: %s\n", identBuf.FirmwareRevision)
 	fmt.Printf("Model Number: %s\n", identBuf.ModelNumber)
 	fmt.Printf("Rotation Rate: %d\n", identBuf.RotationRate)
 	fmt.Printf("SMART support available: %v\n", identBuf.Word87>>14 == 1)
 	fmt.Printf("SMART support enabled: %v\n", identBuf.Word85&0x1 != 0)
-	fmt.Println("ATA Major Version:", identBuf.getATAMajorVersion())
-	fmt.Println("ATA Minor Version:", identBuf.getATAMinorVersion())
-	fmt.Println("Transport:", identBuf.getTransport())
+	fmt.Println("ATA Major Version:", identBuf.GetATAMajorVersion())
+	fmt.Println("ATA Minor Version:", identBuf.GetATAMinorVersion())
+	fmt.Println("Transport:", identBuf.GetTransport())
 
 	thisDrive := db.lookupDrive(identBuf.ModelNumber[:])
 	fmt.Printf("Drive DB contains %d entries. Using model: %s\n", len(db.Drives), thisDrive.Family)
@@ -121,7 +124,7 @@ func (d *SATDevice) PrintSMART(db *driveDb) error {
 	}
 
 	smart := smartPage{}
-	binary.Read(bytes.NewBuffer(respBuf[:362]), nativeEndian, &smart)
+	binary.Read(bytes.NewBuffer(respBuf[:362]), utils.NativeEndian, &smart)
 	printSMARTPage(smart, thisDrive)
 
 	// Read SMART log directory
@@ -131,7 +134,7 @@ func (d *SATDevice) PrintSMART(db *driveDb) error {
 	}
 
 	smartLogDir := smartLogDirectory{}
-	binary.Read(bytes.NewBuffer(logBuf), nativeEndian, &smartLogDir)
+	binary.Read(bytes.NewBuffer(logBuf), utils.NativeEndian, &smartLogDir)
 	fmt.Printf("\nSMART log directory: %+v\n", smartLogDir)
 
 	// Read SMART error log
@@ -141,7 +144,7 @@ func (d *SATDevice) PrintSMART(db *driveDb) error {
 	}
 
 	sumErrLog := smartSummaryErrorLog{}
-	binary.Read(bytes.NewBuffer(logBuf), nativeEndian, &sumErrLog)
+	binary.Read(bytes.NewBuffer(logBuf), utils.NativeEndian, &sumErrLog)
 	fmt.Printf("\nSummary SMART error log: %+v\n", sumErrLog)
 
 	// Read SMART self-test log
@@ -151,7 +154,7 @@ func (d *SATDevice) PrintSMART(db *driveDb) error {
 	}
 
 	selfTestLog := smartSelfTestLog{}
-	binary.Read(bytes.NewBuffer(logBuf), nativeEndian, &selfTestLog)
+	binary.Read(bytes.NewBuffer(logBuf), utils.NativeEndian, &selfTestLog)
 	fmt.Printf("\nSMART self-test log: %+v\n", selfTestLog)
 
 	return nil
