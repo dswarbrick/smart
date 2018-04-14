@@ -17,6 +17,7 @@ import (
 
 	"github.com/dswarbrick/smart"
 	"github.com/dswarbrick/smart/drivedb"
+	"github.com/dswarbrick/smart/megaraid"
 	"github.com/dswarbrick/smart/nvme"
 	"github.com/dswarbrick/smart/scsi"
 )
@@ -69,7 +70,7 @@ func scanDevices() {
 	}
 
 	// Open megaraid_sas ioctl device and scan for hosts / devices
-	if m, err := smart.CreateMegasasIoctl(); err == nil {
+	if m, err := megaraid.CreateMegasasIoctl(); err == nil {
 		defer m.Close()
 		for _, device := range m.ScanDevices() {
 			fmt.Printf("%#v\n", device)
@@ -84,7 +85,7 @@ func main() {
 	fmt.Printf("Built with %s on %s (%s)\n\n", runtime.Version(), runtime.GOOS, runtime.GOARCH)
 
 	device := flag.String("device", "", "SATA / NVMe device from which to read SMART attributes, e.g., /dev/sda, /dev/nvme0")
-	megaraid := flag.String("megaraid", "", "MegaRAID host and device ID from which to read SMART attributes, e.g., megaraid0_23")
+	megaraidDev := flag.String("megaraid", "", "MegaRAID host and device ID from which to read SMART attributes, e.g., megaraid0_23")
 	scan := flag.Bool("scan", false, "Scan for drives that support SMART")
 	flag.Parse()
 
@@ -120,18 +121,18 @@ func main() {
 			fmt.Println(err)
 			os.Exit(1)
 		}
-	} else if *megaraid != "" {
+	} else if *megaraidDev != "" {
 		var (
 			host uint16
 			disk uint8
 		)
 
-		if _, err := fmt.Sscanf(*megaraid, "megaraid%d_%d", &host, &disk); err != nil {
+		if _, err := fmt.Sscanf(*megaraidDev, "megaraid%d_%d", &host, &disk); err != nil {
 			fmt.Println("Invalid MegaRAID host / device ID syntax")
 			os.Exit(1)
 		}
 
-		smart.OpenMegasasIoctl(host, disk)
+		megaraid.OpenMegasasIoctl(host, disk)
 	} else if *scan {
 		scanDevices()
 	} else {
