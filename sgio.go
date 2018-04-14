@@ -13,6 +13,7 @@ import (
 
 	"golang.org/x/sys/unix"
 
+	"github.com/dswarbrick/smart/ioctl"
 	"github.com/dswarbrick/smart/utils"
 )
 
@@ -123,7 +124,7 @@ func (d *SCSIDevice) Close() error {
 }
 
 func (d *SCSIDevice) execGenericIO(hdr *sgIoHdr) error {
-	if err := ioctl(uintptr(d.fd), SG_IO, uintptr(unsafe.Pointer(hdr))); err != nil {
+	if err := ioctl.Ioctl(uintptr(d.fd), SG_IO, uintptr(unsafe.Pointer(hdr))); err != nil {
 		return err
 	}
 

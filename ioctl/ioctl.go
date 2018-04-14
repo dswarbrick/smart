@@ -4,7 +4,7 @@
 // Implementation of Linux kernel ioctl macros (<uapi/asm-generic/ioctl.h>).
 // See https://www.kernel.org/doc/Documentation/ioctl/ioctl-number.txt
 
-package smart
+package ioctl
 
 import (
 	"golang.org/x/sys/unix"
@@ -36,23 +36,23 @@ func _ioc(dir, t, nr, size uintptr) uintptr {
 	return (dir << directionShift) | (t << typeShift) | (nr << numberShift) | (size << sizeShift)
 }
 
-// _ior calculates the ioctl command for a read-ioctl of the specified type, number and size
-func _ior(t, nr, size uintptr) uintptr {
+// Ior calculates the ioctl command for a read-ioctl of the specified type, number and size
+func Ior(t, nr, size uintptr) uintptr {
 	return _ioc(directionRead, t, nr, size)
 }
 
-// _iow calculates the ioctl command for a write-ioctl of the specified type, number and size
-func _iow(t, nr, size uintptr) uintptr {
+// Iow calculates the ioctl command for a write-ioctl of the specified type, number and size
+func Iow(t, nr, size uintptr) uintptr {
 	return _ioc(directionWrite, t, nr, size)
 }
 
-// _iowr calculates the ioctl command for a read/write-ioctl of the specified type, number and size
-func _iowr(t, nr, size uintptr) uintptr {
+// Iowr calculates the ioctl command for a read/write-ioctl of the specified type, number and size
+func Iowr(t, nr, size uintptr) uintptr {
 	return _ioc(directionWrite|directionRead, t, nr, size)
 }
 
 // ioctl executes an ioctl command on the specified file descriptor
-func ioctl(fd, cmd, ptr uintptr) error {
+func Ioctl(fd, cmd, ptr uintptr) error {
 	_, _, errno := unix.Syscall(unix.SYS_IOCTL, fd, cmd, ptr)
 	if errno != 0 {
 		return errno

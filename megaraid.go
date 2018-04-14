@@ -23,6 +23,7 @@ import (
 	"golang.org/x/sys/unix"
 
 	"github.com/dswarbrick/smart/ata"
+	"github.com/dswarbrick/smart/ioctl"
 	"github.com/dswarbrick/smart/utils"
 )
 
@@ -129,7 +130,7 @@ type MegasasDevice struct {
 
 var (
 	// 0xc1944d01 - Beware: cannot use unsafe.Sizeof(megasas_iocpacket{}) due to Go struct padding!
-	MEGASAS_IOC_FIRMWARE = _iowr('M', 1, uintptr(binary.Size(megasas_iocpacket{})))
+	MEGASAS_IOC_FIRMWARE = ioctl.Iowr('M', 1, uintptr(binary.Size(megasas_iocpacket{})))
 )
 
 // PackedBytes is a convenience method that will pack a megasas_iocpacket struct in little-endian
@@ -204,7 +205,7 @@ func (m *MegasasIoctl) MFI(host uint16, opcode uint32, b []byte) error {
 	iocBuf := ioc.PackedBytes()
 
 	// Note pointer to first item in iocBuf buffer
-	if err := ioctl(uintptr(m.fd), MEGASAS_IOC_FIRMWARE, uintptr(unsafe.Pointer(&iocBuf[0]))); err != nil {
+	if err := ioctl.Ioctl(uintptr(m.fd), MEGASAS_IOC_FIRMWARE, uintptr(unsafe.Pointer(&iocBuf[0]))); err != nil {
 		return err
 	}
 
@@ -244,7 +245,7 @@ func (m *MegasasIoctl) PassThru(host uint16, diskNum uint8, cdb []byte, buf []by
 	iocBuf := ioc.PackedBytes()
 
 	// Note pointer to first item in iocBuf buffer
-	return ioctl(uintptr(m.fd), MEGASAS_IOC_FIRMWARE, uintptr(unsafe.Pointer(&iocBuf[0])))
+	return ioctl.Ioctl(uintptr(m.fd), MEGASAS_IOC_FIRMWARE, uintptr(unsafe.Pointer(&iocBuf[0])))
 }
 
 // GetPDList retrieves a list of physical devices attached to the specified host

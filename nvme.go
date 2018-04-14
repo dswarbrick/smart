@@ -14,6 +14,7 @@ import (
 
 	"golang.org/x/sys/unix"
 
+	"github.com/dswarbrick/smart/ioctl"
 	"github.com/dswarbrick/smart/utils"
 )
 
@@ -23,7 +24,7 @@ const (
 )
 
 var (
-	NVME_IOCTL_ADMIN_CMD = _iowr('N', 0x41, unsafe.Sizeof(nvmePassthruCommand{}))
+	NVME_IOCTL_ADMIN_CMD = ioctl.Iowr('N', 0x41, unsafe.Sizeof(nvmePassthruCommand{}))
 )
 
 // Defined in <linux/nvme_ioctl.h>
@@ -211,7 +212,7 @@ func (d *NVMeDevice) PrintSMART(db *driveDb) error {
 		cdw10:    1, // Identify controller
 	}
 
-	if err := ioctl(uintptr(d.fd), NVME_IOCTL_ADMIN_CMD, uintptr(unsafe.Pointer(&cmd))); err != nil {
+	if err := ioctl.Ioctl(uintptr(d.fd), NVME_IOCTL_ADMIN_CMD, uintptr(unsafe.Pointer(&cmd))); err != nil {
 		return err
 	}
 
@@ -247,7 +248,7 @@ func (d *NVMeDevice) PrintSMART(db *driveDb) error {
 		cdw10:    0,
 	}
 
-	if err := ioctl(uintptr(d.fd), NVME_IOCTL_ADMIN_CMD, uintptr(unsafe.Pointer(&cmd))); err != nil {
+	if err := ioctl.Ioctl(uintptr(d.fd), NVME_IOCTL_ADMIN_CMD, uintptr(unsafe.Pointer(&cmd))); err != nil {
 		return err
 	}
 
@@ -315,7 +316,7 @@ func (d *NVMeDevice) readLogPage(logID uint8, buf *[]byte) error {
 		cdw10:    uint32(logID) | (((uint32(bufLen) / 4) - 1) << 16),
 	}
 
-	return ioctl(uintptr(d.fd), NVME_IOCTL_ADMIN_CMD, uintptr(unsafe.Pointer(&cmd)))
+	return ioctl.Ioctl(uintptr(d.fd), NVME_IOCTL_ADMIN_CMD, uintptr(unsafe.Pointer(&cmd)))
 }
 
 // le128ToBigInt takes a little-endian 16-byte slice and returns a *big.Int representing it.
