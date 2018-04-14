@@ -71,6 +71,13 @@ func (e sgioError) Error() string {
 		e.scsiStatus, e.hostStatus, e.driverStatus)
 }
 
+// Top-level device interface. All supported device types must implement these methods.
+type Device interface {
+	Open() error
+	Close() error
+	PrintSMART(*drivedb.DriveDb) error
+}
+
 // TODO: Make a constructor function for this.
 type SCSIDevice struct {
 	Name string
@@ -106,7 +113,7 @@ func (d *SCSIDevice) execGenericIO(hdr *sgIoHdr) error {
 
 // inquiry sends a SCSI INQUIRY command to a device and returns an InquiryResponse struct.
 // TODO: Add support for Vital Product Data (VPD)
-func (d *SCSIDevice) Inquiry() (InquiryResponse, error) {
+func (d *SCSIDevice) inquiry() (InquiryResponse, error) {
 	var resp InquiryResponse
 
 	respBuf := make([]byte, INQ_REPLY_LEN)
@@ -114,7 +121,7 @@ func (d *SCSIDevice) Inquiry() (InquiryResponse, error) {
 	cdb := CDB6{SCSI_INQUIRY}
 	binary.BigEndian.PutUint16(cdb[3:], uint16(len(respBuf)))
 
-	if err := d.SendCDB(cdb[:], &respBuf); err != nil {
+	if err := d.sendCDB(cdb[:], &respBuf); err != nil {
 		return resp, err
 	}
 
@@ -123,10 +130,10 @@ func (d *SCSIDevice) Inquiry() (InquiryResponse, error) {
 	return resp, nil
 }
 
-// SendCDB sends a SCSI Command Descriptor Block to the device and writes the response into the
+// sendCDB sends a SCSI Command Descriptor Block to the device and writes the response into the
 // supplied []byte pointer.
 // TODO: Return SCSI status code, sense buf etc as part of error
-func (d *SCSIDevice) SendCDB(cdb []byte, respBuf *[]byte) error {
+func (d *SCSIDevice) sendCDB(cdb []byte, respBuf *[]byte) error {
 	senseBuf := make([]byte, 32)
 
 	// Populate required fields of "sg_io_hdr_t" struct
@@ -154,7 +161,7 @@ func (d *SCSIDevice) modeSense(pageNum, subPageNum, pageControl uint8) ([]byte, 
 	cdb[3] = subPageNum
 	cdb[4] = uint8(len(respBuf))
 
-	if err := d.SendCDB(cdb[:], &respBuf); err != nil {
+	if err := d.sendCDB(cdb[:], &respBuf); err != nil {
 		return respBuf, err
 	}
 
@@ -166,7 +173,7 @@ func (d *SCSIDevice) readCapacity() (uint64, error) {
 	respBuf := make([]byte, 8)
 	cdb := CDB10{SCSI_READ_CAPACITY_10}
 
-	if err := d.SendCDB(cdb[:], &respBuf); err != nil {
+	if err := d.sendCDB(cdb[:], &respBuf); err != nil {
 		return 0, err
 	}
 
@@ -196,4 +203,26 @@ func (d *SCSIDevice) PrintSMART(db *drivedb.DriveDb) error {
 	fmt.Printf("RPM: %d\n", binary.BigEndian.Uint16(resp[offset+20:]))
 
 	return nil
+}
+
+func OpenSCSIAutodetect(name string) (Device, error) {
+	dev := SCSIDevice{Name: name}
+
+	if err := dev.Open(); err != nil {
+		return nil, err
+	}
+
+	inquiry, err := dev.inquiry()
+	if err != nil {
+		return nil, err
+	}
+
+	// Check if device is an ATA device.
+	// TODO: Handle USB-SATA bridges by probing the device with an ATA IDENTIFY command. Watch out
+	// for ATAPI devices.
+	if inquiry.VendorIdent == [8]byte{0x41, 0x54, 0x41, 0x20, 0x20, 0x20, 0x20, 0x20} {
+		return &SATDevice{dev}, nil
+	}
+
+	return &dev, nil
 }

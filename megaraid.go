@@ -355,9 +355,9 @@ func OpenMegasasIoctl(host uint16, diskNum uint8) error {
 
 	// Send ATA IDENTIFY command as a CDB16 passthru command
 	cdb := scsi.CDB16{scsi.SCSI_ATA_PASSTHRU_16}
-	cdb[1] = 0x08                 // ATA protocol (4 << 1, PIO data-in)
-	cdb[2] = 0x0e                 // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
-	cdb[14] = ATA_IDENTIFY_DEVICE // command
+	cdb[1] = 0x08                     // ATA protocol (4 << 1, PIO data-in)
+	cdb[2] = 0x0e                     // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
+	cdb[14] = ata.ATA_IDENTIFY_DEVICE // command
 	respBuf = make([]byte, 512)
 
 	if err := m.PassThru(host, diskNum, cdb[:], respBuf, scsi.SG_DXFER_FROM_DEV); err != nil {
@@ -382,21 +382,21 @@ func OpenMegasasIoctl(host uint16, diskNum uint8) error {
 
 	// Send ATA SMART READ command as a CDB16 passthru command
 	cdb = scsi.CDB16{scsi.SCSI_ATA_PASSTHRU_16}
-	cdb[1] = 0x08            // ATA protocol (4 << 1, PIO data-in)
-	cdb[2] = 0x0e            // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
-	cdb[4] = SMART_READ_DATA // feature LSB
-	cdb[10] = 0x4f           // low lba_mid
-	cdb[12] = 0xc2           // low lba_high
-	cdb[14] = ATA_SMART      // command
+	cdb[1] = 0x08                // ATA protocol (4 << 1, PIO data-in)
+	cdb[2] = 0x0e                // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
+	cdb[4] = ata.SMART_READ_DATA // feature LSB
+	cdb[10] = 0x4f               // low lba_mid
+	cdb[12] = 0xc2               // low lba_high
+	cdb[14] = ata.ATA_SMART      // command
 	respBuf = make([]byte, 512)
 
 	if err := m.PassThru(host, diskNum, cdb[:], respBuf, scsi.SG_DXFER_FROM_DEV); err != nil {
 		return err
 	}
 
-	smart := smartPage{}
+	smart := ata.SmartPage{}
 	binary.Read(bytes.NewBuffer(respBuf[:362]), utils.NativeEndian, &smart)
-	printSMARTPage(smart, thisDrive)
+	ata.PrintSMARTPage(smart, thisDrive)
 
 	return nil
 }

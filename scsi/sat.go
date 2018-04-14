@@ -3,35 +3,22 @@
 
 // SCSI / ATA Translation functions.
 
-package smart
+package scsi
 
 import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
-	"path/filepath"
 
 	"github.com/dswarbrick/smart/ata"
 	"github.com/dswarbrick/smart/drivedb"
-	"github.com/dswarbrick/smart/scsi"
 	"github.com/dswarbrick/smart/utils"
-)
-
-const (
-	// ATA feature register values for SMART
-	SMART_READ_DATA     = 0xd0
-	SMART_READ_LOG      = 0xd5
-	SMART_RETURN_STATUS = 0xda
-
-	// ATA commands
-	ATA_SMART           = 0xb0
-	ATA_IDENTIFY_DEVICE = 0xec
 )
 
 // SATDevice is a simple wrapper around an embedded SCSIDevice type, which handles sending ATA
 // commands via SCSI pass-through (SCSI-ATA Translation).
 type SATDevice struct {
-	scsi.SCSIDevice
+	SCSIDevice
 }
 
 func (d *SATDevice) identify() (ata.IdentifyDeviceData, error) {
@@ -39,12 +26,12 @@ func (d *SATDevice) identify() (ata.IdentifyDeviceData, error) {
 
 	respBuf := make([]byte, 512)
 
-	cdb16 := scsi.CDB16{scsi.SCSI_ATA_PASSTHRU_16}
-	cdb16[1] = 0x08                 // ATA protocol (4 << 1, PIO data-in)
-	cdb16[2] = 0x0e                 // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
-	cdb16[14] = ATA_IDENTIFY_DEVICE // command
+	cdb16 := CDB16{SCSI_ATA_PASSTHRU_16}
+	cdb16[1] = 0x08                     // ATA protocol (4 << 1, PIO data-in)
+	cdb16[2] = 0x0e                     // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
+	cdb16[14] = ata.ATA_IDENTIFY_DEVICE // command
 
-	if err := d.SendCDB(cdb16[:], &respBuf); err != nil {
+	if err := d.sendCDB(cdb16[:], &respBuf); err != nil {
 		return identBuf, fmt.Errorf("sendCDB ATA IDENTIFY: %v", err)
 	}
 
@@ -57,17 +44,17 @@ func (d *SATDevice) identify() (ata.IdentifyDeviceData, error) {
 func (d *SATDevice) readSMARTLog(logPage uint8) ([]byte, error) {
 	respBuf := make([]byte, 512)
 
-	cdb := scsi.CDB16{scsi.SCSI_ATA_PASSTHRU_16}
-	cdb[1] = 0x08           // ATA protocol (4 << 1, PIO data-in)
-	cdb[2] = 0x0e           // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
-	cdb[4] = SMART_READ_LOG // feature LSB
-	cdb[6] = 0x01           // sector count
-	cdb[8] = logPage        // SMART log page number
-	cdb[10] = 0x4f          // low lba_mid
-	cdb[12] = 0xc2          // low lba_high
-	cdb[14] = ATA_SMART     // command
+	cdb := CDB16{SCSI_ATA_PASSTHRU_16}
+	cdb[1] = 0x08               // ATA protocol (4 << 1, PIO data-in)
+	cdb[2] = 0x0e               // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
+	cdb[4] = ata.SMART_READ_LOG // feature LSB
+	cdb[6] = 0x01               // sector count
+	cdb[8] = logPage            // SMART log page number
+	cdb[10] = 0x4f              // low lba_mid
+	cdb[12] = 0xc2              // low lba_high
+	cdb[14] = ata.ATA_SMART     // command
 
-	if err := d.SendCDB(cdb[:], &respBuf); err != nil {
+	if err := d.sendCDB(cdb[:], &respBuf); err != nil {
 		return respBuf, fmt.Errorf("sendCDB SMART READ LOG: %v", err)
 	}
 
@@ -76,7 +63,7 @@ func (d *SATDevice) readSMARTLog(logPage uint8) ([]byte, error) {
 
 func (d *SATDevice) PrintSMART(db *drivedb.DriveDb) error {
 	// Standard SCSI INQUIRY command
-	inqResp, err := d.Inquiry()
+	inqResp, err := d.inquiry()
 	if err != nil {
 		return fmt.Errorf("SgExecute INQUIRY: %v", err)
 	}
@@ -108,23 +95,23 @@ func (d *SATDevice) PrintSMART(db *drivedb.DriveDb) error {
 	/*
 	 * SMART READ DATA
 	 */
-	cdb := scsi.CDB16{scsi.SCSI_ATA_PASSTHRU_16}
-	cdb[1] = 0x08            // ATA protocol (4 << 1, PIO data-in)
-	cdb[2] = 0x0e            // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
-	cdb[4] = SMART_READ_DATA // feature LSB
-	cdb[10] = 0x4f           // low lba_mid
-	cdb[12] = 0xc2           // low lba_high
-	cdb[14] = ATA_SMART      // command
+	cdb := CDB16{SCSI_ATA_PASSTHRU_16}
+	cdb[1] = 0x08                // ATA protocol (4 << 1, PIO data-in)
+	cdb[2] = 0x0e                // BYT_BLOK = 1, T_LENGTH = 2, T_DIR = 1
+	cdb[4] = ata.SMART_READ_DATA // feature LSB
+	cdb[10] = 0x4f               // low lba_mid
+	cdb[12] = 0xc2               // low lba_high
+	cdb[14] = ata.ATA_SMART      // command
 
 	respBuf := make([]byte, 512)
 
-	if err := d.SendCDB(cdb[:], &respBuf); err != nil {
+	if err := d.sendCDB(cdb[:], &respBuf); err != nil {
 		return fmt.Errorf("sendCDB SMART READ DATA: %v", err)
 	}
 
-	smart := smartPage{}
+	smart := ata.SmartPage{}
 	binary.Read(bytes.NewBuffer(respBuf[:362]), utils.NativeEndian, &smart)
-	printSMARTPage(smart, thisDrive)
+	ata.PrintSMARTPage(smart, thisDrive)
 
 	// Read SMART log directory
 	logBuf, err := d.readSMARTLog(0x00)
@@ -132,7 +119,7 @@ func (d *SATDevice) PrintSMART(db *drivedb.DriveDb) error {
 		return err
 	}
 
-	smartLogDir := smartLogDirectory{}
+	smartLogDir := ata.SmartLogDirectory{}
 	binary.Read(bytes.NewBuffer(logBuf), utils.NativeEndian, &smartLogDir)
 	fmt.Printf("\nSMART log directory: %+v\n", smartLogDir)
 
@@ -142,7 +129,7 @@ func (d *SATDevice) PrintSMART(db *drivedb.DriveDb) error {
 		return err
 	}
 
-	sumErrLog := smartSummaryErrorLog{}
+	sumErrLog := ata.SmartSummaryErrorLog{}
 	binary.Read(bytes.NewBuffer(logBuf), utils.NativeEndian, &sumErrLog)
 	fmt.Printf("\nSummary SMART error log: %+v\n", sumErrLog)
 
@@ -152,26 +139,9 @@ func (d *SATDevice) PrintSMART(db *drivedb.DriveDb) error {
 		return err
 	}
 
-	selfTestLog := smartSelfTestLog{}
+	selfTestLog := ata.SmartSelfTestLog{}
 	binary.Read(bytes.NewBuffer(logBuf), utils.NativeEndian, &selfTestLog)
 	fmt.Printf("\nSMART self-test log: %+v\n", selfTestLog)
 
 	return nil
-}
-
-// TODO: Make this discover NVMe and MegaRAID devices also.
-func ScanDevices() []scsi.SCSIDevice {
-	var devices []scsi.SCSIDevice
-
-	// Find all SCSI disk devices
-	files, err := filepath.Glob("/dev/sd*[^0-9]")
-	if err != nil {
-		return devices
-	}
-
-	for _, file := range files {
-		devices = append(devices, scsi.SCSIDevice{Name: file})
-	}
-
-	return devices
 }

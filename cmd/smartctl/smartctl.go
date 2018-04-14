@@ -17,6 +17,7 @@ import (
 
 	"github.com/dswarbrick/smart"
 	"github.com/dswarbrick/smart/drivedb"
+	"github.com/dswarbrick/smart/scsi"
 )
 
 const (
@@ -90,7 +91,7 @@ func main() {
 
 	if *device != "" {
 		var (
-			d   smart.Device // interface
+			d   scsi.Device // interface
 			err error
 		)
 
@@ -98,7 +99,7 @@ func main() {
 			d = smart.NewNVMeDevice(*device)
 			err = d.Open()
 		} else {
-			d, err = smart.OpenSCSIAutodetect(*device)
+			d, err = scsi.OpenSCSIAutodetect(*device)
 		}
 
 		if err != nil {
