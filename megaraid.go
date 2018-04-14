@@ -23,6 +23,7 @@ import (
 	"golang.org/x/sys/unix"
 
 	"github.com/dswarbrick/smart/ata"
+	"github.com/dswarbrick/smart/drivedb"
 	"github.com/dswarbrick/smart/ioctl"
 	"github.com/dswarbrick/smart/scsi"
 	"github.com/dswarbrick/smart/utils"
@@ -371,12 +372,12 @@ func OpenMegasasIoctl(host uint16, diskNum uint8) error {
 	fmt.Printf("Firmware Revision: %s\n", ident_buf.FirmwareRevision())
 	fmt.Printf("Model Number: %s\n", ident_buf.ModelNumber())
 
-	db, err := OpenDriveDb("drivedb.toml")
+	db, err := drivedb.OpenDriveDb("drivedb.toml")
 	if err != nil {
 		return err
 	}
 
-	thisDrive := db.lookupDrive(ident_buf.ModelNumber())
+	thisDrive := db.LookupDrive(ident_buf.ModelNumber())
 	fmt.Printf("Drive DB contains %d entries. Using model: %s\n", len(db.Drives), thisDrive.Family)
 
 	// Send ATA SMART READ command as a CDB16 passthru command

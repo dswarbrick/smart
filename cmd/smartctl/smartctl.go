@@ -16,6 +16,7 @@ import (
 	"golang.org/x/sys/unix"
 
 	"github.com/dswarbrick/smart"
+	"github.com/dswarbrick/smart/drivedb"
 )
 
 const (
@@ -107,7 +108,7 @@ func main() {
 
 		defer d.Close()
 
-		db, err := smart.OpenDriveDb("drivedb.toml")
+		db, err := drivedb.OpenDriveDb("drivedb.toml")
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)

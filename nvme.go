@@ -14,6 +14,7 @@ import (
 
 	"golang.org/x/sys/unix"
 
+	"github.com/dswarbrick/smart/drivedb"
 	"github.com/dswarbrick/smart/ioctl"
 	"github.com/dswarbrick/smart/utils"
 )
@@ -199,7 +200,7 @@ func (d *NVMeDevice) Close() error {
 }
 
 // WIP - need to split out functionality further.
-func (d *NVMeDevice) PrintSMART(db *driveDb) error {
+func (d *NVMeDevice) PrintSMART(db *drivedb.DriveDb) error {
 	fmt.Println("OK")
 
 	buf := make([]byte, 4096)

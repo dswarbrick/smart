@@ -13,6 +13,7 @@ import (
 
 	"golang.org/x/sys/unix"
 
+	"github.com/dswarbrick/smart/drivedb"
 	"github.com/dswarbrick/smart/ioctl"
 	"github.com/dswarbrick/smart/scsi"
 	"github.com/dswarbrick/smart/utils"
@@ -63,7 +64,7 @@ func (inq inquiryResponse) String() string {
 type Device interface {
 	Open() error
 	Close() error
-	PrintSMART(*driveDb) error
+	PrintSMART(*drivedb.DriveDb) error
 }
 
 type SCSIDevice struct {
@@ -172,7 +173,7 @@ func (d *SCSIDevice) readCapacity() (uint64, error) {
 }
 
 // Regular SCSI (including SAS, but excluding SATA) SMART functions not yet fully implemented.
-func (d *SCSIDevice) PrintSMART(db *driveDb) error {
+func (d *SCSIDevice) PrintSMART(db *drivedb.DriveDb) error {
 	capacity, _ := d.readCapacity()
 	fmt.Printf("Capacity: %d bytes (%s)\n", capacity, formatBytes(capacity))
 

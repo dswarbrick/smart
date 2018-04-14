@@ -7,31 +7,10 @@ package smart
 
 import (
 	"fmt"
-	"regexp"
 	"strconv"
-	"strings"
 
-	"github.com/BurntSushi/toml"
+	"github.com/dswarbrick/smart/drivedb"
 )
-
-// SMART attribute conversion rule
-type attrConv struct {
-	Conv string
-	Name string
-}
-
-type driveModel struct {
-	Family         string
-	ModelRegex     string
-	FirmwareRegex  string
-	WarningMsg     string
-	Presets        map[string]attrConv
-	CompiledRegexp *regexp.Regexp
-}
-
-type driveDb struct {
-	Drives []driveModel
-}
 
 // Individual SMART attribute (12 bytes)
 type smartAttr struct {
@@ -83,60 +62,6 @@ type smartSelfTestLog struct {
 	Index          byte
 	_              uint16 // Reserved
 	Checksum       byte   // Two's complement checksum of first 511 bytes
-}
-
-// lookupDrive returns the most appropriate driveModel for a given ATA IDENTIFY value
-func (db *driveDb) lookupDrive(ident []byte) driveModel {
-	var model driveModel
-
-	for _, d := range db.Drives {
-		// Skip placeholder entry
-		if strings.HasPrefix(d.Family, "$Id") {
-			continue
-		}
-
-		if d.Family == "DEFAULT" {
-			model = d
-			continue
-		}
-
-		if d.CompiledRegexp.Match(ident) {
-			model.Family = d.Family
-			model.ModelRegex = d.ModelRegex
-			model.FirmwareRegex = d.FirmwareRegex
-			model.WarningMsg = d.WarningMsg
-			model.CompiledRegexp = d.CompiledRegexp
-
-			for id, p := range d.Presets {
-				if _, exists := model.Presets[id]; exists {
-					// Some drives override the conv but don't specify a name, so copy it from default
-					if p.Name == "" {
-						p.Name = model.Presets[id].Name
-					}
-				}
-				model.Presets[id] = attrConv{Name: p.Name, Conv: p.Conv}
-			}
-
-			break
-		}
-	}
-
-	return model
-}
-
-// openDriveDb opens a .toml formatted drive database, unmarshalls it, and returns a driveDb
-func OpenDriveDb(dbfile string) (driveDb, error) {
-	var db driveDb
-
-	if _, err := toml.DecodeFile(dbfile, &db); err != nil {
-		return db, fmt.Errorf("Cannot open / parse drive DB: %s", err)
-	}
-
-	for i, d := range db.Drives {
-		db.Drives[i].CompiledRegexp, _ = regexp.Compile(d.ModelRegex)
-	}
-
-	return db, nil
 }
 
 // decodeVendorBytes decodes the six-byte vendor byte array based on the conversion rule passed as
@@ -338,14 +263,14 @@ func formatRawValue(v uint64, conv string) (s string) {
 }
 
 // FIXME: This is all ATA-specific and should be moved to ATA code.
-func printSMARTPage(smart smartPage, drive driveModel) {
+func printSMARTPage(smart smartPage, drive drivedb.DriveModel) {
 	fmt.Printf("\nSMART structure version: %d\n", smart.Version)
 	fmt.Printf("ID# ATTRIBUTE_NAME           FLAG     VALUE WORST RESERVED TYPE     UPDATED RAW_VALUE\n")
 
 	for _, attr := range smart.Attrs {
 		var (
 			rawValue              uint64
-			conv                  attrConv
+			conv                  drivedb.AttrConv
 			attrType, attrUpdated string
 		)
 

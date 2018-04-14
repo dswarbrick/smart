@@ -12,6 +12,7 @@ import (
 	"path/filepath"
 
 	"github.com/dswarbrick/smart/ata"
+	"github.com/dswarbrick/smart/drivedb"
 	"github.com/dswarbrick/smart/scsi"
 	"github.com/dswarbrick/smart/utils"
 )
@@ -73,7 +74,7 @@ func (d *SATDevice) readSMARTLog(logPage uint8) ([]byte, error) {
 	return respBuf, nil
 }
 
-func (d *SATDevice) PrintSMART(db *driveDb) error {
+func (d *SATDevice) PrintSMART(db *drivedb.DriveDb) error {
 	// Standard SCSI INQUIRY command
 	inqResp, err := d.inquiry()
 	if err != nil {
@@ -99,7 +100,7 @@ func (d *SATDevice) PrintSMART(db *driveDb) error {
 	fmt.Println("ATA Minor Version:", identBuf.ATAMinorVersion())
 	fmt.Println("Transport:", identBuf.Transport())
 
-	thisDrive := db.lookupDrive(identBuf.ModelNumber())
+	thisDrive := db.LookupDrive(identBuf.ModelNumber())
 	fmt.Printf("Drive DB contains %d entries. Using model: %s\n", len(db.Drives), thisDrive.Family)
 
 	// FIXME: Check that device supports SMART before trying to read data page
