@@ -3,7 +3,6 @@
   ModelRegex = "-"
   FirmwareRegex = "-"
   WarningMsg = "This is a dummy entry to hold the SVN-Id of drivedb.h"
-  [Drives.Presets]
 
 [[Drives]]
   Family = "DEFAULT"
@@ -207,8 +206,6 @@
 [[Drives]]
   Family = "Swissbit C440 Industrial CompactFlash Card"
   ModelRegex = "SFCF(2048|4096|8192|16GB|32GB|64GB)H[0-9]BU[24]TO-(C|I)-(MS|QT|NU)-5[0-9]7-STD"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.196]
       Conv = "raw24/raw24"
@@ -236,7 +233,6 @@
   Family = "Apacer SSD"
   ModelRegex = "(2|4|8|16|32)GB SATA Flash Drive"
   FirmwareRegex = "SF(DDA01C|I2101D|DE001A)"
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.160]
       Conv = "raw48"
@@ -269,8 +265,6 @@
 [[Drives]]
   Family = "Apple MacBook Air SSD"
   ModelRegex = "APPLE SSD TS(064|128)E"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.173]
       Conv = "raw48"
@@ -285,8 +279,6 @@
 [[Drives]]
   Family = "Apple SD/SM/TS...E/F/G SSDs"
   ModelRegex = "APPLE SSD (S[DM]|TS)0?(128|256|512|768|1024)[EFG]"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.169]
       Conv = "raw48"
@@ -304,8 +296,6 @@
 [[Drives]]
   Family = "Crucial/Micron RealSSD C300/P300"
   ModelRegex = "C300-CTFDDA[AC](064|128|256)MAG|P300-MTFDDAC(050|100|200)SAL"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.170]
       Conv = "raw48"
@@ -342,7 +332,6 @@
   Family = "Crucial/Micron RealSSD m4/C400/P400"
   ModelRegex = "C400-MTFDDA[ACK](064|128|256|512)MAM|M4-CT(032|064|128|256|512)M4SSD[123]|MTFDDA[AK](064|128|256|512|050|100|200|400)MA[MNR]-1[JKS]1.*"
   FirmwareRegex = "030[9-Z]|03[1-Z].|0[4-Z]..|[1-Z]....*"
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.170]
       Conv = "raw48"
@@ -387,7 +376,6 @@
 [[Drives]]
   Family = "Crucial/Micron RealSSD m4/C400"
   ModelRegex = "C400-MTFDDA[ACK](064|128|256|512)MAM|M4-CT(032|064|128|256|512)M4SSD[123]"
-  FirmwareRegex = ""
   WarningMsg = "This drive may hang after 5184 hours of power-on time:\nhttp://www.tomshardware.com/news/Crucial-m4-Firmware-BSOD,14544.html\nSee the following web pages for firmware updates:\nhttp://www.crucial.com/support/firmware.aspx\nhttp://www.micron.com/products/solid-state-storage/client-ssd#software"
   [Drives.Presets]
     [Drives.Presets.170]
@@ -424,8 +412,6 @@
 [[Drives]]
   Family = "Crucial/Micron MX1/2/300, M5/600, 1100 Client SSDs"
   ModelRegex = "Crucial_CT(128|256|512)MX100SSD1|Crucial_CT(200|250|256|500|512|1000|1024)MX200SSD[1346]|Crucial_CT(275|525|1050|2050)MX300SSD[14]|Crucial_CT(120|240|480|960)M500SSD[134]|Crucial_CT(128|256|512|1024)M550SSD[134]|Micron_M500_MTFDDA[KTV](120|240|480|960)MAV|(Micron_)?M510[_-]MTFDDA[KTV](128|256)MAZ|(Micron_)?M550[_-]MTFDDA[KTV](064|128|256|512|1T0)MAY|Micron_M600_(EE|MT)FDDA[KTV](128|256|512|1T0)MBF[25Z]?|Micron_M500DC_(EE|MT)FDDA[AK](120|240|480|800)MBB|Micron_1100_MTFDDA[KV](256|512|1T0|2T0)TBN|MICRON_M510DC_(EE|MT)FDDAK(120|240|480|800|960)MBP|Micron_5100_(EE|MT)FDDA[KV](240|480|960|1T9|3T8|7T6)T(BY|CB|CC)"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.170]
       Conv = "raw48"
@@ -479,8 +465,6 @@
 [[Drives]]
   Family = "Micron M500DC/M510DC Enterprise SSDs"
   ModelRegex = "Micron_M500DC_(EE|MT)FDDA[AK](120|240|480|800)MBB|MICRON_M510DC_(EE|MT)FDDAK(120|240|480|800|960)MBP"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.170]
       Conv = "raw48"
@@ -571,8 +555,6 @@
 [[Drives]]
   Family = "SandForce Driven SSDs"
   ModelRegex = "SandForce 1st Ed\\.|ADATA SSD S(396|510|599) .?..GB|ADATA SP[389]00|ADATA SSD S[PX]900 (64|128|256|512)GB-DL2|ADATA XM11 (128|256)GB|ATP Velocity MIV (60|120|240|480)GB|Corsair CSSD-F(40|60|80|115|120|160|240)GBP?2.*|Corsair Voyager GTX|Corsair Force ((3 |LS )?SSD|GS|GT)|FM-25S2S-(60|120|240)GBP2|FTM(06|12|24|48)CT25H|KINGSTON SE50S3(100|240|480)G|KINGSTON SH10[03]S3(90|120|240|480)G|KINGSTON SKC(300S37A|380S3)(60|120|180|240|480)G|KINGSTON SVP200S3(7A)?(60|90|120|240|480)G|KINGSTON SMS200S3(30|60|120)G|KINGSTON SMS450S3(32|64|128)G|KINGSTON (SV300|SKC100|SE100)S3.*G|MKNSSDCR(45|60|90|120|180|240|360|480)GB(-(7|DX7?|MX|G2))?|MKNSSDEC(60|120|240|480|512)GB|MKNSSDAT(30|40|60|120|180|240|480)GB(-(DX|V))?|Mushkin MKNSSDCL(40|60|80|90|115|120|180|240|480)GB-DX2?|OCZ[ -](AGILITY2([ -]EX)?|COLOSSUS2|ONYX2|VERTEX(2|-LE))( [123]\\..*)?|OCZ-NOCTI|OCZ-REVODRIVE3?( X2)?|OCZ-REVODRIVE350|OCZ[ -](VELO|VERTEX2[ -](EX|PRO))( [123]\\..*)?|D2[CR]STK251...-....|OCZ-(AGILITY3|SOLID3|VERTEX3( MI)?)|OCZ Z-DRIVE R4 [CR]M8[48]|OCZ Z-DRIVE 4500|OCZ-VELO DRIVE|TALOS2|(APOC|DENC|DENEVA|FTNC|GFGC|MANG|MMOC|NIMC|TMSC).*|(DENR|DRSAK|EC188|NIMR|PSIR|TRSAK).*|OWC Aura Pro( 6G SSD)?|OWC Mercury Electra (Pro )?[36]G SSD|OWC Mercury E(xtreme|XTREME) Pro (6G |RE )?SSD|Patriot Pyro|SanDisk SDSSDX(60|120|240|480)GG25|SanDisk SDSSDA(120|240|480)G|SuperSSpeed S301 [0-9]*GB|SG9XCS2D(0?50|100|200|400)GESLT|SSD9SC(120|240|480)GED[EA]|(TX32|TX31C1|VN0.?..GCNMK).*|(TX22D1|TX21B1).*|TX52D1.*|TS(64|128|256|512)GSSD[37]20|UGB(88P|99S)GC...H[BF].|SG9XCS(1F|2D)(50|100|200|400)GE01|VisionTek GoDrive (60|120|240|480)GB"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.1]
       Conv = "raw24/raw32"
@@ -665,8 +647,6 @@
 [[Drives]]
   Family = "StorFly CFast SATA 6Gbps SSDs"
   ModelRegex = "StorFly VSFCS2C[CI](016|030|060|120|240)G-..."
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.160]
       Conv = "raw48"
@@ -696,8 +676,6 @@
 [[Drives]]
   Family = "Phison Driven SSDs"
   ModelRegex = "KINGSTON SUV300S37A(120|240|480)G|KINGSTON SKC310S3B?7A960G|KINGSTON SKC400S37(128G|256G|512G|1T)|KINGSTON SV310S3(7A|D7|N7A|B7A)960G|GOODRAM|PNY CS1311 (120|240|480|960)GB SSD|KINGSTON SHSS3B?7A(120|240|480|960)G"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.10]
       Conv = "raw48"
@@ -776,7 +754,6 @@
   Family = "Phison Driven OEM SSDs"
   ModelRegex = "SATA SSD"
   FirmwareRegex = "(S9FM02\\.1|SBFM10\\.5)"
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.10]
       Conv = "raw48"
@@ -854,15 +831,11 @@
 [[Drives]]
   Family = "Indilinx Barefoot based SSDs"
   ModelRegex = "Corsair CSSD-V(32|60|64|128|256)GB2|Corsair CMFSSD-(32|64|128|256)D1|CRUCIAL_CT(64|128|256)M225|G.SKILL FALCON (64|128|256)GB SSD|OCZ[ -](AGILITY|ONYX|VERTEX( 1199|-TURBO| v1\\.10)?)|Patriot[ -]Torqx.*|RENICE Z2|STT_FT[MD](28|32|56|64)GX25H|TS(18|25)M(64|128)MLC(16|32|64|128|256|512)GSSD|FM-25S2I-(64|128)GBFII|TS(60|120)GSSD25D-M"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.1]
       Conv = "raw64"
-      Name = ""
     [Drives.Presets.12]
       Conv = "raw64"
-      Name = ""
     [Drives.Presets.184]
       Conv = "raw64"
       Name = "Initial_Bad_Block_Count"
@@ -925,13 +898,10 @@
       Name = "Indilinx_Internal"
     [Drives.Presets.9]
       Conv = "raw64"
-      Name = ""
 
 [[Drives]]
   Family = "Indilinx Barefoot_2/Everest/Martini based SSDs"
   ModelRegex = "OCZ VERTEX[ -]PLUS|OCZ-VERTEX PLUS R2|OCZ-PETROL|OCZ-AGILITY4|OCZ-VERTEX4"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.232]
       Conv = "raw48"
@@ -940,8 +910,6 @@
 [[Drives]]
   Family = "Indilinx Barefoot 3 based SSDs"
   ModelRegex = "OCZ-VECTOR(1[58]0)?|OCZ-VERTEX4[56]0A?|OCZ-SABER1000|OCZ-ARC100|Radeon R7"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.171]
       Conv = "raw48"
@@ -1028,8 +996,6 @@
 [[Drives]]
   Family = "OCZ Intrepid 3000 SSDs"
   ModelRegex = "OCZ INTREPID 3[678]00"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.100]
       Conv = "raw48"
@@ -1119,8 +1085,6 @@
 [[Drives]]
   Family = "OCZ/Toshiba Trion SSDs"
   ModelRegex = "OCZ-TRION1[05]0|TOSHIBA-TR150"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.167]
       Conv = "raw48"
@@ -1144,8 +1108,6 @@
 [[Drives]]
   Family = "InnoDisk InnoLite SATADOM D150QV SSDs"
   ModelRegex = "InnoLite SATADOM D150QV.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.168]
       Conv = "raw48"
@@ -1178,8 +1140,6 @@
 [[Drives]]
   Family = "Innodisk 1ME3/3ME/3SE SSDs"
   ModelRegex = "((1\\.8|2\\.5)\"? SATA SSD|InnoDisk Corp\\. - mSATA|Mini PCIeDOM|SATA Slim) (1ME3|3[MS]E)"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.10]
       Conv = "raw48"
@@ -1227,8 +1187,6 @@
 [[Drives]]
   Family = "Innodisk 3IE2/3ME2/3MG2/3SE2 SSDs"
   ModelRegex = "((1\\.8|2\\.5)\"? SATA SSD|SATA Slim|M\\.2 \\(S(42|80)\\)) 3(IE|ME|MG|SE)2(-P)?"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.160]
       Conv = "raw48"
@@ -1282,8 +1240,6 @@
 [[Drives]]
   Family = "Innodisk 3IE3/3ME3/3ME4 SSDs"
   ModelRegex = "(2.5\" SATA SSD|CFast|InnoDisk Corp\\. - mSATA|Mini PCIeDOM|mSATA( mini)?|M\\.2 \\(S42\\)|SATA Slim|SATADOM-[MS][HLV]( Type [CD])?) 3([IM]E3|ME4)( V2)?"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.10]
       Conv = "raw48"
@@ -1352,8 +1308,6 @@
 [[Drives]]
   Family = "InnoDisk iCF 9000 CompactFlash Cards"
   ModelRegex = "InnoDisk Corp\\. - iCF9000 (1|2|4|8|16|32|64)GB"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.160]
       Conv = "raw48"
@@ -1389,8 +1343,6 @@
 [[Drives]]
   Family = "Intel X25-E SSDs"
   ModelRegex = "SSDSA2SH(032|064)G1.* INTEL"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.192]
       Conv = "raw48"
@@ -1411,8 +1363,6 @@
 [[Drives]]
   Family = "Intel X18-M/X25-M G1 SSDs"
   ModelRegex = "INTEL SSDSA[12]MH(080|160)G1.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.192]
       Conv = "raw48"
@@ -1434,7 +1384,6 @@
   Family = "Intel X18-M/X25-M/X25-V G2 SSDs"
   ModelRegex = "INTEL SSDSA[12]M(040|080|120|160)G2.*"
   FirmwareRegex = "2CV102(J[89A-Z]|[K-Z].)"
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.192]
       Conv = "raw48"
@@ -1455,7 +1404,6 @@
 [[Drives]]
   Family = "Intel X18-M/X25-M/X25-V G2 SSDs"
   ModelRegex = "INTEL SSDSA[12]M(040|080|120|160)G2.*"
-  FirmwareRegex = ""
   WarningMsg = "This drive may require a firmware update to\nfix possible drive hangs when reading SMART self-test log:\nhttp://downloadcenter.intel.com/Detail_Desc.aspx?DwnldID=18363"
   [Drives.Presets]
     [Drives.Presets.192]
@@ -1477,8 +1425,6 @@
 [[Drives]]
   Family = "Intel 311/313 Series SSDs"
   ModelRegex = "INTEL SSD(SA2VP|MAEXC)(020|024)G[23]H?"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.170]
       Conv = "raw48"
@@ -1517,8 +1463,6 @@
 [[Drives]]
   Family = "Intel 320 Series SSDs"
   ModelRegex = "INTEL SSDSA[12][BCN][WT](040|080|120|160|300|600)G3[ADL]?"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.170]
       Conv = "raw48"
@@ -1560,8 +1504,6 @@
 [[Drives]]
   Family = "Intel 710 Series SSDs"
   ModelRegex = "INTEL SSDSA2BZ(100|200|300)G3"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.170]
       Conv = "raw48"
@@ -1603,8 +1545,6 @@
 [[Drives]]
   Family = "Intel 510 Series SSDs"
   ModelRegex = "INTEL SSDSC2MH(120|250)A2"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.192]
       Conv = "raw48"
@@ -1616,8 +1556,6 @@
 [[Drives]]
   Family = "Intel 520 Series SSDs"
   ModelRegex = "INTEL SSDSC2[BC]W(060|120|180|240|480)A3[FL]?"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.170]
       Conv = "raw48"
@@ -1662,8 +1600,6 @@
 [[Drives]]
   Family = "Intel 525 Series SSDs"
   ModelRegex = "INTEL SSDMCEAC(030|060|090|120|180|240)B3"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.170]
       Conv = "raw48"
@@ -1711,8 +1647,6 @@
 [[Drives]]
   Family = "Intel 53x and Pro 2500 Series SSDs"
   ModelRegex = "INTEL SSD(MCEA|SC2B|SCKJ)[WF](056|080|120|180|240|360|480)(A4|A5|H6)"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.170]
       Conv = "raw48"
@@ -1760,8 +1694,6 @@
 [[Drives]]
   Family = "Intel 330/335 Series SSDs"
   ModelRegex = "INTEL SSDSC2CT(060|120|180|240)A[34]"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.225]
       Conv = "raw48"
@@ -1782,8 +1714,6 @@
 [[Drives]]
   Family = "Intel 540 Series SSDs"
   ModelRegex = "INTEL SSDSC[K2]KW(120H|180H|240H|360H|480H|010X)6"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.170]
       Conv = "raw48"
@@ -1825,8 +1755,6 @@
 [[Drives]]
   Family = "Intel 730 and DC S35x0/3610/3700 Series SSDs"
   ModelRegex = "INTEL SSDSC(1N|2B)[ABPX]((080|100|120|150|160|200|240|300|400|480|600|800)G[3467]T?|(012|016)T[46])"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.170]
       Conv = "raw48"
@@ -1886,8 +1814,6 @@
 [[Drives]]
   Family = "Intel 3710 Series SSDs"
   ModelRegex = "INTEL SSDSC2BA(200G|400G|800G|012T)4.?"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.170]
       Conv = "raw48"
@@ -1933,7 +1859,6 @@
   Family = "Kingston branded X25-V SSDs"
   ModelRegex = "KINGSTON SSDNow 40GB"
   FirmwareRegex = "2CV102(J[89A-Z]|[K-Z].)"
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.192]
       Conv = "raw48"
@@ -1954,7 +1879,6 @@
 [[Drives]]
   Family = "Kingston branded X25-V SSDs"
   ModelRegex = "KINGSTON SSDNow 40GB"
-  FirmwareRegex = ""
   WarningMsg = "This drive may require a firmware update to\nfix possible drive hangs when reading SMART self-test log.\nTo update Kingston branded drives, a modified Intel update\ntool must be used. Search for \"kingston 40gb firmware\"."
   [Drives.Presets]
     [Drives.Presets.192]
@@ -1977,7 +1901,6 @@
   Family = "JMicron based SSDs"
   ModelRegex = "Kingston SSDNow V Series [0-9]*GB|TS(2|4|8|16|32|64|128|192)GSSD(18|25)[MS]?-[MS]"
   FirmwareRegex = "[BVv].*"
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.229]
       Conv = "hex64:w012345r"
@@ -1998,8 +1921,6 @@
 [[Drives]]
   Family = "JMicron based SSDs"
   ModelRegex = "ADATA S596 Turbo|ADATA SP600|ADATA SP310|APPLE SSD TS(064|128|256|512)C|KINGSTON SNV425S2(64|128)GB|KINGSTON SSDNOW 30GB|KINGSTON SS100S2(8|16)G|KINGSTON SNVP325S2(64|128|256|512)GB|KINGSTON SVP?100S2B?(64|96|128|256|512)G|KINGSTON SV200S3(64|128|256)G|TOSHIBA THNS128GG4BBAA|TOSHIBA THNSNC128GMLJ|TS(8|16|32|64|128|192|256|512)GSSD25S?-(MD?|S)|TS(32|64|128|256)G(SSD|MSA)340"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.10]
       Conv = "raw48"
@@ -2047,8 +1968,6 @@
 [[Drives]]
   Family = "Plextor M3/M5/M6 Series SSDs"
   ModelRegex = "PLEXTOR PX-(64|128|256|512|768)M(3P?|5[MPS]|5Pro|6[MS])"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.170]
       Conv = "raw48"
@@ -2075,8 +1994,6 @@
 [[Drives]]
   Family = "Samsung based SSDs"
   ModelRegex = "SAMSUNG SSD PM800 .*GB|SAMSUNG SSD PM810 .*GB|SAMSUNG SSD PM851 (mSATA |M\\.2 )?(2280 )?(128|256|512)GB|SAMSUNG SSD SM841N (mSATA )?(128|256|512)GB|SAMSUNG 470 Series SSD|Samsung SSD 750 EVO (120|250|500)GB|SAMSUNG SSD 830 Series|SAMSUNG SSD PM830 .*|MZ7PC(512|256|128|064)HA(GH|FU|DR)-000.*|Samsung SSD 840 (PRO )?Series|Samsung SSD 8[45]0 EVO .*|Samsung SSD 850 PRO ((128|256|512)G|1T)B|SAMSUNG MZ7PA256HMDR-.*|Samsung SSD 845DC EVO .*|SAMSUNG MZ[7M]PC(032|064|128|256|512)HBCD-.*|SAMSUNG MZ7TD(128|256)HAFV-.*|SAMSUNG MZ7WD((120|240)H[AC]FV|480HAGM|960HAGP)-00003|SAMSUNG MZ[7N]TE(128|256|512)HMHP-.*|SAMSUNG MZ7GE(240HMGR|(480|960)HMHP)-00003|SAMSUNG MZ7LM(120|240|480|960|1T9|3T8)HC(JM|HP|GR|FD)-.*|SAMSUNG MZ7KM(120|240|480|960|1T9)HA(JM|HP|GR|FD|JM)-.*|SAMSUNG MZN(LF|TY)(128|256)H[CD]HP-.*|SAMSUNG MZ[7N]LN(128|256|512|1T0)H[ACM](GR|HP|HQ|J[HPQ]|LR)-.*|SAMSUNG SSD PM871 .*|SAMSUNG MZHPV(128|256|512)HDGL-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.170]
       Conv = "raw48"
@@ -2154,8 +2071,6 @@
 [[Drives]]
   Family = "Marvell based SanDisk SSDs"
   ModelRegex = "SanDisk SD5SG2[0-9]*G1052E|SanDisk SD6S[BF][12]M[0-9]*G(1022I?)?|SanDisk SD7S[BN]6S-?(128|256|512)G(1122|-1006)|SanDisk SD8SB8U((128|256|512)G|1T00)1122|SanDisk SDSSDHP[0-9]*G|SanDisk (SDSSDHII|Ultra II )[0-9]*GB?|SanDisk SDSSDXPS?[0-9]*G|SSD SATAIII 16GB"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.165]
       Conv = "raw48"
@@ -2215,8 +2130,6 @@
 [[Drives]]
   Family = "SanDisk based SSDs"
   ModelRegex = "SanDisk iSSD P4 [0-9]*GB|SanDisk pSSD|SanDisk SDSSDP[0-9]*G|SanDisk SDSSDRC032G|SanDisk SSD i100 [0-9]*GB|SanDisk SSD U100 ([0-9]*GB|SMG2)|SanDisk SSD U110 (8|16|24|32|64|128)GB|SanDisk SD7[SU]B[23]Q(064|128|256|512)G.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.165]
       Conv = "raw48"
@@ -2252,8 +2165,6 @@
 [[Drives]]
   Family = "Sandisk SATA Cloudspeed Max and GEN2 ESS SSDs"
   ModelRegex = "SD[A-Z0-9]{2}[1-3][A-Z]{3}-?[0-9]{3}[GT]-?1[A-Z0-9]{3}"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.13]
       Conv = "raw48"
@@ -2337,8 +2248,6 @@
 [[Drives]]
   Family = "Sandisk SATA CS1K GEN1 ESS SSDs"
   ModelRegex = "SD[A-Z0-9]{2}[NO][A-Z0-9]{3}-?[0-9]{3}[GT]-?1[A-Z0-9]{3}"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.1]
       Conv = "raw48"
@@ -2398,8 +2307,6 @@
 [[Drives]]
   Family = "SiliconMotion based SSDs"
   ModelRegex = "R3SL(120|240|480|960)G|CT(120|250|500|1000)BX100SSD1|CT(240|480|960)BX200SSD1|TS((16|32|64|128|256|512)G|1T)(SSD|MSA)(370S?|420I?)|TS(16|32|64|128|512|256)GMTS400S?|TS(120|240)GMTS420|TS(128G|256G|512G|1T)SSD230S|TS(120|240|480|960)GSSD220S|TS(16G|32G|64G|128G|256G|512G|1T)MTS800S?|TS(16|32|64)GMSA630|MKNSSDRE(1TB|2TB|512GB|500GB|256GB|250GB)|MKNSSDTR(240|500|250|120|480|240)GB(-LT)?|LITEON LMH-(128|256|512)V2M-.*|ADATA SP550"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.148]
       Conv = "raw48"
@@ -2465,8 +2372,6 @@
 [[Drives]]
   Family = "SMART Modular Technologies mSATA XL+ SLC SSDs"
   ModelRegex = "SH9MST6D[0-9]*GJSI?[0-9]*"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.1]
       Conv = "raw48"
@@ -2541,8 +2446,6 @@
 [[Drives]]
   Family = "Smart Storage Systems Xcel-10 SSDs"
   ModelRegex = "SMART A25FD-(32|64|128)GI32N"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.1]
       Conv = "raw48"
@@ -2569,8 +2472,6 @@
 [[Drives]]
   Family = "Smart Storage Systems XceedSecure2 SSDs"
   ModelRegex = "(SMART|Adtron) ([AIS]25FBS|S35FCS).*"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.194]
       Conv = "hex64"
@@ -2582,8 +2483,6 @@
 [[Drives]]
   Family = "Smart Storage Systems XceedUltraX/Adtron A25FBX SSDs"
   ModelRegex = "(SMART|Adtron) (A|I)25FBX.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.194]
       Conv = "hex48"
@@ -2595,8 +2494,6 @@
 [[Drives]]
   Family = "Smart Storage Systems Adtron A25FB 2xN SSDs"
   ModelRegex = "(SMART|Adtron) A25FB.*2.N"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.110]
       Conv = "hex64"
@@ -2641,8 +2538,6 @@
 [[Drives]]
   Family = "Smart Storage Systems Adtron A25FB 3xN SSDs"
   ModelRegex = "(SMART|Adtron) A25FB-.*3.N"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.113]
       Conv = "hex48"
@@ -2657,8 +2552,6 @@
 [[Drives]]
   Family = "STEC Mach2 CompactFlash Cards"
   ModelRegex = "STEC M2P CF 1.0.0"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.100]
       Conv = "raw48"
@@ -2691,8 +2584,6 @@
 [[Drives]]
   Family = "Transcend CompactFlash Cards"
   ModelRegex = "TRANSCEND|TS(4|8|16)GCF(133|150)"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.7]
       Conv = "raw48"
@@ -2704,242 +2595,161 @@
 [[Drives]]
   Family = "Marvell SSD SD88SA024BA0 (SUN branded)"
   ModelRegex = "MARVELL SD88SA024BA0 SUN24G 0902M0054V"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "HP 1TB SATA disk GB1000EAFJL"
   ModelRegex = "GB1000EAFJL"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "HP 500GB SATA disk MM0500EANCR"
   ModelRegex = "MM0500EANCR"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "HP 250GB SATA disk VB0250EAVER"
   ModelRegex = "VB0250EAVER"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "IBM Deskstar 60GXP"
   ModelRegex = "(IBM-|Hitachi )?IC35L0[12346]0AVER07.*"
   FirmwareRegex = "ER60A46A"
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "IBM Deskstar 60GXP"
   ModelRegex = "(IBM-|Hitachi )?IC35L0[12346]0AVER07.*"
-  FirmwareRegex = ""
   WarningMsg = "IBM Deskstar 60GXP drives may need upgraded SMART firmware.\nPlease see http://haque.net/dtla_update/"
-  [Drives.Presets]
 
 [[Drives]]
   Family = "IBM Deskstar 40GV & 75GXP (A5AA/A6AA firmware)"
   ModelRegex = "(IBM-)?DTLA-30[57]0[123467][05].*"
   FirmwareRegex = "T[WX][123468AG][OF]A[56]AA"
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "IBM Deskstar 40GV & 75GXP (all other firmware)"
   ModelRegex = "(IBM-)?DTLA-30[57]0[123467][05].*"
-  FirmwareRegex = ""
   WarningMsg = "IBM Deskstar 40GV and 75GXP drives may need upgraded SMART firmware.\nPlease see http://haque.net/dtla_update/"
-  [Drives.Presets]
 
 [[Drives]]
-  Family = ""
   ModelRegex = "ExcelStor Technology J(24|34|36|68|88|816)0"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
-  Family = ""
   ModelRegex = "FUJITSU M1623TAU"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "seconds"
-      Name = ""
 
 [[Drives]]
   Family = "Fujitsu MHG"
   ModelRegex = "FUJITSU MHG2...ATU?.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "seconds"
-      Name = ""
 
 [[Drives]]
   Family = "Fujitsu MHH"
   ModelRegex = "FUJITSU MHH2...ATU?.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "seconds"
-      Name = ""
 
 [[Drives]]
   Family = "Fujitsu MHJ"
   ModelRegex = "FUJITSU MHJ2...ATU?.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "seconds"
-      Name = ""
 
 [[Drives]]
   Family = "Fujitsu MHK"
   ModelRegex = "FUJITSU MHK2...ATU?.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "seconds"
-      Name = ""
 
 [[Drives]]
-  Family = ""
   ModelRegex = "FUJITSU MHL2300AT"
-  FirmwareRegex = ""
   WarningMsg = "This drive's firmware has a harmless Drive Identity Structure\nchecksum error bug."
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "seconds"
-      Name = ""
 
 [[Drives]]
-  Family = ""
   ModelRegex = "FUJITSU MHM2(20|15|10|06)0AT"
-  FirmwareRegex = ""
   WarningMsg = "This drive's firmware has a harmless Drive Identity Structure\nchecksum error bug."
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "seconds"
-      Name = ""
 
 [[Drives]]
   Family = "Fujitsu MHN"
   ModelRegex = "FUJITSU MHN2...AT"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "seconds"
-      Name = ""
 
 [[Drives]]
-  Family = ""
   ModelRegex = "FUJITSU MHR2020AT"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "seconds"
-      Name = ""
 
 [[Drives]]
-  Family = ""
   ModelRegex = "FUJITSU MHR2040AT"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.192]
       Conv = "emergencyretractcyclect"
-      Name = ""
     [Drives.Presets.198]
       Conv = "offlinescanuncsectorct"
-      Name = ""
     [Drives.Presets.200]
       Conv = "writeerrorcount"
-      Name = ""
     [Drives.Presets.9]
       Conv = "seconds"
-      Name = ""
 
 [[Drives]]
   Family = "Fujitsu MHS AT"
   ModelRegex = "FUJITSU MHS20[6432]0AT(  .)?"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.192]
       Conv = "emergencyretractcyclect"
-      Name = ""
     [Drives.Presets.198]
       Conv = "offlinescanuncsectorct"
-      Name = ""
     [Drives.Presets.200]
       Conv = "writeerrorcount"
-      Name = ""
     [Drives.Presets.201]
       Conv = "detectedtacount"
-      Name = ""
     [Drives.Presets.9]
       Conv = "seconds"
-      Name = ""
 
 [[Drives]]
   Family = "Fujitsu MHT"
   ModelRegex = "FUJITSU MHT2...(AC|AH|AS|AT|BH)U?.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "seconds"
-      Name = ""
 
 [[Drives]]
   Family = "Fujitsu MHU"
   ModelRegex = "FUJITSU MHU2...ATU?.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "seconds"
-      Name = ""
 
 [[Drives]]
   Family = "Fujitsu MHV"
   ModelRegex = "FUJITSU MHV2...(AH|AS|AT|BH|BS|BT).*"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "seconds"
-      Name = ""
 
 [[Drives]]
   Family = "Fujitsu MPA..MPG"
   ModelRegex = "FUJITSU MP[A-G]3...A[HTEV]U?.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "seconds"
-      Name = ""
 
 [[Drives]]
   Family = "Fujitsu MHY BH"
   ModelRegex = "FUJITSU MHY2(04|06|08|10|12|16|20|25)0BH.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.240]
       Conv = "raw48"
@@ -2948,497 +2758,318 @@
 [[Drives]]
   Family = "Fujitsu MHW AC"
   ModelRegex = "FUJITSU MHW20(40|60)AC"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Fujitsu MHW BH"
   ModelRegex = "FUJITSU MHW2(04|06|08|10|12|16)0BH.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Fujitsu MHW BJ"
   ModelRegex = "FUJITSU MHW2(08|12|16)0BJ.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Fujitsu MHZ BH"
   ModelRegex = "FUJITSU MHZ2(04|08|12|16|20|25|32)0BH.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Fujitsu MHZ BJ"
   ModelRegex = "FUJITSU MHZ2(08|12|16|20|25|32)0BJ.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Fujitsu MHZ BS"
   ModelRegex = "FUJITSU MHZ2(12|25)0BS.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Fujitsu MHZ BK"
   ModelRegex = "FUJITSU MHZ2(08|12|16|25)0BK.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Fujitsu MJA BH"
   ModelRegex = "FUJITSU MJA2(08|12|16|25|32|40|50)0BH.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
-  Family = ""
   ModelRegex = "SAMSUNG SV4012H"
   FirmwareRegex = "RM100-08"
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "halfminutes"
-      Name = ""
 
 [[Drives]]
-  Family = ""
   ModelRegex = "SAMSUNG SV4012H"
-  FirmwareRegex = ""
   WarningMsg = "May need -F samsung disabled; see manual for details."
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "halfminutes"
-      Name = ""
 
 [[Drives]]
-  Family = ""
   ModelRegex = "SAMSUNG SV0412H"
   FirmwareRegex = "SK100-01"
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.194]
       Conv = "10xCelsius"
-      Name = ""
     [Drives.Presets.9]
       Conv = "halfminutes"
-      Name = ""
 
 [[Drives]]
-  Family = ""
   ModelRegex = "SAMSUNG SV0412H"
-  FirmwareRegex = ""
   WarningMsg = "May need -F samsung disabled; see manual for details."
   [Drives.Presets]
     [Drives.Presets.194]
       Conv = "10xCelsius"
-      Name = ""
     [Drives.Presets.9]
       Conv = "halfminutes"
-      Name = ""
 
 [[Drives]]
-  Family = ""
   ModelRegex = "SAMSUNG SV1204H"
   FirmwareRegex = "RK100-1[3-5]"
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.194]
       Conv = "10xCelsius"
-      Name = ""
     [Drives.Presets.9]
       Conv = "halfminutes"
-      Name = ""
 
 [[Drives]]
-  Family = ""
   ModelRegex = "SAMSUNG SV1204H"
-  FirmwareRegex = ""
   WarningMsg = "May need -F samsung disabled; see manual for details."
   [Drives.Presets]
     [Drives.Presets.194]
       Conv = "10xCelsius"
-      Name = ""
     [Drives.Presets.9]
       Conv = "halfminutes"
-      Name = ""
 
 [[Drives]]
-  Family = ""
   ModelRegex = "SAMSUNG SV0322A"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint V80"
   ModelRegex = "SAMSUNG SV(0211|0401|0612|0802|1203|1604)N"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "halfminutes"
-      Name = ""
 
 [[Drives]]
-  Family = ""
   ModelRegex = "SAMSUNG SP40A2H"
   FirmwareRegex = "RR100-07"
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "halfminutes"
-      Name = ""
 
 [[Drives]]
-  Family = ""
   ModelRegex = "SAMSUNG SP80A4H"
   FirmwareRegex = "RT100-06"
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "halfminutes"
-      Name = ""
 
 [[Drives]]
-  Family = ""
   ModelRegex = "SAMSUNG SP8004H"
   FirmwareRegex = "QW100-61"
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "halfminutes"
-      Name = ""
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint F1 DT"
   ModelRegex = "SAMSUNG HD(083G|16[12]G|25[12]H|32[12]H|50[12]I|642J|75[23]L|10[23]U)J"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint F1 EG"
   ModelRegex = "SAMSUNG HD(252H|322H|502I|642J|753L|103U)I"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint F1 RE"
   ModelRegex = "SAMSUNG HE(252H|322H|502I|642J|753L|103U)J"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint F2 EG"
   ModelRegex = "SAMSUNG HD(502H|10[23]S|15[34]U)I"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint F3"
   ModelRegex = "SAMSUNG HD(502H|754J|103S)J"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Barracuda SpinPoint F3"
   ModelRegex = "ST[0-9DM]* HD(502H|754J|103S)J"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint F3 EG"
   ModelRegex = "SAMSUNG HD(253G|(324|503)H|754J|105S|(153|203)W)I"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint F3 RE"
   ModelRegex = "SAMSUNG HE(502H|754J|103S)J"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Samsung Spinpoint F4"
   ModelRegex = "ST(250|320)DM001 HD(256G|322G|323H)J"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint F4 EG (AF)"
   ModelRegex = "SAMSUNG HD(155|204)UI"
-  FirmwareRegex = ""
   WarningMsg = "Using smartmontools or hdparm with this\ndrive may result in data loss due to a firmware bug.\n****** THIS DRIVE MAY OR MAY NOT BE AFFECTED! ******\nBuggy and fixed firmware report same version number!\nSee the following web pages for details:\nhttp://knowledge.seagate.com/articles/en_US/FAQ/223571en\nhttp://www.smartmontools.org/wiki/SamsungF4EGBadBlocks"
-  [Drives.Presets]
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint S250"
   ModelRegex = "SAMSUNG HD(162|200|250)HJ"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint T133"
   ModelRegex = "SAMSUNG HD(250KD|(30[01]|320|40[01])L[DJ])"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint T166"
   ModelRegex = "SAMSUNG HD(080G|160H|252K|32[01]K|403L|50[01]L)J"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.197]
       Conv = "increasing"
-      Name = ""
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint P120"
   ModelRegex = "SAMSUNG SP(16[01]3|2[05][01]4)[CN]"
   FirmwareRegex = "VF100-37"
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint P120"
   ModelRegex = "SAMSUNG SP(16[01]3|2[05][01]4)[CN]"
-  FirmwareRegex = ""
   WarningMsg = "May need -F samsung3 enabled; see manual for details."
-  [Drives.Presets]
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint P80 SD"
   ModelRegex = "SAMSUNG HD(080H|120I|160J)J(/P)?"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint P80"
   ModelRegex = "SAMSUNG SP(0451|08[0124]2|12[0145]3|16[0145]4)[CN]"
   FirmwareRegex = "BH100-35"
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint P80"
   ModelRegex = "SAMSUNG SP(0451|08[0124]2|12[0145]3|16[0145]4)[CN]"
   FirmwareRegex = ".*-3[5-9]"
   WarningMsg = "May need -F samsung3 enabled; see manual for details."
-  [Drives.Presets]
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint P80"
   ModelRegex = "SAMSUNG SP(04[05]1|08[0124]2|12[0145]3|16[0145]4)[CN]"
   FirmwareRegex = ".*-(2[5-9]|3[0-4])"
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.198]
       Conv = "increasing"
-      Name = ""
     [Drives.Presets.9]
       Conv = "halfminutes"
-      Name = ""
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint P80"
   ModelRegex = "SAMSUNG SP(0451|08[0124]2|12[0145]3|16[0145]4)[CN]"
   FirmwareRegex = ".*-2[34]"
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "halfminutes"
-      Name = ""
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint P80"
   ModelRegex = "SAMSUNG SP(0451|08[0124]2|12[0145]3|16[0145]4)[CN]"
-  FirmwareRegex = ""
   WarningMsg = "May need -F samsung2 or -F samsung3 enabled; see manual for details."
-  [Drives.Presets]
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint M40/60/80"
   ModelRegex = "SAMSUNG HM(0[468]0H|120I|1[026]0J)[CI]"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "halfminutes"
-      Name = ""
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint M5"
   ModelRegex = "SAMSUNG HM(((061|080)G|(121|160)H|250J)I|160HC)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint M6"
   ModelRegex = "SAMSUNG HM(251J|320[HJ]|[45]00L)I"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint M7"
   ModelRegex = "SAMSUNG HM(250H|320I|[45]00J)I"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint M7E (AF)"
   ModelRegex = "SAMSUNG HM(161G|(251|321)H|501I|641J)I"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Samsung SpinPoint M7E"
   ModelRegex = "ST(160|250|320|500|640)LM00[01] HM[0-9]*[GHIJ]I"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint M7U (USB)"
   ModelRegex = "SAMSUNG HM(162H|252H|322I|502J)X"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint M8 (AF)"
   ModelRegex = "SAMSUNG HN-M(250|320|500|640|750|101)MBB"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Samsung SpinPoint M8 (AF)"
   ModelRegex = "ST(250|320|500|640|750|1000)LM0[012][124] HN-M[0-9]*MBB|APPLE HDD ST500LM012"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint M8U (USB)"
   ModelRegex = "SAMSUNG HN-M(320|500|750|101)XBB"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Samsung SpinPoint M8U (USB)"
   ModelRegex = "ST(250|320|500|640|750|1000)LM0[012][3459] HN-M[0-9]*ABB"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Samsung SpinPoint M9T"
   ModelRegex = "ST(1500|2000)LM0(03|04|06|07|10) HN-M[0-9]*RAD"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate FireCuda 2.5"
   ModelRegex = "ST(500|1000|2000)LX0(01|15|25)-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.240]
       Conv = "msec24hour32"
-      Name = ""
 
 [[Drives]]
   Family = "Seagate FireCuda 3.5"
   ModelRegex = "ST[12]000DX002-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.240]
       Conv = "msec24hour32"
-      Name = ""
 
 [[Drives]]
   Family = "Seagate Samsung SpinPoint M9TU (USB)"
   ModelRegex = "ST(1500|2000)LM00[58] HN-M[0-9]*AAD"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint MP5"
   ModelRegex = "SAMSUNG HM(250H|320H|500J|640J)J"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint MT2"
   ModelRegex = "SAMSUNG HM100UI"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "SAMSUNG HM100UX (S2 Portable)"
   ModelRegex = "SAMSUNG HM100UX"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint M"
   ModelRegex = "SAMSUNG MP0(302|402|603|804)H"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "halfminutes"
-      Name = ""
 
 [[Drives]]
   Family = "SAMSUNG SpinPoint N3U-3 (USB, 4KiB LLS)"
   ModelRegex = "SAMSUNG HS(122H|2[05]YJ)Z"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "SK hynix SATA SSDs"
   ModelRegex = "SK ?hynix SC(210|300|308|313).*|HFS(128|256|512)G32MND-(2200|3210)A|HFS(120|250|500)G32TND-N1A2A"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.100]
       Conv = "raw48"
@@ -3501,987 +3132,620 @@
 [[Drives]]
   Family = "Maxtor Fireball 541DX"
   ModelRegex = "Maxtor 2B0(0[468]|1[05]|20)H1"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.194]
       Conv = "unknown"
-      Name = ""
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor Fireball 3"
   ModelRegex = "Maxtor 2F0[234]0[JL]0"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor DiamondMax 1280 ATA"
   ModelRegex = "Maxtor 8(1280A2|2160A4|2560A4|3840A6|4000A6|5120A8)"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor DiamondMax 2160 Ultra ATA"
   ModelRegex = "Maxtor 8(2160D2|3228D3|3240D3|4320D4|6480D6|8400D8|8455D8)"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor DiamondMax 2880 Ultra ATA"
   ModelRegex = "Maxtor 9(0510D4|0576D4|0648D5|0720D5|0840D6|0845D6|0864D6|1008D7|1080D8|1152D8)"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor DiamondMax 3400 Ultra ATA"
   ModelRegex = "Maxtor 9(1(360|350|202)D8|1190D7|10[12]0D6|0840D5|06[48]0D4|0510D3|1(350|202)E8|1010E6|0840E5|0640E4)"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor DiamondMax D540X-4G"
   ModelRegex = "Maxtor 4G(120J6|160J[68])"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.194]
       Conv = "unknown"
-      Name = ""
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor DiamondMax D540X-4K"
   ModelRegex = "MAXTOR 4K(020H1|040H2|060H3|080H4)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Maxtor DiamondMax Plus D740X"
   ModelRegex = "MAXTOR 6L0(20[JL]1|40[JL]2|60[JL]3|80[JL]4)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Maxtor DiamondMax Plus 5120 Ultra ATA 33"
   ModelRegex = "Maxtor 9(0512D2|0680D3|0750D3|0913D4|1024D4|1360D6|1536D6|1792D7|2048D8)"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor DiamondMax Plus 6800 Ultra ATA 66"
   ModelRegex = "Maxtor 9(2732U8|2390U7|204[09]U6|1707U5|1366U4|1024U3|0845U3|0683U2)"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor DiamondMax D540X-4D"
   ModelRegex = "Maxtor 4D0(20H1|40H2|60H3|80H4)"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.194]
       Conv = "unknown"
-      Name = ""
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor DiamondMax 16"
   ModelRegex = "Maxtor 4(R0[68]0[JL]0|R1[26]0L0|A160J0|R120L4)"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor DiamondMax 4320 Ultra ATA"
   ModelRegex = "Maxtor (91728D8|91512D7|91303D6|91080D5|90845D4|90645D3|90648D[34]|90432D2)"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor DiamondMax 17 VL"
   ModelRegex = "Maxtor 9(0431U1|0641U2|0871U2|1301U3|1741U4)"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor DiamondMax 20 VL"
   ModelRegex = "Maxtor (94091U8|93071U6|92561U5|92041U4|91731U4|91531U3|91361U3|91021U2|90841U2|90651U2)"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor DiamondMax VL 30"
   ModelRegex = "Maxtor (33073U4|32049U3|31536U2|30768U1|33073H4|32305H3|31536H2|30768H1)"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor DiamondMax 36"
   ModelRegex = "Maxtor (93652U8|92739U6|91826U4|91369U3|90913U2|90845U2|90435U1)"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor DiamondMax 40 ATA 66"
   ModelRegex = "Maxtor 9(0684U2|1024U2|1362U3|1536U3|2049U4|2562U5|3073U6|4098U8)"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor DiamondMax Plus 40 (Ultra ATA 66 and Ultra ATA 100)"
   ModelRegex = "Maxtor (54098[UH]8|53073[UH]6|52732[UH]6|52049[UH]4|51536[UH]3|51369[UH]3|51024[UH]2)"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor DiamondMax 40 VL Ultra ATA 100"
   ModelRegex = "Maxtor 3(1024H1|1535H2|2049H2|3073H3|4098H4)( B)?"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor DiamondMax Plus 45 Ulta ATA 100"
   ModelRegex = "Maxtor 5(4610H6|4098H6|3073H4|2049H3|1536H2|1369H2|1023H2)"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor DiamondMax 60 ATA 66"
   ModelRegex = "Maxtor 9(1023U2|1536U2|2049U3|2305U3|3073U4|4610U6|6147U8)"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor DiamondMax 60 ATA 100"
   ModelRegex = "Maxtor 9(1023H2|1536H2|2049H3|2305H3|3073H4|4098H6|4610H6|6147H8)"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor DiamondMax Plus 60"
   ModelRegex = "Maxtor 5T0(60H6|40H4|30H3|20H2|10H1)"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor DiamondMax 80"
   ModelRegex = "Maxtor (98196H8|96147H6)"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor DiamondMax 536DX"
   ModelRegex = "Maxtor 4W(100H6|080H6|060H4|040H3|030H2)"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor DiamondMax Plus 8"
   ModelRegex = "Maxtor 6(E0[234]|K04)0L0"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor DiamondMax 10 (ATA/133 and SATA/150)"
   ModelRegex = "Maxtor 6(B(30|25|20|16|12|10|08)0[MPRS]|L(080[MLP]|(100|120)[MP]|160[MP]|200[MPRS]|250[RS]|300[RS]))0"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor DiamondMax 10 (SATA/300)"
   ModelRegex = "Maxtor 6V(080E|160E|200E|250F|300F|320F)0"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Maxtor DiamondMax Plus 9"
   ModelRegex = "Maxtor 6Y((060|080|120|160)L0|(060|080|120|160|200|250)P0|(060|080|120|160|200|250)M0)"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor DiamondMax 11"
   ModelRegex = "Maxtor 6H[45]00[FR]0"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Maxtor DiamondMax 17"
   ModelRegex = "Maxtor 6G(080L|160[PE])0"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Maxtor DiamondMax 20"
   ModelRegex = "MAXTOR STM3(40|80|160)[28]1[12]0?AS?"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Maxtor DiamondMax 21"
   ModelRegex = "MAXTOR STM3(80[28]15|160215|250310|(250|320)820|320620|500630)AS?"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Maxtor DiamondMax 22"
   ModelRegex = "(MAXTOR )?STM3(500320|750330|1000340)AS?"
   FirmwareRegex = "MX1A"
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Maxtor DiamondMax 22"
   ModelRegex = "(MAXTOR )?STM3(160813|320614|640323|1000334)AS?"
   FirmwareRegex = "MX1B"
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Maxtor DiamondMax 22"
   ModelRegex = "(MAXTOR )?STM3(500320|750330|1000340)AS?"
   FirmwareRegex = "MX15"
   WarningMsg = "There are known problems with these drives,\nAND THIS FIRMWARE VERSION IS AFFECTED,\nsee the following Seagate web pages:\nhttp://knowledge.seagate.com/articles/en_US/FAQ/207931en\nhttp://knowledge.seagate.com/articles/en_US/FAQ/207969en"
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Maxtor DiamondMax 22"
   ModelRegex = "(MAXTOR )?STM3(160813|32061[34]|500320|640323|750330|10003(34|40))AS?"
-  FirmwareRegex = ""
   WarningMsg = "There are known problems with these drives,\nsee the following Seagate web pages:\nhttp://knowledge.seagate.com/articles/en_US/FAQ/207931en\nhttp://knowledge.seagate.com/articles/en_US/FAQ/207969en\nhttp://knowledge.seagate.com/articles/en_US/FAQ/207975en"
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Maxtor DiamondMax 23"
   ModelRegex = "STM3((160|250)31|(320|500)41|(750|1000)52)8AS?"
   FirmwareRegex = "CC3[D-Z]"
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Maxtor DiamondMax 23"
   ModelRegex = "STM3((160|250)31|(320|500)41|(750|1000)52)8AS?"
-  FirmwareRegex = ""
   WarningMsg = "A firmware update for this drive may be available,\nsee the following Seagate web pages:\nhttp://knowledge.seagate.com/articles/en_US/FAQ/207931en\nhttp://knowledge.seagate.com/articles/en_US/FAQ/213911en"
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Maxtor MaXLine Plus II"
   ModelRegex = "Maxtor 7Y250[PM]0"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor MaXLine II"
   ModelRegex = "Maxtor [45]A(25|30|32)0[JN]0"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor MaXLine III (ATA/133 and SATA/150)"
   ModelRegex = "Maxtor 7L(25|30)0[SR]0"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Maxtor MaXLine III (SATA/300)"
   ModelRegex = "Maxtor 7V(25|30)0F0"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Maxtor MaXLine Pro 500"
   ModelRegex = "Maxtor 7H500F0"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
-  Family = ""
   ModelRegex = "HITACHI_DK14FA-20B"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.193]
       Conv = "loadunload"
-      Name = ""
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "HITACHI Travelstar DK23XX/DK23XXB"
   ModelRegex = "HITACHI_DK23..-..B?"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.193]
       Conv = "loadunload"
-      Name = ""
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Hitachi Endurastar J4K20/N4K20 (formerly DK23FA-20J)"
   ModelRegex = "(HITACHI_DK23FA-20J|HTA422020F9AT[JN]0)"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.193]
       Conv = "loadunload"
-      Name = ""
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Hitachi Endurastar J4K30/N4K30"
   ModelRegex = "HE[JN]4230[23]0F9AT00"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.193]
       Conv = "loadunload"
-      Name = ""
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Hitachi Travelstar C4K60"
   ModelRegex = "HTC4260[23]0G5CE00|HTC4260[56]0G8CE00"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.193]
       Conv = "loadunload"
-      Name = ""
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "IBM Travelstar 4GT"
   ModelRegex = "IBM-DTCA-2(324|409)0"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "IBM Travelstar 6GN"
   ModelRegex = "IBM-DBCA-20(324|486|648)0"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "IBM Travelstar 25GS, 18GT, and 12GN"
   ModelRegex = "IBM-DARA-2(25|18|15|12|09|06)000"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "IBM Travelstar 14GS"
   ModelRegex = "IBM-DCYA-214000"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "IBM Travelstar 4LP"
   ModelRegex = "IBM-DTNA-2(180|216)0"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "IBM Travelstar 48GH, 30GN, and 15GN"
   ModelRegex = "(IBM-|Hitachi )?IC25(T048ATDA05|N0(30|20|15|12|10|07|06|05)ATDA04)-."
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "IBM Travelstar 32GH, 30GT, and 20GN"
   ModelRegex = "IBM-DJSA-2(32|30|20|10|05)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "IBM Travelstar 4GN"
   ModelRegex = "IBM-DKLA-2(216|324|432)0"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "IBM/Hitachi Travelstar 60GH and 40GN"
   ModelRegex = "(IBM-|Hitachi )?IC25(T060ATC[SX]05|N0[4321]0ATC[SX]04)-."
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "IBM/Hitachi Travelstar 40GNX"
   ModelRegex = "(IBM-|Hitachi )?IC25N0[42]0ATC[SX]05-."
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Travelstar 80GN"
   ModelRegex = "(Hitachi )?IC25N0[23468]0ATMR04-."
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Travelstar 4K40"
   ModelRegex = "(Hitachi )?HTS4240[234]0M9AT00"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Travelstar 4K120"
   ModelRegex = "(Hitachi )?(HTS4212(60|80|10|12)H9AT00|HTS421260G9AT00)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Travelstar 5K80"
   ModelRegex = "(Hitachi )?HTS5480[8642]0M9AT00"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Travelstar 5K100"
   ModelRegex = "(Hitachi )?HTS5410[1864]0G9(AT|SA)00"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Travelstar E5K100"
   ModelRegex = "(Hitachi )?HTE541040G9(AT|SA)00"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Travelstar 5K120"
   ModelRegex = "(Hitachi )?HTS5412(60|80|10|12)H9(AT|SA)00"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Travelstar 5K160"
   ModelRegex = "(Hitachi |HITACHI )?HTS5416([468]0|1[26])J9(AT|SA)00"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Travelstar E5K160"
   ModelRegex = "(Hitachi )?HTE5416(12|16|60|80)J9(AT|SA)00"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Travelstar 5K250"
   ModelRegex = "(Hitachi |HITACHI )?HTS5425(80|12|16|20|25)K9(A3|SA)00"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Travelstar 5K320"
   ModelRegex = "(Hitachi |HITACHI )?HT(S|E)5432(80|12|16|25|32)L9(A3(00)?|SA0[012])"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi/HGST Travelstar Z5K320"
   ModelRegex = "(Hitachi|HGST) HT[ES]5432(16|25|32)A7A38[145]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Travelstar 5K500.B"
   ModelRegex = "(Hitachi )?HT[ES]5450(12|16|25|32|40|50)B9(A30[01]|SA00)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi/HGST Travelstar Z5K500"
   ModelRegex = "(Hitachi|HGST|APPLE HDD) HT[ES]5450(25|32|50)A7E(362|38[01]|680)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi/HGST Travelstar 5K750"
   ModelRegex = "(Hitachi|APPLE HDD) HT[ES]5475(50|64|75)A9E38[14]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "HGST Travelstar 5K1000"
   ModelRegex = "HGST HT[ES]5410(64|75|10)A9E68[01]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "HGST Travelstar Z5K1000"
   ModelRegex = "HGST HTS5410(75|10)A7E63[015]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "HGST Travelstar 5K1500"
   ModelRegex = "HGST HT[ES]541515A9E63[015]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Travelstar 7K60"
   ModelRegex = "(Hitachi )?HTS726060M9AT00"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Travelstar E7K60"
   ModelRegex = "(Hitachi )?HTE7260[46]0M9AT00"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Travelstar 7K100"
   ModelRegex = "(Hitachi )?HTS7210[168]0G9(AT|SA)00"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Travelstar E7K100"
   ModelRegex = "(Hitachi )?HTE7210[168]0G9(AT|SA)00"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Travelstar 7K200"
   ModelRegex = "(Hitachi |HITACHI )?HTS7220(80|10|12|16|20)K9(A3|SA)00"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Travelstar 7K320"
   ModelRegex = "(Hitachi )?HT[ES]7232(80|12|16|25|32)L9(A300|A36[02]|SA61)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Travelstar Z7K320"
   ModelRegex = "(HITACHI )?HT[ES]7232(16|25|32)A7A36[145]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Travelstar 7K500"
   ModelRegex = "(Hitachi |HITACHI )?HT[ES]7250(12|16|25|32|50)A9A36[02-5]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi/HGST Travelstar Z7K500"
   ModelRegex = "(HITACHI|HGST) HT[ES]7250(25|32|50)A7E63[015]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi/HGST Travelstar 7K750"
   ModelRegex = "(Hitachi|HGST) HT[ES]7275(50|64|75)A9E36[14]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "HGST Travelstar 7K1000"
   ModelRegex = "HGST HT[ES]7210(10|75)A9E63[01]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "IBM Deskstar 14GXP and 16GP"
   ModelRegex = "IBM-DTTA-3(7101|7129|7144|5032|5043|5064|5084|5101|5129|5168)0"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "IBM Deskstar 25GP and 22GXP"
   ModelRegex = "IBM-DJNA-3(5(101|152|203|250)|7(091|135|180|220))0"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "IBM Deskstar 37GP and 34GXP"
   ModelRegex = "IBM-DPTA-3(5(375|300|225|150)|7(342|273|205|136))0"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "IBM/Hitachi Deskstar 120GXP"
   ModelRegex = "(IBM-)?IC35L((020|040|060|080|120)AVVA|0[24]0AVVN)07-[01]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "IBM/Hitachi Deskstar GXP-180"
   ModelRegex = "(IBM-)?IC35L(030|060|090|120|180)AVV207-[01]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi CinemaStar 5K320"
   ModelRegex = "Hitachi HCS5C32(25|32)SLA380"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi CinemaStar 5K1000"
   ModelRegex = "Hitachi HCS5C10(10|75|50|32|25|16)CLA382"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Deskstar 5K3000"
   ModelRegex = "(Hitachi )?HDS5C30(15|20|30)(ALA|BLE)63[02].*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Deskstar 5K4000"
   ModelRegex = "(Hitachi )?HDS5C40(30|40)ALE63[01].*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Deskstar 7K80"
   ModelRegex = "(Hitachi )?HDS7280([48]0PLAT20|(40)?PLA320|80PLA380).*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Deskstar 7K160"
   ModelRegex = "(Hitachi )?HDS7216(80|16)PLA[3T]80.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Deskstar 7K250"
   ModelRegex = "(Hitachi )?HDS7225((40|80|12|16)VLAT20|(12|16|25)VLAT80|(80|12|16|25)VLSA80)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Deskstar 7K250 (SUN branded)"
   ModelRegex = "HITACHI HDS7225SBSUN250G.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Deskstar T7K250"
   ModelRegex = "(Hitachi )?HDT7225((25|20|16)DLA(T80|380))"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Deskstar 7K400"
   ModelRegex = "(Hitachi )?HDS724040KL(AT|SA)80"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Deskstar 7K500"
   ModelRegex = "(Hitachi )?HDS725050KLA(360|T80)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Deskstar P7K500"
   ModelRegex = "(Hitachi )?HDP7250(16|25|32|40|50)GLA(36|38|T8)0"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Deskstar T7K500"
   ModelRegex = "(Hitachi )?HDT7250(25|32|40|50)VLA(360|380|T80)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Deskstar 7K1000"
   ModelRegex = "(Hitachi )?HDS7210(50|75|10)KLA330"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Deskstar 7K1000.B"
   ModelRegex = "(Hitachi )?HDT7210((16|25)SLA380|(32|50|64|75|10)SLA360)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Deskstar 7K1000.C"
   ModelRegex = "(Hitachi )?HDS7210((16|25)CLA[36]82|(32|50)CLA[36]62|(64|75|10)CLA[36]3[02])"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Deskstar 7K1000.D"
   ModelRegex = "Hitachi HDS7210(25|32|50|75|10)DLE630"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Deskstar E7K1000"
   ModelRegex = "Hitachi HDE7210(50|75|10)SLA330"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Deskstar 7K2000"
   ModelRegex = "Hitachi HDS722020ALA330"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Deskstar 7K3000"
   ModelRegex = "Hitachi HDS7230((15|20)BLA642|30ALA640|30BLE640)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi/HGST Deskstar 7K4000"
   ModelRegex = "(Hitachi|HGST) HDS724040ALE640"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "HGST Deskstar NAS"
   ModelRegex = "HGST HDN72(4030|4040|6050|6060)ALE6[14]0"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Ultrastar A7K1000"
   ModelRegex = "(Hitachi )?HUA7210(50|75|10)KLA330.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Ultrastar A7K2000"
   ModelRegex = "(Hitachi )?HUA7220(50|10|20)[AC]LA33[01].*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi Ultrastar 7K3000"
   ModelRegex = "Hitachi HUA7230(20|30)ALA64[01]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi/HGST Ultrastar 7K4000"
   ModelRegex = "(Hitachi|HGST) HUS7240(20|30|40)AL[AE]64[01]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Hitachi/HGST Ultrastar 7K2"
   ModelRegex = "(Hitachi|HGST) HUS722T[12]TALA604"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.16]
       Conv = "raw48"
@@ -4490,15 +3754,10 @@
 [[Drives]]
   Family = "HGST Ultrastar 7K6000"
   ModelRegex = "HGST HUS7260[2456]0AL[AEN]61[014]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "HGST Ultrastar He6"
   ModelRegex = "HGST HUS726060ALA64[01]"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.22]
       Conv = "raw48"
@@ -4507,8 +3766,6 @@
 [[Drives]]
   Family = "HGST Ultrastar He8"
   ModelRegex = "HGST HUH7280(60|80)AL[EN]60[014]"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.22]
       Conv = "raw48"
@@ -4517,8 +3774,6 @@
 [[Drives]]
   Family = "HGST Ultrastar He10"
   ModelRegex = "HGST HUH7210(08|10)AL[EN]60[014]"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.22]
       Conv = "raw48"
@@ -4527,293 +3782,173 @@
 [[Drives]]
   Family = "HGST MegaScale 4000"
   ModelRegex = "HGST HMS5C4040[AB]LE64[01]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 2.5\" HDD (10-20 GB)"
   ModelRegex = "TOSHIBA MK(101[67]GAP|15[67]GAP|20(1[678]GAP|(18|23)GAS))"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 2.5\" HDD (30-60 GB)"
   ModelRegex = "TOSHIBA MK((6034|4032)GSX|(6034|4032)GAX|(6026|4026|4019|3019)GAXB?|(6025|6021|4025|4021|4018|3025|3021|3018)GAS|(4036|3029)GACE?|(4018|3017)GAP)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 2.5\" HDD (80 GB and above)"
   ModelRegex = "TOSHIBA MK(80(25GAS|26GAX|32GAX|32GSX)|10(31GAS|32GAX)|12(33GAS|34G[AS]X)|2035GSS)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 2.5\" HDD MK..37GSX"
   ModelRegex = "TOSHIBA MK(12|16)37GSX"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 2.5\" HDD MK..46GSX"
   ModelRegex = "TOSHIBA MK(80|12|16|25)46GSX"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 2.5\" HDD MK..50GACY"
   ModelRegex = "TOSHIBA MK8050GACY"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 2.5\" HDD MK..34GSX"
   ModelRegex = "TOSHIBA MK(80|12|10)34GSX"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 2.5\" HDD MK..32GSX"
   ModelRegex = "TOSHIBA MK(10|80|60|40)32GSX"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 2.5\" HDD MK..51GSY"
   ModelRegex = "TOSHIBA MK(80|12|16|25)51GSY"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Toshiba 2.5\" HDD MK..52GSX"
   ModelRegex = "TOSHIBA MK(80|12|16|25|32)52GSX"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 2.5\" HDD MK..55GSX"
   ModelRegex = "TOSHIBA MK(12|16|25|32|40|50)55GSXF?"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 2.5\" HDD MK..56GSY"
   ModelRegex = "TOSHIBA MK(16|25|32|50)56GSYF?"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Toshiba 2.5\" HDD MK..59GSXP (AF)"
   ModelRegex = "TOSHIBA MK(32|50|64|75)59GSXP?"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 2.5\" HDD MK..59GSM (AF)"
   ModelRegex = "TOSHIBA MK(75|10)59GSM"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 2.5\" HDD MK..61GSY[N]"
   ModelRegex = "TOSHIBA MK(16|25|32|50|64)61GSYN?"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Toshiba 2.5\" HDD MK..61GSYB"
   ModelRegex = "TOSHIBA MK(16|25|32|50|64)61GSYB"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 2.5\" HDD MK..65GSX"
   ModelRegex = "TOSHIBA MK(16|25|32|50|64)65GSX[FN]?( H)?"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 2.5\" HDD MK..75GSX"
   ModelRegex = "TOSHIBA MK(32|50|64|75)75GSX"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 2.5\" HDD MK..76GSX"
   ModelRegex = "TOSHIBA MK(16|25|32|50|64)76GSX"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.9]
       Conv = "minutes"
-      Name = ""
 
 [[Drives]]
   Family = "Toshiba 2.5\" HDD MQ01ABB..."
   ModelRegex = "TOSHIBA MQ01ABB(100|150|200)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 2.5\" HDD MQ01ABC..."
   ModelRegex = "TOSHIBA MQ01ABC(100|150|200)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 2.5\" HDD MQ01ABD..."
   ModelRegex = "TOSHIBA MQ01ABD(025|032|050|064|075|100)V?"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 2.5\" HDD MQ01ABF..."
   ModelRegex = "TOSHIBA MQ01ABF(050|075|100)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 2.5\" HDD MQ01UBB... (USB 3.0)"
   ModelRegex = "TOSHIBA MQ01UBB200"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 2.5\" HDD MQ01UBD... (USB 3.0)"
   ModelRegex = "TOSHIBA MQ01UBD(050|075|100)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 2.5\" HDD MQ03ABB..."
   ModelRegex = "TOSHIBA MQ03ABB[23]00"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 2.5\" HDD MQ03UBB..."
   ModelRegex = "TOSHIBA MQ03UBB(300|200|250)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 3.5\" HDD MK.002TSKB"
   ModelRegex = "TOSHIBA MK(10|20)02TSKB"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 3.5\" MG03ACAxxx(Y) Enterprise HDD"
   ModelRegex = "TOSHIBA MG03ACA[1234]00Y?"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 3.5\" MD04ACA... Enterprise HDD"
   ModelRegex = "TOSHIBA MD04ACA[2345]00"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 3.5\" MG04ACA... Enterprise HDD"
   ModelRegex = "TOSHIBA MG04ACA[23456]00[AE].?"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 3.5\" DT01ABA... Desktop HDD"
   ModelRegex = "TOSHIBA DT01ABA(100|150|200|300)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 3.5\" DT01ACA... Desktop HDD"
   ModelRegex = "TOSHIBA DT01ACA(025|032|050|075|100|150|200|300)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba X300"
   ModelRegex = "TOSHIBA HDWE1[456]0"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba P300"
   ModelRegex = "TOSHIBA HDWD1(30|20|10|05)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 1.8\" HDD"
   ModelRegex = "TOSHIBA MK[23468]00[4-9]GA[HL]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba 1.8\" HDD MK..29GSG"
   ModelRegex = "TOSHIBA MK(12|16|25)29GSG"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
-  Family = ""
   ModelRegex = "TOSHIBA MK6022GAX"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba HG6 Series SSD"
   ModelRegex = "TOSHIBA THNS[NF]J(060|128|256|512)G[BCAM8VD][SCN][TU].*"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.167]
       Conv = "raw48"
@@ -4829,409 +3964,249 @@
       Name = "Erase_Count"
 
 [[Drives]]
-  Family = ""
   ModelRegex = "TOSHIBA MK6409MAV"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Toshiba MKx019GAXB (SUN branded)"
   ModelRegex = "TOS MK[34]019GAXB SUN[34]0G"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Momentus"
   ModelRegex = "ST9(20|28|40|48)11A"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Momentus 42"
   ModelRegex = "ST9(2014|3015|4019)A"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Momentus 4200.2"
   ModelRegex = "ST9(100822|808210|60812|50212|402113|30219)A"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Momentus 5400.2"
   ModelRegex = "ST9(808211|6082[12]|408114|308110|120821|10082[34]|8823|6812|4813|3811)AS?"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Momentus 5400.3"
   ModelRegex = "ST9(4081[45]|6081[35]|8081[15]|100828|120822|160821)AS?"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Momentus 5400.3 ED"
   ModelRegex = "ST9(4081[45]|6081[35]|8081[15]|100828|120822|160821)AB"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Momentus 5400.4"
   ModelRegex = "ST9(120817|(160|200|250)827)AS"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Momentus 5400.5"
   ModelRegex = "ST9((80|120|160)310|(250|320)320)AS"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Momentus 5400.6"
   ModelRegex = "ST9(80313|160(301|314)|(12|25)0315|250317|(320|500)325|500327|640320)ASG?"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Momentus 5400.7"
   ModelRegex = "ST9(160316|(250|320)310|(500|640)320)AS"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Momentus 5400.7 (AF)"
   ModelRegex = "ST9(320312|400321|640322|750423)AS"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Momentus 5400 PSD"
   ModelRegex = "ST9(808212|(120|160)8220)AS"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Momentus 7200.1"
   ModelRegex = "ST9(10021|80825|6023|4015)AS?"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Momentus 7200.2"
   ModelRegex = "ST9(80813|100821|120823|160823|200420)ASG?"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Momentus 7200.3"
   ModelRegex = "ST9((80|120|160)411|(250|320)421)ASG?"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Momentus 7200.4"
   ModelRegex = "ST9(160412|250410|320423|500420)ASG?"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Momentus 7200 FDE.2"
   ModelRegex = "ST9((160413|25041[12]|320426|50042[12])AS|(16041[489]|2504[16]4|32042[67]|500426)ASG)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Momentus 7200.5"
   ModelRegex = "ST9(50042[34]|64042[012]|75042[02])ASG?"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Momentus XT"
   ModelRegex = "ST9(2505610|3205620|5005620)AS"
   FirmwareRegex = "SD2[68]"
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Momentus XT"
   ModelRegex = "ST9(2505610|3205620|5005620)AS"
   FirmwareRegex = "SD2[45]"
   WarningMsg = "These drives may corrupt large files,\nAND THIS FIRMWARE VERSION IS AFFECTED,\nsee the following web pages for details:\nhttp://knowledge.seagate.com/articles/en_US/FAQ/215451en\nhttp://forums.seagate.com/t5/Momentus-XT-Momentus-Momentus/Momentus-XT-corrupting-large-files-Linux/td-p/109008\nhttp://superuser.com/questions/313447/seagate-momentus-xt-corrupting-files-linux-and-mac"
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Momentus XT"
   ModelRegex = "ST9(2505610|3205620|5005620)AS"
-  FirmwareRegex = ""
   WarningMsg = "These drives may corrupt large files,\nsee the following web pages for details:\nhttp://knowledge.seagate.com/articles/en_US/FAQ/215451en\nhttp://forums.seagate.com/t5/Momentus-XT-Momentus-Momentus/Momentus-XT-corrupting-large-files-Linux/td-p/109008\nhttp://superuser.com/questions/313447/seagate-momentus-xt-corrupting-files-linux-and-mac"
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Momentus XT (AF)"
   ModelRegex = "ST750LX003-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Momentus Thin"
   ModelRegex = "ST(160|250|320)LT0(07|09|11|14)-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Laptop HDD"
   ModelRegex = "ST((25|32|50)0LT0(12|15|25)|(32|50)0LM0(10|21)|[34]00LM016)-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Laptop SSHD"
   ModelRegex = "ST(500|1000)LM0(00|14)-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Medalist 1010, 1720, 1721, 2120, 3230 and 4340"
   ModelRegex = "ST3(1010|1720|1721|2120|3230|4340)A"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Medalist 2110, 3221, 4321, 6531, and 8641"
   ModelRegex = "ST3(2110|3221|4321|6531|8641)A"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate U4"
   ModelRegex = "ST3(2112|4311|6421|8421)A"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate U5"
   ModelRegex = "ST3(40823|30621|20413|15311|10211)A"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate U6"
   ModelRegex = "ST3(8002|6002|4081|3061|2041)0A"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate U7"
   ModelRegex = "ST3(30012|40012|60012|80022|120020)A"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate U8"
   ModelRegex = "ST3(4313|6811|8410|4313|13021|17221)A"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate U9"
   ModelRegex = "ST3(80012|120025|160022)A(CE)?"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate U10"
   ModelRegex = "ST3(20423|15323|10212)A"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate UX"
   ModelRegex = "ST3(10014A(CE)?|20014A)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Barracuda ATA"
   ModelRegex = "ST3(2804|2724|2043|1362|1022|681)0A"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Barracuda ATA II"
   ModelRegex = "ST3(3063|2042|1532|1021)0A"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Barracuda ATA III"
   ModelRegex = "ST3(40824|30620|20414|15310|10215)A"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Barracuda ATA IV"
   ModelRegex = "ST3(20011|30011|40016|60021|80021)A"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Barracuda ATA V"
   ModelRegex = "ST3(12002(3A|4A|9A|3AS)|800(23A|15A|23AS)|60(015A|210A)|40017A)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Barracuda 5400.1"
   ModelRegex = "ST340015A"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Barracuda 7200.7 and 7200.7 Plus"
   ModelRegex = "ST3(200021A|200822AS?|16002[13]AS?|12002[26]AS?|1[26]082[78]AS|8001[13]AS?|8081[79]AS|60014A|40111AS|40014AS?)( .* IBM)?"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Barracuda 7200.8"
   ModelRegex = "ST3(400[68]32|300[68]31|250[68]23|200826)AS?"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Barracuda 7200.9"
   ModelRegex = "ST3(402111?|80[28]110?|120[28]1[0134]|160[28]1[012]|200827|250[68]24|300[68]22|(320|400)[68]33|500[68](32|41))AS?.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Barracuda 7200.10"
   ModelRegex = "ST3((80|160)[28]15|200820|250[34]10|(250|300|320|400)[68]20|360320|500[68]30|750[68]40)AS?"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Barracuda 7200.11"
   ModelRegex = "ST3(160813|320[68]13|500[368]20|640[36]23|640[35]30|750[36]30|1000(333|[36]40)|1500341)AS?"
   FirmwareRegex = "CC.?.?"
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Barracuda 7200.11"
   ModelRegex = "ST3(500[368]20|750[36]30|1000340)AS?"
   FirmwareRegex = "SD1A"
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Barracuda 7200.11"
   ModelRegex = "ST3(160813|320[68]13|640[36]23|1000333|1500341)AS?"
   FirmwareRegex = "SD[12]B"
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Barracuda 7200.11"
   ModelRegex = "ST3(500[368]20|640[35]30|750[36]30|1000340)AS?"
   FirmwareRegex = "(AD14|SD1[5-9]|SD81)"
   WarningMsg = "There are known problems with these drives,\nTHIS DRIVE MAY OR MAY NOT BE AFFECTED,\nsee the following web pages for details:\nhttp://knowledge.seagate.com/articles/en_US/FAQ/207931en\nhttp://knowledge.seagate.com/articles/en_US/FAQ/207951en\nhttp://bugs.debian.org/cgi-bin/bugreport.cgi?bug=632758"
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Barracuda 7200.11"
   ModelRegex = "ST3(160813|320[68]13|500[368]20|640[36]23|640[35]30|750[36]30|1000(333|[36]40)|1500341)AS?"
-  FirmwareRegex = ""
   WarningMsg = "There are known problems with these drives,\nsee the following Seagate web pages:\nhttp://knowledge.seagate.com/articles/en_US/FAQ/207931en\nhttp://knowledge.seagate.com/articles/en_US/FAQ/207951en\nhttp://knowledge.seagate.com/articles/en_US/FAQ/207957en"
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Barracuda 7200.12"
   ModelRegex = "ST3(160318|250318|320418|50041[08]|750528|1000528)AS"
   FirmwareRegex = "CC4[9A-Z]"
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Barracuda 7200.12"
   ModelRegex = "ST3(160318|250318|320418|50041[08]|750528|1000528)AS"
-  FirmwareRegex = ""
   WarningMsg = "A firmware update for this drive may be available,\nsee the following Seagate web pages:\nhttp://knowledge.seagate.com/articles/en_US/FAQ/207931en\nhttp://knowledge.seagate.com/articles/en_US/FAQ/213891en"
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Barracuda 7200.12"
   ModelRegex = "ST3(160318|25031[128]|320418|50041[038]|750(518|52[358])|100052[348]|320413|160316)AS"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Barracuda XT"
   ModelRegex = "ST(3(2000641|3000651)AS|4000DX000-.*)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Barracuda 7200.14 (AF)"
   ModelRegex = "ST(1000|1500|2000|2500|3000)DM00[1-3]-9YN16."
   FirmwareRegex = "CC(4[H-Z]|[5-9A-Z]..*)"
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.188]
       Conv = "raw16"
-      Name = ""
     [Drives.Presets.240]
       Conv = "msec24hour32"
-      Name = ""
 
 [[Drives]]
   Family = "Seagate Barracuda 7200.14 (AF)"
@@ -5241,129 +4216,91 @@
   [Drives.Presets]
     [Drives.Presets.188]
       Conv = "raw16"
-      Name = ""
     [Drives.Presets.240]
       Conv = "msec24hour32"
-      Name = ""
 
 [[Drives]]
   Family = "Seagate Barracuda 7200.14 (AF)"
   ModelRegex = "ST(1000|1500|2000|2500|3000)DM00[1-3]-9YN16."
-  FirmwareRegex = ""
   WarningMsg = "A firmware update for this drive may be available,\nsee the following Seagate web pages:\nhttp://knowledge.seagate.com/articles/en_US/FAQ/207931en\nhttp://knowledge.seagate.com/articles/en_US/FAQ/223651en"
   [Drives.Presets]
     [Drives.Presets.188]
       Conv = "raw16"
-      Name = ""
     [Drives.Presets.240]
       Conv = "msec24hour32"
-      Name = ""
 
 [[Drives]]
   Family = "Seagate Barracuda 7200.14 (AF)"
   ModelRegex = "ST(1000|1500|2000|2500|3000)DM00[0-3]-.*|APPLE HDD ST3000DM001"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.188]
       Conv = "raw16"
-      Name = ""
     [Drives.Presets.240]
       Conv = "msec24hour32"
-      Name = ""
 
 [[Drives]]
   Family = "Seagate Barracuda 3.5"
   ModelRegex = "ST(4000DM00[45]|3000DM008|3000DM009|2000DM006|2000DM007|1000DM010|500DM009)-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.188]
       Conv = "raw16"
-      Name = ""
     [Drives.Presets.240]
       Conv = "msec24hour32"
-      Name = ""
 
 [[Drives]]
   Family = "Seagate Barracuda 7200.14 (AF)"
   ModelRegex = "ST(250|320|500|750)DM00[0-3]-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.188]
       Conv = "raw16"
-      Name = ""
     [Drives.Presets.240]
       Conv = "msec24hour32"
-      Name = ""
 
 [[Drives]]
   Family = "Seagate Desktop HDD.15"
   ModelRegex = "ST[4568]000DM00[012]-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.188]
       Conv = "raw16"
-      Name = ""
     [Drives.Presets.240]
       Conv = "msec24hour32"
-      Name = ""
 
 [[Drives]]
   Family = "Seagate Desktop SSHD"
   ModelRegex = "ST[124]000DX001-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.188]
       Conv = "raw16"
-      Name = ""
     [Drives.Presets.240]
       Conv = "msec24hour32"
-      Name = ""
 
 [[Drives]]
   Family = "Seagate Barracuda LP"
   ModelRegex = "ST3(500412|1000520|1500541|2000542)AS"
   FirmwareRegex = "CC3[5-9A-Z]"
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Barracuda LP"
   ModelRegex = "ST3(500412|1000520|1500541|2000542)AS"
-  FirmwareRegex = ""
   WarningMsg = "A firmware update for this drive may be available,\nsee the following Seagate web pages:\nhttp://knowledge.seagate.com/articles/en_US/FAQ/207931en\nhttp://knowledge.seagate.com/articles/en_US/FAQ/213915en"
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Barracuda Green (AF)"
   ModelRegex = "ST((10|15|20)00DL00[123])-.*"
   FirmwareRegex = "CC(3[2-9A-Z]|[4-9A-Z]..*)"
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Barracuda Green (AF)"
   ModelRegex = "ST((10|15|20)00DL00[123])-.*"
-  FirmwareRegex = ""
   WarningMsg = "A firmware update for this drive may be available,\nsee the following Seagate web pages:\nhttp://knowledge.seagate.com/articles/en_US/FAQ/207931en\nhttp://knowledge.seagate.com/articles/en_US/FAQ/218171en"
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Barracuda ES"
   ModelRegex = "ST3(250[68]2|32062|40062|50063|75064)0NS"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Barracuda 2.5 5400"
   ModelRegex = "ST(5000LM000|[34]000LM024|2000LM015|1000LM048|500LM030)-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.183]
       Conv = "raw48"
@@ -5373,216 +4310,130 @@
   Family = "Seagate Barracuda ES.2"
   ModelRegex = "ST3(25031|50032|75033|100034)0NS"
   FirmwareRegex = "SN[01]6|MA(0[^7]|[^0].)"
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Barracuda ES.2"
   ModelRegex = "ST3(25031|50032|75033|100034)0NS"
   FirmwareRegex = "MA07"
   WarningMsg = "There are known problems with these drives,\nAND THIS FIRMWARE VERSION IS AFFECTED,\nsee the following Seagate web page:\nhttp://dellfirmware.seagate.com/dell_firmware/DellFirmwareRequest.jsp"
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Barracuda ES.2"
   ModelRegex = "ST3(25031|50032|75033|100034)0NS"
-  FirmwareRegex = ""
   WarningMsg = "There are known problems with these drives,\nsee the following Seagate web pages:\nhttp://knowledge.seagate.com/articles/en_US/FAQ/207931en\nhttp://knowledge.seagate.com/articles/en_US/FAQ/207963en"
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Constellation (SATA)"
   ModelRegex = "ST9(160511|500530)NS"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Constellation ES (SATA)"
   ModelRegex = "ST3(50051|100052|200064)4NS|MB0500EAMZD"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Constellation ES (SATA 6Gb/s)"
   ModelRegex = "ST(5|10|20)00NM0011|MB1000GCEEK"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Constellation ES.2 (SATA 6Gb/s)"
   ModelRegex = "ST3(2000645|300065[012])NS|MB3000EBKAB"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Constellation ES.3"
   ModelRegex = "ST[1234]000NM00[35]3-.*|MB1000GCWCV"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Constellation CS"
   ModelRegex = "ST(1000|2000|3000)NC00[0-3](-.*)?"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Constellation.2 (SATA)"
   ModelRegex = "ST9(25061|50062|100064)[012]NS|MM1000GBKAL"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Enterprise Capacity 3.5 HDD"
   ModelRegex = "ST([24568]|10)000NM0[01][0-48][456]-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.188]
       Conv = "raw16"
-      Name = ""
     [Drives.Presets.240]
       Conv = "msec24hour32"
-      Name = ""
 
 [[Drives]]
   Family = "Seagate NAS HDD"
   ModelRegex = "ST([234]000VN000|[468]000VN00(02|21|12|31|3))-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate IronWolf"
   ModelRegex = "ST(10|8|6|4|3|2|1)000VN00(04|22|41|8|7|2|4)-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Archive HDD"
   ModelRegex = "ST[568]000AS00[01][12]-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Pipeline HD 5900.1"
   ModelRegex = "ST3(160310|320[34]10|500(321|422))CS"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Pipeline HD 5900.2"
   ModelRegex = "ST3(160316|250[34]12|320(311|413)|500(312|414)|1000(322|424))CS"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Video 3.5 HDD"
   ModelRegex = "ST(10|15|20|30|40)00VM00[023]-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Medalist 17240, 13030, 10231, 8420, and 4310"
   ModelRegex = "ST3(17240|13030|10231|8420|4310)A"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Medalist 17242, 13032, 10232, 8422, and 4312"
   ModelRegex = "ST3(1724|1303|1023|842|431)2A"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate NL35"
   ModelRegex = "ST3(250623|250823|400632|400832|250824|250624|400633|400833|500641|500841)NS"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate SV35.2"
   ModelRegex = "ST3(160815|250820|320620|500630|750640)[AS]V"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate SV35.3"
   ModelRegex = "ST3(500320|750330|1000340)SV"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate SV35.5"
   ModelRegex = "ST3(250311|500410|1000525)SV"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate Surveillance"
   ModelRegex = "ST([1-6]000VX00[01234]1?|31000526SV|3500411SV)(-.*)?"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate DB35"
   ModelRegex = "ST3(200826|250823|300831|400832)[AS]CE"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate DB35.2"
   ModelRegex = "ST3(802110|120213|160212|200827|250824|300822|400833|500841)[AS]CE"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate DB35.3"
   ModelRegex = "ST3(750640SCE|((80|160)215|(250|320|400)820|500830|750840)[AS]CE)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate LD25.2"
   ModelRegex = "ST9(40|80)210AS?"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Seagate ST1.2 CompactFlash"
   ModelRegex = "ST6[468]022CF"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "WD Blue PC SSD"
   ModelRegex = "WDC WDS...[TG]1B0[AB].*"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.165]
       Conv = "raw48"
@@ -5636,169 +4487,98 @@
 [[Drives]]
   Family = "Western Digital Protege"
   ModelRegex = "WDC WD([2468]00E|1[26]00A)B-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Caviar"
   ModelRegex = "WDC WD(2|3|4|6|8|10|12|16|18|20|25)00BB-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Caviar WDxxxAB"
   ModelRegex = "WDC WD(3|4|6|8|25)00AB-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Caviar WDxxxAA"
   ModelRegex = "WDC WD...?AA(-.*)?"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Caviar WDxxxBA"
   ModelRegex = "WDC WD...BA"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Caviar AC"
   ModelRegex = "WDC AC((116|121|125|225|132|232)|([1-4][4-9][0-9])|([1-4][0-9][0-9][0-9]))00[A-Z]?.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Caviar SE"
   ModelRegex = "WDC WD(4|6|8|10|12|16|18|20|25|30|32|40|50)00(JB|PB)-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Caviar Blue EIDE"
   ModelRegex = "WDC WD(16|25|32|40|50)00AAJB-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Caviar Blue EIDE"
   ModelRegex = "WDC WD(25|32|40|50)00AAKB-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital RE EIDE"
   ModelRegex = "WDC WD(12|16|25|32)00SB-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Caviar Serial ATA"
   ModelRegex = "WDC WD(4|8|20|32)00BD-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Caviar SE Serial ATA"
   ModelRegex = "WDC WD(4|8|12|16|20|25|30|32|40)00(JD|KD|PD)-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Caviar SE Serial ATA"
   ModelRegex = "WDC WD(8|12|16|20|25|30|32|40|50)00JS-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Caviar SE16 Serial ATA"
   ModelRegex = "WDC WD(16|20|25|32|40|50|75)00KS-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Caviar Blue Serial ATA"
   ModelRegex = "WDC WD((8|12|16|25|32)00AABS|(8|12|16|25|32|40|50)00AAJS)-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Caviar Blue (SATA)"
   ModelRegex = "WDC WD((16|20|25|32|40|50|64|75)00AAKS|1602ABKS|10EALS)-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Blue"
   ModelRegex = "WDC WD((25|32|50)00AAKX|5000AZ(LX|RZ)|7500A(AL|ZE)X|10E(AL|ZE)X|[1-6]0EZRZ)-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital RE Serial ATA"
   ModelRegex = "WDC WD(12|16|25|32)00(SD|YD|YS)-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital RE2 Serial ATA"
   ModelRegex = "WDC WD((40|50|75)00(YR|YS|AYYS)|(16|32|40|50)0[01]ABYS)-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital RE2-GP"
   ModelRegex = "WDC WD(5000AB|7500AY|1000FY)PS-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital RE3 Serial ATA"
   ModelRegex = "WDC WD((25|32|50|75)02A|(75|10)02F)BYS-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital RE4"
   ModelRegex = "WDC WD((25|50)03ABY[XZ]|1003FBY[XZ]|(15|20)03FYYS)-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital RE4-GP"
   ModelRegex = "(WDC )?WD200[23]FYPS-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Re"
   ModelRegex = "WDC WD([12]004FBYZ|[1-6]00[01M]F[SXY]YZ)-.*|WD2000FYYX"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.16]
       Conv = "raw48"
@@ -5807,162 +4587,94 @@
 [[Drives]]
   Family = "Western Digital Se"
   ModelRegex = "WDC WD(1002|2000|3000|4000)F9YZ-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Caviar Green"
   ModelRegex = "WDC WD((50|64|75)00AA[CV]S|(50|64|75)00AADS|10EA[CV]S|(10|15|20)EAD[SX])-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Caviar Green (AF)"
   ModelRegex = "WDC WD(((64|75|80)00AA|(10|15|20)EA|(25|30)EZ)R|20EAC)S-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Green"
   ModelRegex = "WDC WD(7500AA|(10|15|20)EA|(10|20|25|30|40|50|60)EZ)RX-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Caviar Black"
   ModelRegex = "WDC WD((500|640)1AAL|7501AA[EL]|1001FA[EL]|2001FAS)S-.*|WDC WD(2002|7502|1502|5003|1002|5002)(FAE|AAE|AZE|AAL)X-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Black"
   ModelRegex = "WDC WD(6001|2003|5001|1003|4003|4004|5003|3003|3001)(FZW|FZE|AZE)X-.*|WDC WD(4001|3001|2002|1002|5003|7500|5000|3200|2500|1600)(FAE|AZE)X-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital AV ATA"
   ModelRegex = "WDC WD(8|16|25|32|50)00AV[BJ]B-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital AV SATA"
   ModelRegex = "WDC WD(16|25|32)00AVJS-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital AV-GP"
   ModelRegex = "WDC WD((16|25|32|50|64|75)00AV[CDV]S|(10|15|20)EV[CDV]S)-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital AV-GP (AF)"
   ModelRegex = "WDC WD(5000AUDX|7500AURS|10EUCX|(10|15|20|25|30)EUR[SX])-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital AV"
   ModelRegex = "WDC WD((16|25|32|50)00BU[CD]|5000LUC|10JUC)T-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Raptor"
   ModelRegex = "WDC WD((360|740|800)GD|(360|740|800|1500)ADF[DS])-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Raptor X"
   ModelRegex = "WDC WD1500AHFD-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital VelociRaptor"
   ModelRegex = "WDC WD(((800H|(1500|3000)[BH]|1600H|3000G)LFS)|((1500|3000|4500|6000)[BH]LHX))-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital VelociRaptor (AF)"
   ModelRegex = "WDC WD(2500H|5000H|1000D)HTZ-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Scorpio EIDE"
   ModelRegex = "WDC WD(4|6|8|10|12|16)00(UE|VE)-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Scorpio Blue EIDE"
   ModelRegex = "WDC WD(4|6|8|10|12|16|25|32)00BEVE-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Scorpio Serial ATA"
   ModelRegex = "WDC WD(4|6|8|10|12|16|25)00BEAS-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Scorpio Blue Serial ATA"
   ModelRegex = "WDC WD((4|6|8|10|12|16|25)00BEVS|(8|12|16|25|32|40|50|64)00BEVT|7500KEVT|10TEVT)-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Scorpio Blue Serial ATA (AF)"
   ModelRegex = "WDC WD((16|25|32|50|64|75)00BPVT|10[JT]PVT)-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Scorpio Black"
   ModelRegex = "WDC WD(8|12|16|25|32|50)00B[EJ]KT-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Scorpio Black (AF)"
   ModelRegex = "WDC WD(50|75)00BPKT-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Red"
   ModelRegex = "WDC WD(7500BFC|10JFC|[1-6]0EFR|80E[FZ][AZ])X-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
   [Drives.Presets]
     [Drives.Presets.22]
       Conv = "raw48"
@@ -5971,1560 +4683,897 @@
 [[Drives]]
   Family = "Western Digital Red Pro"
   ModelRegex = "WDC WD([2-68]00[12])FF[SW]X-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Purple"
   ModelRegex = "WDC WD[123456]0PURX-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Gold"
   ModelRegex = "WDC WD(101KR|[68]002FR|4002FY)YZ-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Blue Mobile"
   ModelRegex = "WDC WD((25|32|50|75)00[BLM]|10[JS]|20N)P[CV][TXZ]-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Green Mobile"
   ModelRegex = "WDC WD(15|20)NPV[TX]-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Black Mobile"
   ModelRegex = "WDC WD((16|25|32)00BEK[TX]|(25|32|50|75)00(BPK|LPL)X|10JPLX)-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Elements / My Passport (USB)"
   ModelRegex = "WDC WD(25|32|40|50)00BMV[UVW]-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Western Digital Elements / My Passport (USB, AF)"
   ModelRegex = "WDC WD(5000[LK]|7500[BK]|10[JT]|[234]0N)M[VZ][VW]-.*"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Quantum Bigfoot"
   ModelRegex = "QUANTUM BIGFOOT TS(10\\.0|12\\.7)A"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Quantum Fireball lct15"
   ModelRegex = "QUANTUM FIREBALLlct15 ([123]0|22)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Quantum Fireball lct20"
   ModelRegex = "QUANTUM FIREBALLlct20 [1234]0"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Quantum Fireball CX"
   ModelRegex = "QUANTUM FIREBALL CX10.2A"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Quantum Fireball CR"
   ModelRegex = "QUANTUM FIREBALL CR(4.3|6.4|8.4|13.0)A"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Quantum Fireball EX"
   ModelRegex = "QUANTUM FIREBALL EX(3\\.2|6\\.4|10\\.2)A"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Quantum Fireball ST"
   ModelRegex = "QUANTUM FIREBALL ST(3.2|4.3|4300)A"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Quantum Fireball SE"
   ModelRegex = "QUANTUM FIREBALL SE4.3A"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Quantum Fireball Plus LM"
   ModelRegex = "QUANTUM FIREBALLP LM(10.2|15|20.[45]|30)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Quantum Fireball Plus AS"
   ModelRegex = "QUANTUM FIREBALLP AS(10.2|20.5|30.0|40.0|60.0)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Quantum Fireball Plus KX"
   ModelRegex = "QUANTUM FIREBALLP KX27.3"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "Quantum Fireball Plus KA"
   ModelRegex = "QUANTUM FIREBALLP KA(9|10).1"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ViPowER USB3.0 Storage; "
   ModelRegex = "0x0350:0x0038"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: HP Desktop HD BD07; "
   ModelRegex = "0x03f0:0xbd07"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; ALi M5621"
   ModelRegex = "0x0402:0x5621"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Connectland BE-USB2-35BP-LCM; VIA VT6204"
   ModelRegex = "0x040d:0x6204"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Buffalo JustStore Portable HD-PVU2; "
   ModelRegex = "0x0411:0x0181"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Buffalo Drivestation Duo; "
   ModelRegex = "0x0411:0x01ce"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Buffalo DriveStation HD-LBU2 ; Medialogic MLDU11"
   ModelRegex = "0x0411:0x01ea"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Buffalo MiniStation; "
   ModelRegex = "0x0411:0x0(1[df]9|240|251)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: LG Mini HXD5; JMicron"
   ModelRegex = "0x043e:0x70f1"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Renesas uPD720231A"
   ModelRegex = "0x045b:0x022[9a]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Philips; "
   ModelRegex = "0x0471:0x2021"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Toshiba Stor.E Slim USB 3.0; "
   ModelRegex = "0x0480:0x0100"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Toshiba Canvio; "
   ModelRegex = "0x0480:0x02(01|10)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Toshiba Canvio 500GB; SunPlus"
   ModelRegex = "0x0480:0xa004"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Toshiba Canvio Basics; "
   ModelRegex = "0x0480:0xa00[6d]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Toshiba Stor.E; "
   ModelRegex = "0x0480:0xa00[9ace]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Toshiba Canvio; "
   ModelRegex = "0x0480:0x(a(007|100|20[027c])|b207)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Toshiba Canvio Desktop; "
   ModelRegex = "0x0480:0xd0(00|10|11)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Cypress CY7C68300A (AT2)"
   ModelRegex = "0x04b4:0x6830"
   FirmwareRegex = "0x0001"
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Cypress CY7C68300B/C (AT2LP)"
   ModelRegex = "0x04b4:0x6830"
   FirmwareRegex = "0x0240"
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Fujitsu/Zalman ZM-VE300; "
   ModelRegex = "0x04c5:0x2028"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Fujitsu"
   ModelRegex = "0x04c5:0x201d"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Myson Century CS8818"
   ModelRegex = "0x04cf:0x8818"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Samsung S2 Portable; JMicron"
   ModelRegex = "0x04e8:0x1f0[568a]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Samsung S1 Portable; JMicron"
   ModelRegex = "0x04e8:0x2f03"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Samsung Story Station; "
   ModelRegex = "0x04e8:0x5f0[56]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Samsung G2 Portable; JMicron"
   ModelRegex = "0x04e8:0x6032"
   FirmwareRegex = "0x0000"
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Samsung G2 Portable; "
   ModelRegex = "0x04e8:0x6032"
   FirmwareRegex = "0x...[1-9]"
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Samsung Story Station 3.0; "
   ModelRegex = "0x04e8:0x6052"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Samsung Story Station 3.0; "
   ModelRegex = "0x04e8:0x6054"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Samsung M2 Portable 3.0; "
   ModelRegex = "0x04e8:0x60c5"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Samsung D3 Station; "
   ModelRegex = "0x04e8:0x612[45]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Samsung M3 Portable USB 3.0; "
   ModelRegex = "0x04e8:0x61b[3456]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Samsung S3 Portable; "
   ModelRegex = "0x04e8:0x61c8"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; SunPlus"
   ModelRegex = "0x04fc:0x0c05"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; SunPlus SPDIF215"
   ModelRegex = "0x04fc:0x0c15"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; SunPlus SPDIF225"
   ModelRegex = "0x04fc:0x0c25"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Iomega Prestige Desktop USB 3.0; "
   ModelRegex = "0x059b:0x0070"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Iomega LPHD080-0; "
   ModelRegex = "0x059b:0x0272"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Iomega MDHD500-U; "
   ModelRegex = "0x059b:0x0275"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Iomega; JMicron"
   ModelRegex = "0x059b:0x027[78]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Iomega LDHD-UP; Sunplus"
   ModelRegex = "0x059b:0x0370"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Iomega; JMicron"
   ModelRegex = "0x059b:0x0(47[05]|57[15])"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Iomega; JMicron"
   ModelRegex = "0x059b:0x047a"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: LaCie hard disk (FA Porsche design);"
   ModelRegex = "0x059f:0x0651"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: LaCie d2 Quadra; Oxford OXUF934SSA-LQAG "
   ModelRegex = "0x059f:0x0828"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: LaCie hard disk; JMicron"
   ModelRegex = "0x059f:0x0951"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: LaCie Rugged Triple Interface; "
   ModelRegex = "0x059f:0x100c"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: LaCie Desktop Hard Drive;"
   ModelRegex = "0x059f:0x1010"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: LaCie Desktop Hard Drive; "
   ModelRegex = "0x059f:0x101[68]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: LaCie Desktop Hard Drive; JMicron"
   ModelRegex = "0x059f:0x1019"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: LaCie Rugged Hard Drive; JMicron"
   ModelRegex = "0x059f:0x101d"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: LaCie Little Disk USB2; JMicron"
   ModelRegex = "0x059f:0x1021"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: LaCie hard disk; "
   ModelRegex = "0x059f:0x1029"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Lacie rikiki; JMicron"
   ModelRegex = "0x059f:0x102a"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: LaCie D2 USB3; LucidPort USB300 "
   ModelRegex = "0x059f:0x103d"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: LaCie rikiki USB 3.0; "
   ModelRegex = "0x059f:0x10(49|57)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: LaCie minimus USB 3.0; "
   ModelRegex = "0x059f:0x104a"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: LaCie Rugged Mini USB 3.0; "
   ModelRegex = "0x059f:0x1051"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: LaCie; "
   ModelRegex = "0x059f:0x10(6f|7[05])"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; In-System/Cypress ISD-300A1"
   ModelRegex = "0x05ab:0x0060"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Apple; "
   ModelRegex = "0x05ac:0x8406"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Genesys Logic GL881E"
   ModelRegex = "0x05e3:0x0702"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Genesys Logic"
   ModelRegex = "0x05e3:0x0718"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Genesys Logic GL3310"
   ModelRegex = "0x05e3:0x0731"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Genesys Logic"
   ModelRegex = "0x05e3:0x0735"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Micron USB SSD; "
   ModelRegex = "0x0634:0x0655"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Prolific PL2507"
   ModelRegex = "0x067b:0x2507"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Prolific PL2571/2771/2773/2775"
   ModelRegex = "0x067b:0x(2571|277[135])"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Prolific PL3507"
   ModelRegex = "0x067b:0x3507"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Imation ; "
   ModelRegex = "0x0718:0x1000"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: SanDisk SDCZ80 Flash Drive; Fujitsu"
   ModelRegex = "0x0781:0x558[08]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Innostor IS631"
   ModelRegex = "0x07ab:0x0621"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Freecom Quattro 3.0; "
   ModelRegex = "0x07ab:0xfc77"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Freecom Mobile Drive XXS; JMicron"
   ModelRegex = "0x07ab:0xfc88"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Freecom Hard Drive XS; Sunplus"
   ModelRegex = "0x07ab:0xfc8e"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Freecom; "
   ModelRegex = "0x07ab:0xfc8f"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Freecom Classic HD 120GB; "
   ModelRegex = "0x07ab:0xfccd"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Freecom HD; JMicron"
   ModelRegex = "0x07ab:0xfcd[6a]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Oxford"
   ModelRegex = "0x0928:0x0000"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Oxford OXU921DS"
   ModelRegex = "0x0928:0x0002"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Oxford"
   ModelRegex = "0x0928:0x0010"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Toshiba PX1270E-1G16; Sunplus"
   ModelRegex = "0x0930:0x0b03"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Toshiba PX1396E-3T01; Sunplus"
   ModelRegex = "0x0930:0x0b09"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Toshiba Stor.E Steel; Sunplus"
   ModelRegex = "0x0930:0x0b11"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Toshiba Stor.E; "
   ModelRegex = "0x0930:0x0b1[9ab]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Toshiba Stor.E; Sunplus"
   ModelRegex = "0x0939:0x0b1[56]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Apricorn SATA Wire; "
   ModelRegex = "0x0984:0x0040"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Neodio; Initio INIC-1810PL"
   ModelRegex = "0x0aec:0x3050"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Seagate External Drive; Cypress"
   ModelRegex = "0x0bc2:0x0503"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Seagate FreeAgent Go; "
   ModelRegex = "0x0bc2:0x2(000|100|101)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Seagate FreeAgent Go FW; "
   ModelRegex = "0x0bc2:0x2200"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Seagate Expansion Portable; "
   ModelRegex = "0x0bc2:0x23(00|12|1a|20|21|22)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Seagate FreeAgent Desktop; "
   ModelRegex = "0x0bc2:0x3000"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Seagate FreeAgent Desk; "
   ModelRegex = "0x0bc2:0x3001"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Seagate FreeAgent Desk; "
   ModelRegex = "0x0bc2:0x3008"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Seagate FreeAgent XTreme; "
   ModelRegex = "0x0bc2:0x3101"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Seagate Expansion Desktop; "
   ModelRegex = "0x0bc2:0x33(00|1[2a]|2[012]|3[02])"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Seagate FreeAgent GoFlex USB 2.0; "
   ModelRegex = "0x0bc2:0x502[01]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Seagate FreeAgent GoFlex USB 3.0; "
   ModelRegex = "0x0bc2:0x5030"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Seagate FreeAgent GoFlex USB 3.0; "
   ModelRegex = "0x0bc2:0x5031"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Seagate FreeAgent; "
   ModelRegex = "0x0bc2:0x5040"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Seagate FreeAgent GoFlex USB 3.0; "
   ModelRegex = "0x0bc2:0x507[01]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Seagate FreeAgent GoFlex Desk USB 3.0; "
   ModelRegex = "0x0bc2:0x50a1"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Seagate FreeAgent GoFlex Desk USB 3.0; "
   ModelRegex = "0x0bc2:0x50a[57]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Seagate FreeAgent / Maxtor D3; "
   ModelRegex = "0x0bc2:0x612[136]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Maxtor M3 Portable; "
   ModelRegex = "0x0bc2:0x61b7"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Seagate Backup Plus USB 3.0; "
   ModelRegex = "0x0bc2:0xa0[01]3"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Seagate Backup Plus Desktop USB 3.0; "
   ModelRegex = "0x0bc2:0xa(0a[14]|b3[14])"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Seagate Slim Portable Drive; "
   ModelRegex = "0x0bc2:0xab00"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Seagate Backup Plus USB 3.0; "
   ModelRegex = "0x0bc2:0xab(1e|2[01458]|38|43)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Addonics HDMU3; "
   ModelRegex = "0x0bf6:0x1001"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Dura Micro; Cypress"
   ModelRegex = "0x0c0b:0xb001"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Dura Micro; Initio"
   ModelRegex = "0x0c0b:0xb136"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Dura Micro 509; Sunplus"
   ModelRegex = "0x0c0b:0xb159"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Maxtor OneTouch 200GB; "
   ModelRegex = "0x0d49:0x7010"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Maxtor OneTouch; "
   ModelRegex = "0x0d49:0x7300"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Maxtor OneTouch 4; "
   ModelRegex = "0x0d49:0x7310"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Maxtor OneTouch 4 Mini; "
   ModelRegex = "0x0d49:0x7350"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Maxtor BlackArmor Portable; "
   ModelRegex = "0x0d49:0x7550"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Maxtor Basics Desktop; "
   ModelRegex = "0x0d49:0x7410"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Maxtor Basics Portable; "
   ModelRegex = "0x0d49:0x7450"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Cypress"
   ModelRegex = "0x0dbf:0x9001"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Oyen Digital MiniPro USB 3.0; "
   ModelRegex = "0x0dc4:0x020a"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Cowon iAudio X5; "
   ModelRegex = "0x0e21:0x0510"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: iRiver iHP-120/140 MP3 Player; Cypress"
   ModelRegex = "0x1006:0x3002"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: WD My Passport (IDE); Cypress"
   ModelRegex = "0x1058:0x0701"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: WD Elements Desktop; "
   ModelRegex = "0x1058:0x10(01|03|21|7c)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: WD Elements / My Passport; "
   ModelRegex = "0x1058:0x(07(0[245a]|1a|30|4[0128a]|a[8e])|08(1[06]|2[02]|3[37a])|10(10|23|4[28]|7d|a[28]|b8)|25(9[9df]|a[12]|e2|fa))"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: WD My Book / Easystore; "
   ModelRegex = "0x1058:0x(09(0[06]|10)|11(0[01245]|1[0d]|30|40)|1230|25(a3|ee|fb))"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Atech"
   ModelRegex = "0x11b0:0x6298"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ADATA; "
   ModelRegex = "0x125f:0xa(11|31|35|15)a"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ADATA; Cypress"
   ModelRegex = "0x125f:0xa9[34]a"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Initio 316000"
   ModelRegex = "0x13fd:0x0540"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Initio"
   ModelRegex = "0x13fd:0x0840"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Initio"
   ModelRegex = "0x13fd:0x1040"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Initio 6Y120L0"
   ModelRegex = "0x13fd:0x1150"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Initio"
   ModelRegex = "0x13fd:0x1240"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Initio"
   ModelRegex = "0x13fd:0x1340"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Initio"
   ModelRegex = "0x13fd:0x16[45]0"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Intenso Memory Station 2,5\"; Initio"
   ModelRegex = "0x13fd:0x1840"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Initio"
   ModelRegex = "0x13fd:0x1e40"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Initio"
   ModelRegex = "0x13fd:0x39[124]0"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Super Top generic enclosure; "
   ModelRegex = "0x14cd:0x6116"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; JMicron JMS539"
   ModelRegex = "0x152d:0x0539"
   FirmwareRegex = "0x0100"
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; JMicron JMS539"
   ModelRegex = "0x152d:0x0539"
   FirmwareRegex = "0x020[56]|0x28(03|12)"
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; JMicron "
   ModelRegex = "0x152d:0x0551"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; JMicron"
   ModelRegex = "0x152d:0x0565"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; JMicron JMS567"
   ModelRegex = "0x152d:0x0567"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; JMicron JMS578"
   ModelRegex = "0x152d:0x0578"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; JMicron"
   ModelRegex = "0x152d:0x0579"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: OCZ THROTTLE OCZESATATHR8G; JMicron JMF601"
   ModelRegex = "0x152d:0x0602"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; JMicron JMS561"
   ModelRegex = "0x152d:0x[19]561"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; JMicron JM20329"
   ModelRegex = "0x152d:0x2329"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; JMicron JM20336"
   ModelRegex = "0x152d:0x2336"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Generic JMicron adapter; JMicron"
   ModelRegex = "0x152d:0x2337"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; JMicron JM20337/8"
   ModelRegex = "0x152d:0x2338"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; JMicron JM20339"
   ModelRegex = "0x152d:0x2339"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; JMicron"
   ModelRegex = "0x152d:0x2351"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; JMicron"
   ModelRegex = "0x152d:0x2352"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; JMicron"
   ModelRegex = "0x152d:0x2509"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; JMicron JMS566"
   ModelRegex = "0x152d:0x2566"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; JMicron"
   ModelRegex = "0x152d:0x2590"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; JMicron JMS567"
   ModelRegex = "0x152d:0x3562"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; JMicron"
   ModelRegex = "0x152d:0x3569"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; JMicron JMS561U"
   ModelRegex = "0x152d:0x8561"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; ASMedia ASM1053/1153/1351"
   ModelRegex = "0x174c:0x1([01]53|351)"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; ASMedia ASM1051"
   ModelRegex = "0x174c:0x5106"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; ASMedia AS2105"
   ModelRegex = "0x174c:0x5136"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; ASMedia"
   ModelRegex = "0x174c:0x5516"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; ASMedia"
   ModelRegex = "0x174c:0x55aa"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; LucidPORT USB300"
   ModelRegex = "0x1759:0x500[02]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; LucidPort"
   ModelRegex = "0x1759:0x5100"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Verbatim Portable Hard Drive; Sunplus"
   ModelRegex = "0x18a5:0x0214"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Verbatim FW/USB160; Oxford OXUF934SSA-LQAG"
   ModelRegex = "0x18a5:0x0215"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Verbatim External Hard Drive 47519; Sunplus"
   ModelRegex = "0x18a5:0x0216"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Verbatim Pocket Hard Drive; JMicron"
   ModelRegex = "0x18a5:0x0227"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Verbatim External Hard Drive; JMicron"
   ModelRegex = "0x18a5:0x022a"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Verbatim Store'n'Go; JMicron"
   ModelRegex = "0x18a5:0x022b"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Verbatim Pocket Hard Drive; "
   ModelRegex = "0x18a5:0x0237"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Verbatim External Hard Drive; "
   ModelRegex = "0x18a5:0x0400"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Vantec NST-400MX-SR; Silicon Image 5744"
   ModelRegex = "0x1a4a:0x1670"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Voyager GTX; "
   ModelRegex = "0x1b1c:0x1a0e"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; SunplusIT"
   ModelRegex = "0x1bcf:0x0c31"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: TrekStor DataStation; "
   ModelRegex = "0x1e68:0x0050"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Innostor IS611"
   ModelRegex = "0x1f75:0x0611"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Innostor IS621"
   ModelRegex = "0x1f75:0x0621"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; Innostor IS888"
   ModelRegex = "0x1f75:0x0888"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; VIA VL701"
   ModelRegex = "0x2109:0x0701"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; VIA VL711"
   ModelRegex = "0x2109:0x0711"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; "
   ModelRegex = "0x2537:0x106[68]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: PQI H560; "
   ModelRegex = "0x3538:0x0902"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: PQI bridge; "
   ModelRegex = "0x3538:0x0064"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Sharkoon QuickPort XT USB 3.0; "
   ModelRegex = "0x357d:0x7788"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Hitachi Touro Desk; JMicron"
   ModelRegex = "0x4971:0x1011"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Hitachi Touro; "
   ModelRegex = "0x4971:0x101[45]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Hitachi Touro Mobile; "
   ModelRegex = "0x4971:0x102[034]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: SimpleTech;"
   ModelRegex = "0x4971:0x8017"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Hitachi/SimpleTech; JMicron"
   ModelRegex = "0x4971:0xce17"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; OnSpec"
   ModelRegex = "0x55aa:0x2b00"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: Sharkoon 2-Bay RAID Box; "
   ModelRegex = "0x6795:0x2756"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; JMicron JMS566"
   ModelRegex = "0xa152:0xb566"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
 
 [[Drives]]
   Family = "USB: ; "
   ModelRegex = "0xabcd:0x610[34]"
-  FirmwareRegex = ""
-  WarningMsg = ""
-  [Drives.Presets]
