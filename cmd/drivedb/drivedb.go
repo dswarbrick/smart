@@ -1,7 +1,7 @@
 // Copyright 2017-18 Daniel Swarbrick. All rights reserved.
 // Use of this source code is governed by a GPL license that can be found in the LICENSE file.
 
-// Smartmontools drivedb.h database to .toml format converter.
+// Smartmontools drivedb.h database to YAML format converter.
 //
 package main
 
@@ -15,20 +15,20 @@ import (
 	"strings"
 	"time"
 
-	"github.com/BurntSushi/toml"
+	"gopkg.in/yaml.v2"
 )
 
 type AttrConv struct {
 	Conv string
-	Name string `toml:",omitempty"`
+	Name string `yaml:",omitempty"`
 }
 
 type DriveModel struct {
-	Family        string `toml:",omitempty"`
+	Family        string `yaml:",omitempty"`
 	ModelRegex    string
-	FirmwareRegex string              `toml:",omitempty"`
-	WarningMsg    string              `toml:",omitempty"`
-	Presets       map[string]AttrConv `toml:",omitempty"`
+	FirmwareRegex string              `yaml:",omitempty"`
+	WarningMsg    string              `yaml:",omitempty"`
+	Presets       map[string]AttrConv `yaml:",omitempty"`
 }
 
 type DriveDb struct {
@@ -36,7 +36,7 @@ type DriveDb struct {
 }
 
 func main() {
-	dest := flag.String("o", "drivedb.toml", "Output .toml file")
+	dest := flag.String("o", "drivedb.yml", "Output .yml file")
 	flag.Parse()
 
 	if *dest == "" {
@@ -83,10 +83,10 @@ func main() {
 	}
 
 	fmt.Printf("Parsed drivedb.h in %v - %d entries\n", time.Since(t0), len(drivedb.Drives))
-	enc := toml.NewEncoder(destFile)
+	enc := yaml.NewEncoder(destFile)
 
 	if err := enc.Encode(drivedb); err != nil {
-		fmt.Printf("Error encoding toml: %v\n", err)
+		fmt.Printf("Error encoding yaml: %v\n", err)
 		os.Exit(1)
 	}
 

@@ -4,11 +4,11 @@
 package drivedb
 
 import (
-	"fmt"
+	"os"
 	"regexp"
 	"strings"
 
-	"github.com/BurntSushi/toml"
+	"gopkg.in/yaml.v2"
 )
 
 // SMART attribute conversion rule
@@ -69,12 +69,20 @@ func (db *DriveDb) LookupDrive(ident []byte) DriveModel {
 	return model
 }
 
-// OpenDriveDb opens a .toml formatted drive database, unmarshalls it, and returns a DriveDb.
+// OpenDriveDb opens a YAML-formatted drive database, unmarshalls it, and returns a DriveDb.
 func OpenDriveDb(dbfile string) (DriveDb, error) {
 	var db DriveDb
 
-	if _, err := toml.DecodeFile(dbfile, &db); err != nil {
-		return db, fmt.Errorf("Cannot open / parse drive DB: %s", err)
+	f, err := os.Open(dbfile)
+	if err != nil {
+		return db, nil
+	}
+
+	defer f.Close()
+	dec := yaml.NewDecoder(f)
+
+	if err := dec.Decode(&db); err != nil {
+		return db, err
 	}
 
 	for i, d := range db.Drives {
