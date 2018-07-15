@@ -20,15 +20,15 @@ import (
 
 type AttrConv struct {
 	Conv string
-	Name string `toml:"Name,omitempty"`
+	Name string `toml:",omitempty"`
 }
 
 type DriveModel struct {
-	Family        string `toml:"Family,omitempty"`
+	Family        string `toml:",omitempty"`
 	ModelRegex    string
-	FirmwareRegex string              `toml:"FirmwareRegex,omitempty"`
-	WarningMsg    string              `toml:"WarningMsg,omitempty"`
-	Presets       map[string]AttrConv `toml:"Presets,omitempty"`
+	FirmwareRegex string              `toml:",omitempty"`
+	WarningMsg    string              `toml:",omitempty"`
+	Presets       map[string]AttrConv `toml:",omitempty"`
 }
 
 type DriveDb struct {
