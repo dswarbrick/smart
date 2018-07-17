@@ -9,6 +9,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 	"text/scanner"
 	"time"
@@ -61,12 +62,22 @@ func main() {
 		} else if prev == scanner.String && tok == scanner.String {
 			items[idx] += strings.Trim(s.TokenText(), `"`)
 		} else if tok == '}' {
-			dm := DriveModel{
-				Family:        items[0],
-				ModelRegex:    items[1],
-				FirmwareRegex: items[2],
-				WarningMsg:    items[3],
-				Presets:       make(map[string]AttrConv),
+			dm := DriveModel{Presets: make(map[string]AttrConv)}
+
+			if tmp, err := strconv.Unquote(`"` + items[0] + `"`); err == nil {
+				dm.Family = tmp
+			}
+
+			if tmp, err := strconv.Unquote(`"` + items[1] + `"`); err == nil {
+				dm.ModelRegex = tmp
+			}
+
+			if tmp, err := strconv.Unquote(`"` + items[2] + `"`); err == nil {
+				dm.FirmwareRegex = tmp
+			}
+
+			if tmp, err := strconv.Unquote(`"` + items[3] + `"`); err == nil {
+				dm.WarningMsg = tmp
 			}
 
 			// Split presets params so we can parse them.
