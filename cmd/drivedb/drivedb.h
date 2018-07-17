@@ -18,15 +18,15 @@
 
 /*
  * Structure used to store drive database entries:
- */
-struct drive_settings {
-  const char * modelfamily;
-  const char * modelregexp;
-  const char * firmwareregexp;
-  const char * warningmsg;
-  const char * presets;
-};
-/*
+ *
+ * struct drive_settings {
+ *   const char * modelfamily;
+ *   const char * modelregexp;
+ *   const char * firmwareregexp;
+ *   const char * warningmsg;
+ *   const char * presets;
+ * };
+ *
  * The elements are used in the following ways:
  *
  *  modelfamily     Informal string about the model family/series of a
@@ -72,7 +72,9 @@ struct drive_settings {
  *
  */
 
-const struct drive_settings builtin_knowndrives[] = {
+/*
+const drive_settings builtin_knowndrives[] = {
+ */
   { "$Id: drivedb.h 4732 2018-06-17 17:45:04Z dipohl $",
     "-", "-",
     "This is a dummy entry to hold the SVN-Id of drivedb.h",
@@ -5056,4 +5058,6 @@ const struct drive_settings builtin_knowndrives[] = {
     "",
     "-d sat"
   },
+/*
 }; // builtin_knowndrives[]
+ */
