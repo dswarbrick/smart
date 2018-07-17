@@ -1,5 +1,5 @@
 drives:
-- family: '$Id: drivedb.h 4635 2017-12-02 14:34:25Z chrfranke $'
+- family: '$Id: drivedb.h 4732 2018-06-17 17:45:04Z dipohl $'
   modelregex: '-'
   firmwareregex: '-'
   warningmsg: This is a dummy entry to hold the SVN-Id of drivedb.h
@@ -546,7 +546,7 @@ drives:
     |LS )?SSD|GS|GT)|FM-25S2S-(60|120|240)GBP2|FTM(06|12|24|48)CT25H|KINGSTON SE50S3(100|240|480)G|KINGSTON
     SH10[03]S3(90|120|240|480)G|KINGSTON SKC(300S37A|380S3)(60|120|180|240|480)G|KINGSTON
     SVP200S3(7A)?(60|90|120|240|480)G|KINGSTON SMS200S3(30|60|120)G|KINGSTON SMS450S3(32|64|128)G|KINGSTON
-    (SV300|SKC100|SE100)S3.*G|MKNSSDCR(45|60|90|120|180|240|360|480)GB(-(7|DX7?|MX|G2))?|MKNSSDEC(60|120|240|480|512)GB|MKNSSDAT(30|40|60|120|180|240|480)GB(-(DX|V))?|Mushkin
+    (SV300|SKC100|SE100)S3.*G|KINGSTON SNS4151S316GD|MKNSSDCR(45|60|90|120|180|240|360|480)GB(-(7|DX7?|MX|G2))?|MKNSSDEC(60|120|240|480|512)GB|MKNSSDAT(30|40|60|120|180|240|480)GB(-(DX|V))?|Mushkin
     MKNSSDCL(40|60|80|90|115|120|180|240|480)GB-DX2?|OCZ[ -](AGILITY2([ -]EX)?|COLOSSUS2|ONYX2|VERTEX(2|-LE))(
     [123]\..*)?|OCZ-NOCTI|OCZ-REVODRIVE3?( X2)?|OCZ-REVODRIVE350|OCZ[ -](VELO|VERTEX2[
     -](EX|PRO))( [123]\..*)?|D2[CR]STK251...-....|OCZ-(AGILITY3|SOLID3|VERTEX3( MI)?)|OCZ
@@ -673,7 +673,7 @@ drives:
 - family: Phison Driven SSDs
   modelregex: KINGSTON SUV300S37A(120|240|480)G|KINGSTON SKC310S3B?7A960G|KINGSTON
     SKC400S37(128G|256G|512G|1T)|KINGSTON SV310S3(7A|D7|N7A|B7A)960G|GOODRAM|PNY CS1311
-    (120|240|480|960)GB SSD|KINGSTON SHSS3B?7A(120|240|480|960)G
+    (120|240|480|960)GB SSD|SSD Smartbuy (60|120|240)GB|KINGSTON SHSS3B?7A(120|240|480|960)G
   presets:
     "2":
       conv: raw48
@@ -749,7 +749,7 @@ drives:
       name: Total_Erase_Count
 - family: Phison Driven OEM SSDs
   modelregex: SATA SSD
-  firmwareregex: (S9FM02\.1|SBFM10\.5)
+  firmwareregex: (S9FM02\.1|SBFM10\.5|SBFM91\.2)
   presets:
     "2":
       conv: raw48
@@ -1073,7 +1073,7 @@ drives:
       conv: raw48
       name: Total_NAND_Read_Ct_GiB
 - family: OCZ/Toshiba Trion SSDs
-  modelregex: OCZ-TRION1[05]0|TOSHIBA-TR150
+  modelregex: OCZ-TRION1[05]0|TOSHIBA-TR150|TOSHIBA Q300( Pro\.)?
   presets:
     "167":
       conv: raw48
@@ -1766,6 +1766,42 @@ drives:
     "243":
       conv: raw48
       name: NAND_Writes_32MiB
+- family: Intel SSD Pro 5400s Series
+  modelregex: INTEL SSDSC[2K]KF(120H|180H|240H|360H|480H|010X)6
+  presets:
+    "170":
+      conv: raw48
+      name: Available_Reservd_Space
+    "171":
+      conv: raw48
+      name: Program_Fail_Count
+    "172":
+      conv: raw48
+      name: Erase_Fail_Count
+    "174":
+      conv: raw48
+      name: Unexpect_Power_Loss_Ct
+    "183":
+      conv: raw48
+      name: SATA_Downshift_Count
+    "187":
+      conv: raw48
+      name: Uncorrectable_Error_Cnt
+    "225":
+      conv: raw48
+      name: Host_Writes_32MiB
+    "226":
+      conv: raw48
+      name: Workld_Media_Wear_Indic
+    "227":
+      conv: raw48
+      name: Workld_Host_Reads_Perc
+    "228":
+      conv: raw48
+      name: Workload_Minutes
+    "249":
+      conv: raw48
+      name: NAND_Writes_1GiB
 - family: Intel 3710 Series SSDs
   modelregex: INTEL SSDSC2BA(200G|400G|800G|012T)4.?
   presets:
@@ -1918,7 +1954,7 @@ drives:
       conv: raw48
       name: Unknown_JMF_Attribute
 - family: Plextor M3/M5/M6 Series SSDs
-  modelregex: PLEXTOR PX-(64|128|256|512|768)M(3P?|5[MPS]|5Pro|6[MS])
+  modelregex: PLEXTOR PX-(64|128|256|512|768)M(3P?|5[MPS]|5Pro|6[MS])\+?
   presets:
     "170":
       conv: raw48
@@ -2028,9 +2064,9 @@ drives:
       name: NAND_Writes
 - family: Marvell based SanDisk SSDs
   modelregex: SanDisk SD5SG2[0-9]*G1052E|SanDisk SD6S[BF][12]M[0-9]*G(1022I?)?|SanDisk
-    SD7S[BN]6S-?(128|256|512)G(1122|-1006)|SanDisk SD8SB8U((128|256|512)G|1T00)1122|SanDisk
-    SDSSDHP[0-9]*G|SanDisk (SDSSDHII|Ultra II )[0-9]*GB?|SanDisk SDSSDXPS?[0-9]*G|SSD
-    SATAIII 16GB
+    SD7S[BN]6S-?(128|256|512)G(1122|-1006)|SanDisk SD8S[BN]8U-?((128|256|512)G|1T00)(1122|-1006)|SanDisk
+    SDSSDHP[0-9]*G|SanDisk (SDSSDHII|Ultra II )[0-9]*GB?|SanDisk SDSSDH2(128|256)G|SanDisk
+    SDSSDXPS?[0-9]*G|SSD SATAIII 16GB
   presets:
     "165":
       conv: raw48
@@ -2062,6 +2098,9 @@ drives:
     "199":
       conv: raw48
       name: SATA_CRC_Error
+    "201":
+      conv: raw48
+      name: Lifetime_Remaining%
     "212":
       conv: raw48
       name: SATA_PHY_Error
@@ -2086,10 +2125,13 @@ drives:
     "244":
       conv: raw48
       name: Thermal_Throttle
+    "249":
+      conv: raw48
+      name: TLC_NAND_GB_Writes
 - family: SanDisk based SSDs
   modelregex: SanDisk iSSD P4 [0-9]*GB|SanDisk pSSD|SanDisk SDSSDP[0-9]*G|SanDisk
     SDSSDRC032G|SanDisk SSD i100 [0-9]*GB|SanDisk SSD U100 ([0-9]*GB|SMG2)|SanDisk
-    SSD U110 (8|16|24|32|64|128)GB|SanDisk SD7[SU]B[23]Q(064|128|256|512)G.*
+    SSD U110 (8|16|24|32|64|128)GB|SanDisk SDSA6MM-.*|SanDisk SD7[SU]B[23]Q(064|128|256|512)G.*
   presets:
     "165":
       conv: raw48
@@ -2260,7 +2302,7 @@ drives:
       conv: raw48
       name: DriveLife_Used%
 - family: SiliconMotion based SSDs
-  modelregex: R3SL(120|240|480|960)G|CT(120|250|500|1000)BX100SSD1|CT(240|480|960)BX200SSD1|TS((16|32|64|128|256|512)G|1T)(SSD|MSA)(370S?|420I?)|TS(16|32|64|128|512|256)GMTS400S?|TS(120|240)GMTS420|TS(128G|256G|512G|1T)SSD230S|TS(120|240|480|960)GSSD220S|TS(16G|32G|64G|128G|256G|512G|1T)MTS800S?|TS(16|32|64)GMSA630|MKNSSDRE(1TB|2TB|512GB|500GB|256GB|250GB)|MKNSSDTR(240|500|250|120|480|240)GB(-LT)?|LITEON
+  modelregex: R3SL(120|240|480|960)G|CT(120|250|500|1000)BX100SSD1|CT(240|480|960)BX200SSD1|TS((16|32|64|128|256|512)G|1T)(SSD|MSA)(370S?|420I?)|TS(16|32|64|128|512|256)GMTS400S?|TS(120|240)GMTS420|TS(128G|256G|512G|1T)SSD230S|TS(120|240|480|960)GSSD220S|TS(16G|32G|64G|128G|256G|512G|1T)MTS800S?|TS(16|32|64)GMSA630|TS(32|64|128)GPSD330|MKNSSDRE(1TB|2TB|512GB|500GB|256GB|250GB)|MKNSSDTR(240|500|250|120|480|240)GB(-LT)?|LITEON
     LMH-(128|256|512)V2M-.*|ADATA SP550
   presets:
     "148":
@@ -3287,7 +3329,7 @@ drives:
 - family: Hitachi/HGST Deskstar 7K4000
   modelregex: (Hitachi|HGST) HDS724040ALE640
 - family: HGST Deskstar NAS
-  modelregex: HGST HDN72(4030|4040|6050|6060)ALE6[14]0
+  modelregex: HGST HDN72(4030|4040|6050|6060)ALE6(10|14|40|04)
 - family: Hitachi Ultrastar A7K1000
   modelregex: (Hitachi )?HUA7210(50|75|10)KLA330.*
 - family: Hitachi Ultrastar A7K2000
@@ -3411,6 +3453,21 @@ drives:
 - family: Toshiba 1.8" HDD MK..29GSG
   modelregex: TOSHIBA MK(12|16|25)29GSG
 - modelregex: TOSHIBA MK6022GAX
+- family: Toshiba HK4R Series SSD
+  modelregex: TOSHIBA THNSN8(120P|240P|480P|960P|1Q92)CSE
+  presets:
+    "167":
+      conv: raw48
+      name: SSD_Protect_Mode
+    "168":
+      conv: raw48
+      name: SATA_PHY_Error_Count
+    "169":
+      conv: raw48
+      name: Bad_Block_Count
+    "173":
+      conv: raw48
+      name: Erase_Count
 - family: Toshiba HG6 Series SSD
   modelregex: TOSHIBA THNS[NF]J(060|128|256|512)G[BCAM8VD][SCN][TU].*
   presets:
@@ -3491,7 +3548,7 @@ drives:
 - family: Seagate Momentus Thin
   modelregex: ST(160|250|320)LT0(07|09|11|14)-.*
 - family: Seagate Laptop HDD
-  modelregex: ST((25|32|50)0LT0(12|15|25)|(32|50)0LM0(10|21)|[34]00LM016)-.*
+  modelregex: ST((25|32|50)0LT0(12|15|25)|(32|50)0LM0(10|21)|[34]000LM016)-.*
 - family: Seagate Laptop SSHD
   modelregex: ST(500|1000)LM0(00|14)-.*
 - family: Seagate Medalist 1010, 1720, 1721, 2120, 3230 and 4340
@@ -3623,6 +3680,15 @@ drives:
       conv: raw16
     "240":
       conv: msec24hour32
+- family: Seagate Barracuda Compute
+  modelregex: ST(8000DM004|6000DM003|4000DM004|3000DM007|2000DM005)-.*
+- family: Seagate Barracuda Pro
+  modelregex: ST(8000DM005|6000DM004|4000DM006|2000DM009)-.*
+  presets:
+    "188":
+      conv: raw16
+    "240":
+      conv: msec24hour32
 - family: Seagate Barracuda 7200.14 (AF)
   modelregex: ST(250|320|500|750)DM00[0-3]-.*
   presets:
@@ -3705,7 +3771,7 @@ drives:
 - family: Seagate Constellation.2 (SATA)
   modelregex: ST9(25061|50062|100064)[012]NS|MM1000GBKAL
 - family: Seagate Enterprise Capacity 3.5 HDD
-  modelregex: ST([24568]|10)000NM0[01][0-48][456]-.*
+  modelregex: ST([1234568]|10)000NM0[01][0-68][456]-.*
   presets:
     "188":
       conv: raw16
@@ -3713,8 +3779,10 @@ drives:
       conv: msec24hour32
 - family: Seagate NAS HDD
   modelregex: ST([234]000VN000|[468]000VN00(02|21|12|31|3))-.*
+- family: Seagate Enterprise NAS HDD
+  modelregex: ST(8000NE|[65432]000VN)00[01]1-.*
 - family: Seagate IronWolf
-  modelregex: ST(10|8|6|4|3|2|1)000VN00(04|22|41|8|7|2|4)-.*
+  modelregex: ST(12|10|8|6|4|3|2|1)000VN00(04|07|22|41|8|7|2|4)-.*
 - family: Seagate Archive HDD
   modelregex: ST[568]000AS00[01][12]-.*
 - family: Seagate Pipeline HD 5900.1
@@ -3747,6 +3815,42 @@ drives:
   modelregex: ST9(40|80)210AS?
 - family: Seagate ST1.2 CompactFlash
   modelregex: ST6[468]022CF
+- family: Seagate Nytro XF1230 SATA SSD
+  modelregex: XF1230-1A(0240|0480|0960|1920)
+  presets:
+    "174":
+      conv: raw48
+      name: Unexpect_Power_Loss_Ct
+    "180":
+      conv: raw48
+      name: End_to_End_Err_Detect
+    "183":
+      conv: raw48
+      name: SATA_Downshift_Count
+    "189":
+      conv: raw48
+      name: SSD_Health_Flags
+    "190":
+      conv: raw48
+      name: SATA_Error_Ct
+    "201":
+      conv: raw48
+      name: Read_Error_Rate
+    "231":
+      conv: raw48
+      name: SSD_Life_Left_Perc
+    "234":
+      conv: raw48
+      name: Lifetime_Nand_Gb
+    "241":
+      conv: raw48
+      name: Total_Writes_GiB
+    "242":
+      conv: raw48
+      name: Total_Reads_GiB
+    "245":
+      conv: raw48
+      name: Read_Error_Rate
 - family: WD Blue PC SSD
   modelregex: WDC WDS...[TG]1B0[AB].*
   presets:
@@ -3845,13 +3949,13 @@ drives:
 - family: Western Digital RE4-GP
   modelregex: (WDC )?WD200[23]FYPS-.*
 - family: Western Digital Re
-  modelregex: WDC WD([12]004FBYZ|[1-6]00[01M]F[SXY]YZ)-.*|WD2000FYYX
+  modelregex: WDC WD((1004|2004)FBYZ|([234]000)FDYZ|[234]000FYYZ|2000FYYX)-.*
   presets:
     "16":
       conv: raw48
       name: Total_LBAs_Read
 - family: Western Digital Se
-  modelregex: WDC WD(1002|2000|3000|4000)F9YZ-.*
+  modelregex: WDC WD(1002|2000|3000|4000|5001|6001)F9YZ-.*
 - family: Western Digital Caviar Green
   modelregex: WDC WD((50|64|75)00AA[CV]S|(50|64|75)00AADS|10EA[CV]S|(10|15|20)EAD[SX])-.*
 - family: Western Digital Caviar Green (AF)
@@ -3963,20 +4067,10 @@ drives:
   modelregex: 0x045b:0x022[9a]
 - family: 'USB: Philips; '
   modelregex: 0x0471:0x2021
-- family: 'USB: Toshiba Stor.E Slim USB 3.0; '
-  modelregex: 0x0480:0x0100
-- family: 'USB: Toshiba Canvio; '
-  modelregex: 0x0480:0x02(01|10)
 - family: 'USB: Toshiba Canvio 500GB; SunPlus'
   modelregex: 0x0480:0xa004
-- family: 'USB: Toshiba Canvio Basics; '
-  modelregex: 0x0480:0xa00[6d]
-- family: 'USB: Toshiba Stor.E; '
-  modelregex: 0x0480:0xa00[9ace]
-- family: 'USB: Toshiba Canvio; '
-  modelregex: 0x0480:0x(a(007|100|20[027c])|b207)
-- family: 'USB: Toshiba Canvio Desktop; '
-  modelregex: 0x0480:0xd0(00|10|11)
+- family: 'USB: Toshiba; '
+  modelregex: 0x0480:0x....
 - family: 'USB: ; Cypress CY7C68300A (AT2)'
   modelregex: 0x04b4:0x6830
   firmwareregex: "0x0001"
@@ -4125,48 +4219,10 @@ drives:
   modelregex: 0x0aec:0x3050
 - family: 'USB: Seagate External Drive; Cypress'
   modelregex: 0x0bc2:0x0503
-- family: 'USB: Seagate FreeAgent Go; '
-  modelregex: 0x0bc2:0x2(000|100|101)
-- family: 'USB: Seagate FreeAgent Go FW; '
-  modelregex: 0x0bc2:0x2200
-- family: 'USB: Seagate Expansion Portable; '
-  modelregex: 0x0bc2:0x23(00|12|1a|20|21|22)
-- family: 'USB: Seagate FreeAgent Desktop; '
-  modelregex: 0x0bc2:0x3000
-- family: 'USB: Seagate FreeAgent Desk; '
-  modelregex: 0x0bc2:0x3001
-- family: 'USB: Seagate FreeAgent Desk; '
-  modelregex: 0x0bc2:0x3008
-- family: 'USB: Seagate FreeAgent XTreme; '
-  modelregex: 0x0bc2:0x3101
-- family: 'USB: Seagate Expansion Desktop; '
-  modelregex: 0x0bc2:0x33(00|1[2a]|2[012]|3[02])
-- family: 'USB: Seagate FreeAgent GoFlex USB 2.0; '
-  modelregex: 0x0bc2:0x502[01]
-- family: 'USB: Seagate FreeAgent GoFlex USB 3.0; '
-  modelregex: 0x0bc2:0x5030
-- family: 'USB: Seagate FreeAgent GoFlex USB 3.0; '
-  modelregex: 0x0bc2:0x5031
 - family: 'USB: Seagate FreeAgent; '
-  modelregex: 0x0bc2:0x5040
-- family: 'USB: Seagate FreeAgent GoFlex USB 3.0; '
-  modelregex: 0x0bc2:0x507[01]
-- family: 'USB: Seagate FreeAgent GoFlex Desk USB 3.0; '
-  modelregex: 0x0bc2:0x50a1
-- family: 'USB: Seagate FreeAgent GoFlex Desk USB 3.0; '
-  modelregex: 0x0bc2:0x50a[57]
-- family: 'USB: Seagate FreeAgent / Maxtor D3; '
-  modelregex: 0x0bc2:0x612[136]
-- family: 'USB: Maxtor M3 Portable; '
-  modelregex: 0x0bc2:0x61b7
-- family: 'USB: Seagate Backup Plus USB 3.0; '
-  modelregex: 0x0bc2:0xa0[01]3
-- family: 'USB: Seagate Backup Plus Desktop USB 3.0; '
-  modelregex: 0x0bc2:0xa(0a[14]|b3[14])
-- family: 'USB: Seagate Slim Portable Drive; '
-  modelregex: 0x0bc2:0xab00
-- family: 'USB: Seagate Backup Plus USB 3.0; '
-  modelregex: 0x0bc2:0xab(1e|2[01458]|38|43)
+  modelregex: 0x0bc2:0x(3008|50(31|a1))
+- family: 'USB: Seagate; '
+  modelregex: 0x0bc2:0x....
 - family: 'USB: Addonics HDMU3; '
   modelregex: 0x0bf6:0x1001
 - family: 'USB: Dura Micro; Cypress'
@@ -4199,38 +4255,20 @@ drives:
   modelregex: 0x1006:0x3002
 - family: 'USB: WD My Passport (IDE); Cypress'
   modelregex: 0x1058:0x0701
-- family: 'USB: WD Elements Desktop; '
-  modelregex: 0x1058:0x10(01|03|21|7c)
-- family: 'USB: WD Elements / My Passport; '
-  modelregex: 0x1058:0x(07(0[245a]|1a|30|4[0128a]|a[8e])|08(1[06]|2[02]|3[37a])|10(10|23|4[28]|7d|a[28]|b8)|25(9[9df]|a[12]|e2|fa))
-- family: 'USB: WD My Book / Easystore; '
-  modelregex: 0x1058:0x(09(0[06]|10)|11(0[01245]|1[0d]|30|40)|1230|25(a3|ee|fb))
+- family: 'USB: Western Digital; '
+  modelregex: 0x1058:0x....
 - family: 'USB: ; Atech'
   modelregex: 0x11b0:0x6298
 - family: 'USB: ADATA; '
   modelregex: 0x125f:0xa(11|31|35|15)a
 - family: 'USB: ADATA; Cypress'
   modelregex: 0x125f:0xa9[34]a
-- family: 'USB: ; Initio 316000'
-  modelregex: 0x13fd:0x0540
 - family: 'USB: ; Initio'
-  modelregex: 0x13fd:0x0840
-- family: 'USB: ; Initio'
-  modelregex: 0x13fd:0x1040
-- family: 'USB: ; Initio 6Y120L0'
-  modelregex: 0x13fd:0x1150
-- family: 'USB: ; Initio'
-  modelregex: 0x13fd:0x1240
-- family: 'USB: ; Initio'
-  modelregex: 0x13fd:0x1340
+  modelregex: 0x13fd:0x(054|1(04|15))0
 - family: 'USB: ; Initio'
   modelregex: 0x13fd:0x16[45]0
-- family: 'USB: Intenso Memory Station 2,5"; Initio'
-  modelregex: 0x13fd:0x1840
 - family: 'USB: ; Initio'
-  modelregex: 0x13fd:0x1e40
-- family: 'USB: ; Initio'
-  modelregex: 0x13fd:0x39[124]0
+  modelregex: 0x13fd:0x....
 - family: 'USB: Super Top generic enclosure; '
   modelregex: 0x14cd:0x6116
 - family: 'USB: ; JMicron JMS539'
@@ -4279,16 +4317,8 @@ drives:
   modelregex: 0x152d:0x3569
 - family: 'USB: ; JMicron JMS561U'
   modelregex: 0x152d:0x8561
-- family: 'USB: ; ASMedia ASM1053/1153/1351'
-  modelregex: 0x174c:0x1([01]53|351)
-- family: 'USB: ; ASMedia ASM1051'
-  modelregex: 0x174c:0x5106
-- family: 'USB: ; ASMedia AS2105'
-  modelregex: 0x174c:0x5136
 - family: 'USB: ; ASMedia'
-  modelregex: 0x174c:0x5516
-- family: 'USB: ; ASMedia'
-  modelregex: 0x174c:0x55aa
+  modelregex: 0x174c:0x....
 - family: 'USB: ; LucidPORT USB300'
   modelregex: 0x1759:0x500[02]
 - family: 'USB: ; LucidPort'
