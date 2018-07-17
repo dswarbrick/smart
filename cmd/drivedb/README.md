@@ -1,10 +1,7 @@
 DriveDB
 =======
 
-DriveDB is a simple tool that leverages cgo to read the drivedb.h file that
-ships with [smartmontools][1], writing out the database in .yaml format.
-
-The drivedb.h file is included under the terms of the Smartmontools license,
-with minimal modifications in order to be compatible with Go's cgo package.
+DriveDB is a simple tool to retrieve the drivedb.h drive "database" from
+[smartmontools][1], and convert it to a more Go-friendly YAML format.
 
 [1]: https://www.smartmontools.org/

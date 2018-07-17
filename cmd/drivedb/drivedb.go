@@ -8,51 +8,48 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io"
+	"net/http"
 	"os"
 	"strconv"
 	"strings"
 	"text/scanner"
-	"time"
 
 	"gopkg.in/yaml.v2"
 )
 
+const (
+	defaultDrivedbURL = "https://www.smartmontools.org/export/HEAD/trunk/smartmontools/drivedb.h"
+)
+
 type AttrConv struct {
-	Conv string
-	Name string `yaml:",omitempty"`
+	Conv string `yaml:"conv,omitempty"`
+	Name string `yaml:"name,omitempty"`
 }
 
 type DriveModel struct {
-	Family        string `yaml:",omitempty"`
-	ModelRegex    string
-	FirmwareRegex string              `yaml:",omitempty"`
-	WarningMsg    string              `yaml:",omitempty"`
-	Presets       map[string]AttrConv `yaml:",omitempty"`
+	Family        string              `yaml:"family,omitempty"`
+	ModelRegex    string              `yaml:"model_regex,omitempty"`
+	FirmwareRegex string              `yaml:"firmware_regex,omitempty"`
+	WarningMsg    string              `yaml:"warning,omitempty"`
+	Presets       map[string]AttrConv `yaml:"presets,omitempty"`
 }
 
 type DriveDb struct {
-	Drives []DriveModel
+	Drives []DriveModel `yaml:"drives"`
 }
 
-func main() {
-	input, err := os.Open("drivedb.h")
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Cannot open source file: %v\n", err)
-		os.Exit(1)
-	}
-
-	defer input.Close()
-
+func parseDrivedb(src io.Reader) []DriveModel {
 	var (
-		s       scanner.Scanner
-		prev    rune
-		idx     int
-		items   = make([]string, 5)
-		drivedb DriveDb
+		s    scanner.Scanner
+		prev rune
+		idx  int
 	)
 
-	s.Init(input)
-	t0 := time.Now()
+	drives := make([]DriveModel, 0)
+	items := make([]string, 5)
+
+	s.Init(src)
 
 	for tok := s.Scan(); tok != scanner.EOF; tok = s.Scan() {
 		if (prev == '{' || prev == ',') && tok == scanner.String {
@@ -95,8 +92,7 @@ func main() {
 				}
 			}
 
-			drivedb.Drives = append(drivedb.Drives, dm)
-
+			drives = append(drives, dm)
 			items = make([]string, 5)
 			idx = 0
 		}
@@ -104,15 +100,30 @@ func main() {
 		prev = tok
 	}
 
-	dest := flag.String("o", "drivedb.yml", "Output .yml file")
+	return drives
+}
+
+func main() {
+	var (
+		drivedbURL, outFilename string
+	)
+
+	flag.StringVar(&drivedbURL, "url", defaultDrivedbURL, "drivedb URL")
+	flag.StringVar(&outFilename, "o", "drivedb.yml", "Output .yml filename")
 	flag.Parse()
 
-	if *dest == "" {
-		flag.PrintDefaults()
+	resp, err := http.Get(drivedbURL)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Cannot fetch drivedb: %v\n", err)
 		os.Exit(1)
 	}
 
-	destFile, err := os.Create(*dest)
+	defer resp.Body.Close()
+
+	drives := parseDrivedb(resp.Body)
+	fmt.Printf("Parsed drivedb.h - %d entries\n", len(drives))
+
+	destFile, err := os.Create(outFilename)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Cannot create output: %v\n", err)
 		os.Exit(1)
@@ -120,13 +131,12 @@ func main() {
 
 	defer destFile.Close()
 
-	fmt.Printf("Parsed drivedb.h in %v - %d entries\n", time.Since(t0), len(drivedb.Drives))
 	enc := yaml.NewEncoder(destFile)
 
-	if err := enc.Encode(drivedb); err != nil {
+	if err := enc.Encode(DriveDb{drives}); err != nil {
 		fmt.Fprintf(os.Stderr, "Error encoding yaml: %v\n", err)
 		os.Exit(1)
 	}
 
-	fmt.Printf("Successfully wrote output to %s\n", *dest)
+	fmt.Printf("Successfully wrote output to %s\n", outFilename)
 }

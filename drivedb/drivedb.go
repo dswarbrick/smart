@@ -13,21 +13,21 @@ import (
 
 // SMART attribute conversion rule
 type AttrConv struct {
-	Conv string
-	Name string
+	Conv string `yaml:"conv"`
+	Name string `yaml:"name"`
 }
 
 type DriveModel struct {
-	Family         string
-	ModelRegex     string
-	FirmwareRegex  string
-	WarningMsg     string
-	Presets        map[string]AttrConv
+	Family         string              `yaml:"family"`
+	ModelRegex     string              `yaml:"model_regex"`
+	FirmwareRegex  string              `yaml:"firmware_regex"`
+	WarningMsg     string              `yaml:"warning"`
+	Presets        map[string]AttrConv `yaml:"presets"`
 	CompiledRegexp *regexp.Regexp
 }
 
 type DriveDb struct {
-	Drives []DriveModel
+	Drives []DriveModel `yaml:"drives"`
 }
 
 // LookupDrive returns the most appropriate DriveModel for a given ATA IDENTIFY value.
