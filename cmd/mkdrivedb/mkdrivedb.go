@@ -121,7 +121,7 @@ func main() {
 
 	flag.StringVar(&drivedbURL, "url", defaultDrivedbURL, "Optional drivedb URL")
 	flag.StringVar(&inFilename, "in", "", "Optional path to local drivedb.h")
-	flag.StringVar(&outFilename, "out", "drivedb.yml", "Output .yml filename")
+	flag.StringVar(&outFilename, "out", "drivedb.yaml", "Output .yaml filename")
 	flag.Parse()
 
 	if inFilename != "" {

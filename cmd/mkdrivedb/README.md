@@ -14,7 +14,7 @@ Usage of mkdrivedb:
   -in string
         Optional path to local drivedb.h
   -out string
-        Output .yml filename (default "drivedb.yml")
+        Output .yaml filename (default "drivedb.yaml")
   -url string
         Optional drivedb URL (default "https://www.smartmontools.org/export/HEAD/trunk/smartmontools/drivedb.h")
 ```

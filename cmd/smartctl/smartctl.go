@@ -111,7 +111,7 @@ func main() {
 
 		defer d.Close()
 
-		db, err := drivedb.OpenDriveDb("drivedb.yml")
+		db, err := drivedb.OpenDriveDb("drivedb.yaml")
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)

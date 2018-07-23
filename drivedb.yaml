@@ -1,0 +1,202 @@
+# Minimal drivedb with default attribute names / conversions.
+#
+# For a more complete drivedb, run the `mkdrivedb` tool included with this
+# package, to convert a Smartmontools (https://smartmontools.org) drivedb.h
+# to YAML format.
+- family: DEFAULT
+  model_regex: '-'
+  firmware_regex: '-'
+  warning: Default settings
+  presets:
+    "1":
+      conv: raw48
+      name: Raw_Read_Error_Rate
+    "2":
+      conv: raw48
+      name: Throughput_Performance
+    "3":
+      conv: raw16(avg16)
+      name: Spin_Up_Time
+    "4":
+      conv: raw48
+      name: Start_Stop_Count
+    "5":
+      conv: raw16(raw16)
+      name: Reallocated_Sector_Ct
+    "6":
+      conv: raw48
+      name: Read_Channel_Margin
+    "7":
+      conv: raw48
+      name: Seek_Error_Rate
+    "8":
+      conv: raw48
+      name: Seek_Time_Performance
+    "9":
+      conv: raw24(raw8)
+      name: Power_On_Hours
+    "10":
+      conv: raw48
+      name: Spin_Retry_Count
+    "11":
+      conv: raw48
+      name: Calibration_Retry_Count
+    "12":
+      conv: raw48
+      name: Power_Cycle_Count
+    "13":
+      conv: raw48
+      name: Read_Soft_Error_Rate
+    "175":
+      conv: raw48
+      name: Program_Fail_Count_Chip
+    "176":
+      conv: raw48
+      name: Erase_Fail_Count_Chip
+    "177":
+      conv: raw48
+      name: Wear_Leveling_Count
+    "178":
+      conv: raw48
+      name: Used_Rsvd_Blk_Cnt_Chip
+    "179":
+      conv: raw48
+      name: Used_Rsvd_Blk_Cnt_Tot
+    "180":
+      conv: raw48
+      name: Unused_Rsvd_Blk_Cnt_Tot
+    "181":
+      conv: raw48
+      name: Program_Fail_Cnt_Total
+    "182":
+      conv: raw48
+      name: Erase_Fail_Count_Total
+    "183":
+      conv: raw48
+      name: Runtime_Bad_Block
+    "184":
+      conv: raw48
+      name: End-to-End_Error
+    "187":
+      conv: raw48
+      name: Reported_Uncorrect
+    "188":
+      conv: raw48
+      name: Command_Timeout
+    "189":
+      conv: raw48
+      name: High_Fly_Writes
+    "190":
+      conv: tempminmax
+      name: Airflow_Temperature_Cel
+    "191":
+      conv: raw48
+      name: G-Sense_Error_Rate
+    "192":
+      conv: raw48
+      name: Power-Off_Retract_Count
+    "193":
+      conv: raw48
+      name: Load_Cycle_Count
+    "194":
+      conv: tempminmax
+      name: Temperature_Celsius
+    "195":
+      conv: raw48
+      name: Hardware_ECC_Recovered
+    "196":
+      conv: raw16(raw16)
+      name: Reallocated_Event_Count
+    "197":
+      conv: raw48
+      name: Current_Pending_Sector
+    "198":
+      conv: raw48
+      name: Offline_Uncorrectable
+    "199":
+      conv: raw48
+      name: UDMA_CRC_Error_Count
+    "200":
+      conv: raw48
+      name: Multi_Zone_Error_Rate
+    "201":
+      conv: raw48
+      name: Soft_Read_Error_Rate
+    "202":
+      conv: raw48
+      name: Data_Address_Mark_Errs
+    "203":
+      conv: raw48
+      name: Run_Out_Cancel
+    "204":
+      conv: raw48
+      name: Soft_ECC_Correction
+    "205":
+      conv: raw48
+      name: Thermal_Asperity_Rate
+    "206":
+      conv: raw48
+      name: Flying_Height
+    "207":
+      conv: raw48
+      name: Spin_High_Current
+    "208":
+      conv: raw48
+      name: Spin_Buzz
+    "209":
+      conv: raw48
+      name: Offline_Seek_Performnce
+    "220":
+      conv: raw48
+      name: Disk_Shift
+    "221":
+      conv: raw48
+      name: G-Sense_Error_Rate
+    "222":
+      conv: raw48
+      name: Loaded_Hours
+    "223":
+      conv: raw48
+      name: Load_Retry_Count
+    "224":
+      conv: raw48
+      name: Load_Friction
+    "225":
+      conv: raw48
+      name: Load_Cycle_Count
+    "226":
+      conv: raw48
+      name: Load-in_Time
+    "227":
+      conv: raw48
+      name: Torq-amp_Count
+    "228":
+      conv: raw48
+      name: Power-off_Retract_Count
+    "230":
+      conv: raw48
+      name: Head_Amplitude
+    "231":
+      conv: raw48
+      name: Temperature_Celsius
+    "232":
+      conv: raw48
+      name: Available_Reservd_Space
+    "233":
+      conv: raw48
+      name: Media_Wearout_Indicator
+    "240":
+      conv: raw24(raw8)
+      name: Head_Flying_Hours
+    "241":
+      conv: raw48
+      name: Total_LBAs_Written
+    "242":
+      conv: raw48
+      name: Total_LBAs_Read
+    "250":
+      conv: raw48
+      name: Read_Error_Retry_Rate
+    "254":
+      conv: raw48
+      name: Free_Fall_Sensor
