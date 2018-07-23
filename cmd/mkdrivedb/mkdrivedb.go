@@ -105,22 +105,39 @@ func parseDrivedb(src io.Reader) []DriveModel {
 
 func main() {
 	var (
-		drivedbURL, outFilename string
+		drivedbURL              string
+		inFilename, outFilename string
+		reader                  io.Reader
 	)
 
-	flag.StringVar(&drivedbURL, "url", defaultDrivedbURL, "drivedb URL")
-	flag.StringVar(&outFilename, "o", "drivedb.yml", "Output .yml filename")
+	flag.StringVar(&drivedbURL, "url", defaultDrivedbURL, "Optional drivedb URL")
+	flag.StringVar(&inFilename, "in", "", "Optional path to local drivedb.h")
+	flag.StringVar(&outFilename, "out", "drivedb.yml", "Output .yml filename")
 	flag.Parse()
 
-	resp, err := http.Get(drivedbURL)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Cannot fetch drivedb: %v\n", err)
-		os.Exit(1)
+	if inFilename != "" {
+		f, err := os.Open(inFilename)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Cannot read drivedb: %v\n", err)
+			os.Exit(1)
+		}
+
+		defer f.Close()
+		fmt.Printf("Reading from local file %s\n", f.Name())
+		reader = f
+	} else {
+		resp, err := http.Get(drivedbURL)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Cannot fetch drivedb: %v\n", err)
+			os.Exit(1)
+		}
+
+		defer resp.Body.Close()
+		fmt.Printf("Reading from fetched drivedb %s\n", drivedbURL)
+		reader = resp.Body
 	}
 
-	defer resp.Body.Close()
-
-	drives := parseDrivedb(resp.Body)
+	drives := parseDrivedb(reader)
 	fmt.Printf("Parsed drivedb.h - %d entries\n", len(drives))
 
 	destFile, err := os.Create(outFilename)
@@ -130,7 +147,6 @@ func main() {
 	}
 
 	defer destFile.Close()
-
 	enc := yaml.NewEncoder(destFile)
 
 	if err := enc.Encode(DriveDb{drives}); err != nil {
