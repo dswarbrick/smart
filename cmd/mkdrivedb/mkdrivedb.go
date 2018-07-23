@@ -39,24 +39,33 @@ type DriveDb struct {
 	Drives []DriveModel `yaml:"drives"`
 }
 
-func parseDrivedb(src io.Reader) []DriveModel {
+func parseDrivedb(src io.Reader) (string, []DriveModel) {
 	var (
 		s    scanner.Scanner
 		prev rune
 		idx  int
 	)
 
+	header := "# This file was generated from:\n"
 	drives := make([]DriveModel, 0)
 	items := make([]string, 5)
 
 	s.Init(src)
+	s.Mode ^= scanner.SkipComments
 
+	// Extremely simple state machine like processing of tokens.
 	for tok := s.Scan(); tok != scanner.EOF; tok = s.Scan() {
-		if (prev == '{' || prev == ',') && tok == scanner.String {
+		if prev == 0 && tok == scanner.Comment {
+			// First comment from drivedb.h should be copyright / license header. Convert C-style
+			// comment to a YAML comment.
+			for _, line := range strings.Split(s.TokenText(), "\n") {
+				header += "# " + strings.TrimLeft(line, "/* ") + "\n"
+			}
+		} else if (prev == '{' || prev == ',') && tok == scanner.String {
 			items[idx] = strings.Trim(s.TokenText(), `"`)
 		} else if prev == scanner.String && tok == ',' {
 			idx++
-		} else if prev == scanner.String && tok == scanner.String {
+		} else if (prev == scanner.String || prev == scanner.Comment) && tok == scanner.String {
 			items[idx] += strings.Trim(s.TokenText(), `"`)
 		} else if tok == '}' {
 			dm := DriveModel{Presets: make(map[string]AttrConv)}
@@ -100,7 +109,7 @@ func parseDrivedb(src io.Reader) []DriveModel {
 		prev = tok
 	}
 
-	return drives
+	return header, drives
 }
 
 func main() {
@@ -137,7 +146,7 @@ func main() {
 		reader = resp.Body
 	}
 
-	drives := parseDrivedb(reader)
+	header, drives := parseDrivedb(reader)
 	fmt.Printf("Parsed drivedb.h - %d entries\n", len(drives))
 
 	destFile, err := os.Create(outFilename)
@@ -147,6 +156,8 @@ func main() {
 	}
 
 	defer destFile.Close()
+	destFile.WriteString(header)
+
 	enc := yaml.NewEncoder(destFile)
 
 	if err := enc.Encode(DriveDb{drives}); err != nil {
