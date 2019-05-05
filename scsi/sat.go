@@ -20,6 +20,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
+	"io"
 
 	"github.com/dswarbrick/smart/ata"
 	"github.com/dswarbrick/smart/drivedb"
@@ -72,34 +73,34 @@ func (d *SATDevice) readSMARTLog(logPage uint8) ([]byte, error) {
 	return respBuf, nil
 }
 
-func (d *SATDevice) PrintSMART(db *drivedb.DriveDb) error {
+func (d *SATDevice) PrintSMART(db *drivedb.DriveDb, w io.Writer) error {
 	// Standard SCSI INQUIRY command
 	inqResp, err := d.inquiry()
 	if err != nil {
 		return fmt.Errorf("SgExecute INQUIRY: %v", err)
 	}
 
-	fmt.Println("SCSI INQUIRY:", inqResp)
+	fmt.Fprintln(w, "SCSI INQUIRY:", inqResp)
 
 	identBuf, err := d.identify()
 	if err != nil {
 		return err
 	}
 
-	fmt.Println("\nATA IDENTIFY data follows:")
-	fmt.Printf("Serial Number: %s\n", identBuf.SerialNumber())
-	fmt.Println("LU WWN Device Id:", identBuf.WWN())
-	fmt.Printf("Firmware Revision: %s\n", identBuf.FirmwareRevision())
-	fmt.Printf("Model Number: %s\n", identBuf.ModelNumber())
-	fmt.Printf("Rotation Rate: %d\n", identBuf.RotationRate)
-	fmt.Printf("SMART support available: %v\n", identBuf.Word87>>14 == 1)
-	fmt.Printf("SMART support enabled: %v\n", identBuf.Word85&0x1 != 0)
-	fmt.Println("ATA Major Version:", identBuf.ATAMajorVersion())
-	fmt.Println("ATA Minor Version:", identBuf.ATAMinorVersion())
-	fmt.Println("Transport:", identBuf.Transport())
+	fmt.Fprintln(w, "\nATA IDENTIFY data follows:")
+	fmt.Fprintf(w, "Serial Number: %s\n", identBuf.SerialNumber())
+	fmt.Fprintln(w, "LU WWN Device Id:", identBuf.WWN())
+	fmt.Fprintf(w, "Firmware Revision: %s\n", identBuf.FirmwareRevision())
+	fmt.Fprintf(w, "Model Number: %s\n", identBuf.ModelNumber())
+	fmt.Fprintf(w, "Rotation Rate: %d\n", identBuf.RotationRate)
+	fmt.Fprintf(w, "SMART support available: %v\n", identBuf.Word87>>14 == 1)
+	fmt.Fprintf(w, "SMART support enabled: %v\n", identBuf.Word85&0x1 != 0)
+	fmt.Fprintln(w, "ATA Major Version:", identBuf.ATAMajorVersion())
+	fmt.Fprintln(w, "ATA Minor Version:", identBuf.ATAMinorVersion())
+	fmt.Fprintln(w, "Transport:", identBuf.Transport())
 
 	thisDrive := db.LookupDrive(identBuf.ModelNumber())
-	fmt.Printf("Drive DB contains %d entries. Using model: %s\n", len(db.Drives), thisDrive.Family)
+	fmt.Fprintf(w, "Drive DB contains %d entries. Using model: %s\n", len(db.Drives), thisDrive.Family)
 
 	// FIXME: Check that device supports SMART before trying to read data page
 
@@ -122,7 +123,7 @@ func (d *SATDevice) PrintSMART(db *drivedb.DriveDb) error {
 
 	smart := ata.SmartPage{}
 	binary.Read(bytes.NewBuffer(respBuf[:362]), utils.NativeEndian, &smart)
-	ata.PrintSMARTPage(smart, thisDrive)
+	ata.PrintSMARTPage(smart, thisDrive, w)
 
 	// Read SMART log directory
 	logBuf, err := d.readSMARTLog(0x00)
@@ -132,7 +133,7 @@ func (d *SATDevice) PrintSMART(db *drivedb.DriveDb) error {
 
 	smartLogDir := ata.SmartLogDirectory{}
 	binary.Read(bytes.NewBuffer(logBuf), utils.NativeEndian, &smartLogDir)
-	fmt.Printf("\nSMART log directory: %+v\n", smartLogDir)
+	fmt.Fprintf(w, "\nSMART log directory: %+v\n", smartLogDir)
 
 	// Read SMART error log
 	logBuf, err = d.readSMARTLog(0x01)
@@ -142,7 +143,7 @@ func (d *SATDevice) PrintSMART(db *drivedb.DriveDb) error {
 
 	sumErrLog := ata.SmartSummaryErrorLog{}
 	binary.Read(bytes.NewBuffer(logBuf), utils.NativeEndian, &sumErrLog)
-	fmt.Printf("\nSummary SMART error log: %+v\n", sumErrLog)
+	fmt.Fprintf(w, "\nSummary SMART error log: %+v\n", sumErrLog)
 
 	// Read SMART self-test log
 	logBuf, err = d.readSMARTLog(0x06)
@@ -152,7 +153,7 @@ func (d *SATDevice) PrintSMART(db *drivedb.DriveDb) error {
 
 	selfTestLog := ata.SmartSelfTestLog{}
 	binary.Read(bytes.NewBuffer(logBuf), utils.NativeEndian, &selfTestLog)
-	fmt.Printf("\nSMART self-test log: %+v\n", selfTestLog)
+	fmt.Fprintf(w, "\nSMART self-test log: %+v\n", selfTestLog)
 
 	return nil
 }

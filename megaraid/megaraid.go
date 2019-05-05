@@ -407,7 +407,7 @@ func OpenMegasasIoctl(host uint16, diskNum uint8) error {
 
 	smart := ata.SmartPage{}
 	binary.Read(bytes.NewBuffer(respBuf[:362]), utils.NativeEndian, &smart)
-	ata.PrintSMARTPage(smart, thisDrive)
+	ata.PrintSMARTPage(smart, thisDrive, os.Stdout)
 
 	return nil
 }

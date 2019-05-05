@@ -20,6 +20,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
+	"io"
 	"unsafe"
 
 	"golang.org/x/sys/unix"
@@ -86,7 +87,7 @@ func (e sgioError) Error() string {
 type Device interface {
 	Open() error
 	Close() error
-	PrintSMART(*drivedb.DriveDb) error
+	PrintSMART(*drivedb.DriveDb, io.Writer) error
 }
 
 // TODO: Make a constructor function for this.
@@ -196,22 +197,22 @@ func (d *SCSIDevice) readCapacity() (uint64, error) {
 }
 
 // Regular SCSI (including SAS, but excluding SATA) SMART functions not yet fully implemented.
-func (d *SCSIDevice) PrintSMART(db *drivedb.DriveDb) error {
+func (d *SCSIDevice) PrintSMART(db *drivedb.DriveDb, w io.Writer) error {
 	capacity, _ := d.readCapacity()
-	fmt.Printf("Capacity: %d bytes (%s)\n", capacity, utils.FormatBytes(capacity))
+	fmt.Fprintf(w, "Capacity: %d bytes (%s)\n", capacity, utils.FormatBytes(capacity))
 
 	// WIP
 	resp, _ := d.modeSense(RIGID_DISK_DRIVE_GEOMETRY_PAGE, 0, MPAGE_CONTROL_DEFAULT)
-	fmt.Printf("MODE SENSE buf: % x\n", resp)
+	fmt.Fprintf(w, "MODE SENSE buf: % x\n", resp)
 
 	// TODO: Handle this elegantly for MODE SENSE(10) also
 	respLen := resp[0] + 1
 	bdLen := resp[3]
 	offset := bdLen + 4
-	fmt.Printf("respLen: %d, bdLen: %d, offset: %d\n",
+	fmt.Fprintf(w, "respLen: %d, bdLen: %d, offset: %d\n",
 		respLen, bdLen, offset)
 
-	fmt.Printf("RPM: %d\n", binary.BigEndian.Uint16(resp[offset+20:]))
+	fmt.Fprintf(w, "RPM: %d\n", binary.BigEndian.Uint16(resp[offset+20:]))
 
 	return nil
 }

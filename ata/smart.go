@@ -16,6 +16,7 @@ package ata
 
 import (
 	"fmt"
+	"io"
 	"strconv"
 
 	"github.com/dswarbrick/smart/drivedb"
@@ -271,9 +272,9 @@ func formatRawValue(v uint64, conv string) (s string) {
 	return s
 }
 
-func PrintSMARTPage(smart SmartPage, drive drivedb.DriveModel) {
-	fmt.Printf("\nSMART structure version: %d\n", smart.Version)
-	fmt.Printf("ID# ATTRIBUTE_NAME           FLAG     VALUE WORST RESERVED TYPE     UPDATED RAW_VALUE\n")
+func PrintSMARTPage(smart SmartPage, drive drivedb.DriveModel, w io.Writer) {
+	fmt.Fprintf(w, "\nSMART structure version: %d\n", smart.Version)
+	fmt.Fprintf(w, "ID# ATTRIBUTE_NAME           FLAG     VALUE WORST RESERVED TYPE     UPDATED RAW_VALUE\n")
 
 	for _, attr := range smart.Attrs {
 		var (
@@ -305,7 +306,7 @@ func PrintSMARTPage(smart SmartPage, drive drivedb.DriveModel) {
 			attrUpdated = "Offline"
 		}
 
-		fmt.Printf("%3d %-24s %#04x   %03d   %03d   %03d      %-8s %-7s %s\n",
+		fmt.Fprintf(w, "%3d %-24s %#04x   %03d   %03d   %03d      %-8s %-7s %s\n",
 			attr.Id, conv.Name, attr.Flags, attr.Value, attr.Worst, attr.Reserved, attrType,
 			attrUpdated, formatRawValue(rawValue, conv.Conv))
 	}

@@ -20,6 +20,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
+	"io"
 	"math/big"
 	"unsafe"
 
@@ -211,9 +212,7 @@ func (d *NVMeDevice) Close() error {
 }
 
 // WIP - need to split out functionality further.
-func (d *NVMeDevice) PrintSMART(db *drivedb.DriveDb) error {
-	fmt.Println("OK")
-
+func (d *NVMeDevice) PrintSMART(db *drivedb.DriveDb, w io.Writer) error {
 	buf := make([]byte, 4096)
 
 	cmd := nvmePassthruCommand{
@@ -228,25 +227,25 @@ func (d *NVMeDevice) PrintSMART(db *drivedb.DriveDb) error {
 		return err
 	}
 
-	fmt.Printf("NVMe call: opcode=%#02x, size=%#04x, nsid=%#08x, cdw10=%#08x\n",
+	fmt.Fprintf(w, "NVMe call: opcode=%#02x, size=%#04x, nsid=%#08x, cdw10=%#08x\n",
 		cmd.opcode, cmd.data_len, cmd.nsid, cmd.cdw10)
 
 	var controller nvmeIdentController
 
 	binary.Read(bytes.NewBuffer(buf[:]), utils.NativeEndian, &controller)
 
-	fmt.Println()
-	fmt.Printf("Vendor ID: %#04x\n", controller.VendorID)
-	fmt.Printf("Model number: %s\n", controller.ModelNumber)
-	fmt.Printf("Serial number: %s\n", controller.SerialNumber)
-	fmt.Printf("Firmware version: %s\n", controller.Firmware)
-	fmt.Printf("IEEE OUI identifier: 0x%02x%02x%02x\n",
+	fmt.Fprintln(w)
+	fmt.Fprintf(w, "Vendor ID: %#04x\n", controller.VendorID)
+	fmt.Fprintf(w, "Model number: %s\n", controller.ModelNumber)
+	fmt.Fprintf(w, "Serial number: %s\n", controller.SerialNumber)
+	fmt.Fprintf(w, "Firmware version: %s\n", controller.Firmware)
+	fmt.Fprintf(w, "IEEE OUI identifier: 0x%02x%02x%02x\n",
 		controller.IEEE[2], controller.IEEE[1], controller.IEEE[0])
-	fmt.Printf("Max. data transfer size: %d pages\n", 1<<controller.Mdts)
+	fmt.Fprintf(w, "Max. data transfer size: %d pages\n", 1<<controller.Mdts)
 
 	for _, ps := range controller.Psd {
 		if ps.MaxPower > 0 {
-			fmt.Printf("%+v\n", ps)
+			fmt.Fprintf(w, "%+v\n", ps)
 		}
 	}
 
@@ -264,15 +263,15 @@ func (d *NVMeDevice) PrintSMART(db *drivedb.DriveDb) error {
 		return err
 	}
 
-	fmt.Printf("NVMe call: opcode=%#02x, size=%#04x, nsid=%#08x, cdw10=%#08x\n",
+	fmt.Fprintf(w, "NVMe call: opcode=%#02x, size=%#04x, nsid=%#08x, cdw10=%#08x\n",
 		cmd.opcode, cmd.data_len, cmd.nsid, cmd.cdw10)
 
 	var ns nvmeIdentNamespace
 
 	binary.Read(bytes.NewBuffer(buf2[:]), utils.NativeEndian, &ns)
 
-	fmt.Printf("Namespace 1 size: %d sectors\n", ns.Nsze)
-	fmt.Printf("Namespace 1 utilisation: %d sectors\n", ns.Nuse)
+	fmt.Fprintf(w, "Namespace 1 size: %d sectors\n", ns.Nsze)
+	fmt.Fprintf(w, "Namespace 1 utilisation: %d sectors\n", ns.Nuse)
 
 	buf3 := make([]byte, 512)
 
@@ -290,25 +289,25 @@ func (d *NVMeDevice) PrintSMART(db *drivedb.DriveDb) error {
 	unitsWritten := le128ToBigInt(sl.DataUnitsWritten)
 	unit := big.NewInt(512 * 1000)
 
-	fmt.Println("\nSMART data follows:")
-	fmt.Printf("Critical warning: %#02x\n", sl.CritWarning)
-	fmt.Printf("Temperature: %d Celsius\n",
+	fmt.Fprintln(w, "\nSMART data follows:")
+	fmt.Fprintf(w, "Critical warning: %#02x\n", sl.CritWarning)
+	fmt.Fprintf(w, "Temperature: %d Celsius\n",
 		((uint16(sl.Temperature[1])<<8)|uint16(sl.Temperature[0]))-273) // Kelvin to degrees Celsius
-	fmt.Printf("Avail. spare: %d%%\n", sl.AvailSpare)
-	fmt.Printf("Avail. spare threshold: %d%%\n", sl.SpareThresh)
-	fmt.Printf("Percentage used: %d%%\n", sl.PercentUsed)
-	fmt.Printf("Data units read: %d [%s]\n",
+	fmt.Fprintf(w, "Avail. spare: %d%%\n", sl.AvailSpare)
+	fmt.Fprintf(w, "Avail. spare threshold: %d%%\n", sl.SpareThresh)
+	fmt.Fprintf(w, "Percentage used: %d%%\n", sl.PercentUsed)
+	fmt.Fprintf(w, "Data units read: %d [%s]\n",
 		unitsRead, utils.FormatBigBytes(new(big.Int).Mul(unitsRead, unit)))
-	fmt.Printf("Data units written: %d [%s]\n",
+	fmt.Fprintf(w, "Data units written: %d [%s]\n",
 		unitsWritten, utils.FormatBigBytes(new(big.Int).Mul(unitsWritten, unit)))
-	fmt.Printf("Host read commands: %d\n", le128ToBigInt(sl.HostReads))
-	fmt.Printf("Host write commands: %d\n", le128ToBigInt(sl.HostWrites))
-	fmt.Printf("Controller busy time: %d\n", le128ToBigInt(sl.CtrlBusyTime))
-	fmt.Printf("Power cycles: %d\n", le128ToBigInt(sl.PowerCycles))
-	fmt.Printf("Power on hours: %d\n", le128ToBigInt(sl.PowerOnHours))
-	fmt.Printf("Unsafe shutdowns: %d\n", le128ToBigInt(sl.UnsafeShutdowns))
-	fmt.Printf("Media & data integrity errors: %d\n", le128ToBigInt(sl.MediaErrors))
-	fmt.Printf("Error information log entries: %d\n", le128ToBigInt(sl.NumErrLogEntries))
+	fmt.Fprintf(w, "Host read commands: %d\n", le128ToBigInt(sl.HostReads))
+	fmt.Fprintf(w, "Host write commands: %d\n", le128ToBigInt(sl.HostWrites))
+	fmt.Fprintf(w, "Controller busy time: %d\n", le128ToBigInt(sl.CtrlBusyTime))
+	fmt.Fprintf(w, "Power cycles: %d\n", le128ToBigInt(sl.PowerCycles))
+	fmt.Fprintf(w, "Power on hours: %d\n", le128ToBigInt(sl.PowerOnHours))
+	fmt.Fprintf(w, "Unsafe shutdowns: %d\n", le128ToBigInt(sl.UnsafeShutdowns))
+	fmt.Fprintf(w, "Media & data integrity errors: %d\n", le128ToBigInt(sl.MediaErrors))
+	fmt.Fprintf(w, "Error information log entries: %d\n", le128ToBigInt(sl.NumErrLogEntries))
 
 	return nil
 }
