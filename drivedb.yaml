@@ -3,6 +3,7 @@
 # For a more complete drivedb, run the `mkdrivedb` tool included with this
 # package, to convert a Smartmontools (https://smartmontools.org) drivedb.h
 # to YAML format.
+drives:
 - family: DEFAULT
   model_regex: '-'
   firmware_regex: '-'
