@@ -13,7 +13,6 @@
 // limitations under the License.
 
 // Smartmontools drivedb.h database to YAML format converter.
-//
 package main
 
 import (
@@ -26,7 +25,7 @@ import (
 	"strings"
 	"text/scanner"
 
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 const (
